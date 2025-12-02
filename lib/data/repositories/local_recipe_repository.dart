@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'local_recipe_repository.g.dart';
 
 @riverpod
-RecipeRepository recipeRepository(RecipeRepositoryRef ref) {
+RecipeRepository recipeRepository(Ref ref) {
   return LocalRecipeRepository();
 }
 

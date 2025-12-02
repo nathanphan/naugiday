@@ -66,6 +66,7 @@ class RecipeDto {
     );
   }
 
-  factory RecipeDto.fromJson(Map<String, dynamic> json) => _$RecipeDtoFromJson(json);
+  factory RecipeDto.fromJson(Map<String, dynamic> json) =>
+      _$RecipeDtoFromJson(json);
   Map<String, dynamic> toJson() => _$RecipeDtoToJson(this);
 }

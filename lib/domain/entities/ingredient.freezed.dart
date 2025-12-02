@@ -11,30 +11,33 @@ part of 'ingredient.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$Ingredient {
 
- String get id; String get name; String? get category;
+ String get id; String get name; String get quantity; String? get category;
 /// Create a copy of Ingredient
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 $IngredientCopyWith<Ingredient> get copyWith => _$IngredientCopyWithImpl<Ingredient>(this as Ingredient, _$identity);
 
+  /// Serializes this Ingredient to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Ingredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.category, category) || other.category == category));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Ingredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.category, category) || other.category == category));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,category);
+int get hashCode => Object.hash(runtimeType,id,name,quantity,category);
 
 @override
 String toString() {
-  return 'Ingredient(id: $id, name: $name, category: $category)';
+  return 'Ingredient(id: $id, name: $name, quantity: $quantity, category: $category)';
 }
 
 
@@ -45,7 +48,7 @@ abstract mixin class $IngredientCopyWith<$Res>  {
   factory $IngredientCopyWith(Ingredient value, $Res Function(Ingredient) _then) = _$IngredientCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? category
+ String id, String name, String quantity, String? category
 });
 
 
@@ -62,10 +65,11 @@ class _$IngredientCopyWithImpl<$Res>
 
 /// Create a copy of Ingredient
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? category = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? quantity = null,Object? category = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as String,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -152,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? category)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String quantity,  String? category)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Ingredient() when $default != null:
-return $default(_that.id,_that.name,_that.category);case _:
+return $default(_that.id,_that.name,_that.quantity,_that.category);case _:
   return orElse();
 
 }
@@ -173,10 +177,10 @@ return $default(_that.id,_that.name,_that.category);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? category)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String quantity,  String? category)  $default,) {final _that = this;
 switch (_that) {
 case _Ingredient():
-return $default(_that.id,_that.name,_that.category);case _:
+return $default(_that.id,_that.name,_that.quantity,_that.category);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +197,10 @@ return $default(_that.id,_that.name,_that.category);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? category)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String quantity,  String? category)?  $default,) {final _that = this;
 switch (_that) {
 case _Ingredient() when $default != null:
-return $default(_that.id,_that.name,_that.category);case _:
+return $default(_that.id,_that.name,_that.quantity,_that.category);case _:
   return null;
 
 }
@@ -205,14 +209,15 @@ return $default(_that.id,_that.name,_that.category);case _:
 }
 
 /// @nodoc
+@JsonSerializable()
 
-
-class _Ingredient implements Ingredient {
-  const _Ingredient({required this.id, required this.name, this.category});
-  
+class _Ingredient extends Ingredient {
+  const _Ingredient({required this.id, required this.name, required this.quantity, this.category}): super._();
+  factory _Ingredient.fromJson(Map<String, dynamic> json) => _$IngredientFromJson(json);
 
 @override final  String id;
 @override final  String name;
+@override final  String quantity;
 @override final  String? category;
 
 /// Create a copy of Ingredient
@@ -221,20 +226,23 @@ class _Ingredient implements Ingredient {
 @pragma('vm:prefer-inline')
 _$IngredientCopyWith<_Ingredient> get copyWith => __$IngredientCopyWithImpl<_Ingredient>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$IngredientToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Ingredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.category, category) || other.category == category));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Ingredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.category, category) || other.category == category));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,category);
+int get hashCode => Object.hash(runtimeType,id,name,quantity,category);
 
 @override
 String toString() {
-  return 'Ingredient(id: $id, name: $name, category: $category)';
+  return 'Ingredient(id: $id, name: $name, quantity: $quantity, category: $category)';
 }
 
 
@@ -245,7 +253,7 @@ abstract mixin class _$IngredientCopyWith<$Res> implements $IngredientCopyWith<$
   factory _$IngredientCopyWith(_Ingredient value, $Res Function(_Ingredient) _then) = __$IngredientCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? category
+ String id, String name, String quantity, String? category
 });
 
 
@@ -262,10 +270,11 @@ class __$IngredientCopyWithImpl<$Res>
 
 /// Create a copy of Ingredient
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? category = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? quantity = null,Object? category = freezed,}) {
   return _then(_Ingredient(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,quantity: null == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
 as String,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

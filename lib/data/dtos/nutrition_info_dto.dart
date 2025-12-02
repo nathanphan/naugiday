@@ -35,6 +35,7 @@ class NutritionInfoDto {
     );
   }
 
-  factory NutritionInfoDto.fromJson(Map<String, dynamic> json) => _$NutritionInfoDtoFromJson(json);
+  factory NutritionInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$NutritionInfoDtoFromJson(json);
   Map<String, dynamic> toJson() => _$NutritionInfoDtoToJson(this);
 }

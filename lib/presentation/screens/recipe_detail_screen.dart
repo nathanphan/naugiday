@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:naugiday/core/constants/app_assets.dart';
 
 class RecipeDetailScreen extends StatelessWidget {
   final Recipe recipe;
@@ -28,6 +29,12 @@ class RecipeDetailScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          SizedBox(
+            height: 200,
+            width: double.infinity,
+            child: Image.asset(AppAssets.foodPlaceholder, fit: BoxFit.cover),
+          ),
+          const SizedBox(height: 16),
           Text(
             recipe.description,
             style: Theme.of(context).textTheme.bodyLarge,
@@ -35,43 +42,47 @@ class RecipeDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _buildNutritionSection(context),
           const Divider(height: 32),
-          Text(
-            'Ingredients',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('Ingredients', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
           if (haveIngredients.isNotEmpty) ...[
             Text(
               'From your fridge:',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.green),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.green),
             ),
-            ...haveIngredients.map((i) => ListTile(
-                  leading: const Icon(Icons.check, color: Colors.green),
-                  title: Text(i.name),
-                  dense: true,
-                )),
+            ...haveIngredients.map(
+              (i) => ListTile(
+                leading: const Icon(Icons.check, color: Colors.green),
+                title: Text(i.name),
+                dense: true,
+              ),
+            ),
           ],
           if (missingIngredients.isNotEmpty) ...[
             Text(
               'You may need to buy:',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.orange),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: Colors.orange),
             ),
-            ...missingIngredients.map((i) => ListTile(
-                  leading: const Icon(Icons.shopping_cart, color: Colors.orange),
-                  title: Text(i.name),
-                  dense: true,
-                )),
+            ...missingIngredients.map(
+              (i) => ListTile(
+                leading: const Icon(Icons.shopping_cart, color: Colors.orange),
+                title: Text(i.name),
+                dense: true,
+              ),
+            ),
           ],
           const Divider(height: 32),
-          Text(
-            'Steps',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('Steps', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
-          ...recipe.steps.asMap().entries.map((entry) => ListTile(
-                leading: CircleAvatar(child: Text('${entry.key + 1}')),
-                title: Text(entry.value),
-              )),
+          ...recipe.steps.asMap().entries.map(
+            (entry) => ListTile(
+              leading: CircleAvatar(child: Text('${entry.key + 1}')),
+              title: Text(entry.value),
+            ),
+          ),
         ],
       ),
     );

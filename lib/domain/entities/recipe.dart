@@ -4,11 +4,14 @@ import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
 
 part 'recipe.freezed.dart';
+part 'recipe.g.dart';
 
 enum RecipeDifficulty { easy, medium, hard }
 
 @freezed
-class Recipe with _$Recipe {
+abstract class Recipe with _$Recipe {
+  const Recipe._();
+
   const factory Recipe({
     required String id,
     required String name,
@@ -22,4 +25,7 @@ class Recipe with _$Recipe {
     @Default(false) bool isUserCreated,
     String? imageUrl,
   }) = _Recipe;
+
+  factory Recipe.fromJson(Map<String, dynamic> json) =>
+      _$RecipeFromJson(json);
 }

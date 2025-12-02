@@ -80,7 +80,7 @@ final class SuggestionsProvider
   }
 }
 
-String _$suggestionsHash() => r'd83f11d0135b1cb90f984058dc9d93f532e955b2';
+String _$suggestionsHash() => r'd4f71fc0925fd028b010200bec29bbabd66e53e5';
 
 final class SuggestionsFamily extends $Family
     with

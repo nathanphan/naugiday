@@ -11,6 +11,7 @@ part of 'recipe.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$Recipe {
 
@@ -21,6 +22,8 @@ mixin _$Recipe {
 @pragma('vm:prefer-inline')
 $RecipeCopyWith<Recipe> get copyWith => _$RecipeCopyWithImpl<Recipe>(this as Recipe, _$identity);
 
+  /// Serializes this Recipe to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -28,7 +31,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&const DeepCollectionEquality().equals(other.steps, steps)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(ingredients),const DeepCollectionEquality().hash(steps),nutrition,mealType,isUserCreated,imageUrl);
 
@@ -222,11 +225,11 @@ return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_
 }
 
 /// @nodoc
+@JsonSerializable()
 
-
-class _Recipe implements Recipe {
-  const _Recipe({required this.id, required this.name, required this.description, required this.cookingTimeMinutes, required this.difficulty, required final  List<Ingredient> ingredients, required final  List<String> steps, required this.nutrition, required this.mealType, this.isUserCreated = false, this.imageUrl}): _ingredients = ingredients,_steps = steps;
-  
+class _Recipe extends Recipe {
+  const _Recipe({required this.id, required this.name, required this.description, required this.cookingTimeMinutes, required this.difficulty, required final  List<Ingredient> ingredients, required final  List<String> steps, required this.nutrition, required this.mealType, this.isUserCreated = false, this.imageUrl}): _ingredients = ingredients,_steps = steps,super._();
+  factory _Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
 @override final  String id;
 @override final  String name;
@@ -258,14 +261,17 @@ class _Recipe implements Recipe {
 @pragma('vm:prefer-inline')
 _$RecipeCopyWith<_Recipe> get copyWith => __$RecipeCopyWithImpl<_Recipe>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$RecipeToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&const DeepCollectionEquality().equals(other._steps, _steps)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(_ingredients),const DeepCollectionEquality().hash(_steps),nutrition,mealType,isUserCreated,imageUrl);
 

@@ -9,13 +9,14 @@ import 'package:uuid/uuid.dart';
 part 'fake_ai_recipe_service.g.dart';
 
 @riverpod
-AiRecipeService aiRecipeService(AiRecipeServiceRef ref) {
+AiRecipeService aiRecipeService(Ref ref) {
   return FakeAiRecipeService();
 }
 
 class FakeAiRecipeService implements AiRecipeService {
   @override
-  Future<({List<String> detectedIngredients, List<Recipe> recipes})> suggestRecipesFromImages({
+  Future<({List<String> detectedIngredients, List<Recipe> recipes})>
+  suggestRecipesFromImages({
     required List<String> imagePaths,
     required MealType mealType,
   }) async {
@@ -33,13 +34,13 @@ class FakeAiRecipeService implements AiRecipeService {
 
   List<Recipe> _getMockRecipes(MealType mealType) {
     const uuid = Uuid();
-    
+
     // Common ingredients
-    final shrimp = const Ingredient(id: '1', name: 'Shrimp');
-    final pork = const Ingredient(id: '2', name: 'Pork Belly');
-    final fishSauce = const Ingredient(id: '3', name: 'Fish Sauce');
-    final rice = const Ingredient(id: '4', name: 'Rice');
-    final egg = const Ingredient(id: '5', name: 'Egg');
+    final shrimp = const Ingredient(id: '1', name: 'Shrimp', quantity: '200g');
+    final pork = const Ingredient(id: '2', name: 'Pork Belly', quantity: '150g');
+    final fishSauce = const Ingredient(id: '3', name: 'Fish Sauce', quantity: '2 tbsp');
+    final rice = const Ingredient(id: '4', name: 'Rice', quantity: '1 cup');
+    final egg = const Ingredient(id: '5', name: 'Egg', quantity: '2 eggs');
 
     if (mealType == MealType.breakfast) {
       return [
@@ -53,9 +54,14 @@ class FakeAiRecipeService implements AiRecipeService {
           steps: [
             'Heat pan with oil.',
             'Crack eggs and fry until whites are set.',
-            'Serve with baguette, soy sauce, and cucumber.'
+            'Serve with baguette, soy sauce, and cucumber.',
           ],
-          nutrition: const NutritionInfo(calories: 450, protein: 20, carbs: 40, fat: 22),
+          nutrition: const NutritionInfo(
+            calories: 450,
+            protein: 20,
+            carbs: 40,
+            fat: 22,
+          ),
           mealType: MealType.breakfast,
         ),
       ];
@@ -74,9 +80,14 @@ class FakeAiRecipeService implements AiRecipeService {
           'Marinate shrimp and pork with fish sauce and sugar.',
           'Caramelize sugar in a pot.',
           'Add meat and shrimp, simmer until sauce thickens.',
-          'Serve with hot rice.'
+          'Serve with hot rice.',
         ],
-        nutrition: const NutritionInfo(calories: 600, protein: 35, carbs: 50, fat: 25),
+        nutrition: const NutritionInfo(
+          calories: 600,
+          protein: 35,
+          carbs: 50,
+          fat: 25,
+        ),
         mealType: mealType,
       ),
       Recipe(
@@ -90,9 +101,14 @@ class FakeAiRecipeService implements AiRecipeService {
           'Boil water, add tamarind.',
           'Add shrimp and vegetables (pineapple, tomato, okra).',
           'Season with fish sauce and sugar.',
-          'Garnish with herbs.'
+          'Garnish with herbs.',
         ],
-        nutrition: const NutritionInfo(calories: 200, protein: 15, carbs: 10, fat: 5),
+        nutrition: const NutritionInfo(
+          calories: 200,
+          protein: 15,
+          carbs: 10,
+          fat: 5,
+        ),
         mealType: mealType,
       ),
     ];

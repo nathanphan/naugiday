@@ -1,8 +1,9 @@
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
+import 'package:naugiday/presentation/widgets/camera_controls_overlay.dart';
+import 'package:naugiday/presentation/widgets/scan_preview_sheet.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -16,6 +17,7 @@ class _ScanScreenState extends State<ScanScreen> {
   List<CameraDescription>? _cameras;
   final List<XFile> _capturedImages = [];
   bool _isInitializing = true;
+  bool _isFlashOn = false;
 
   @override
   void initState() {
@@ -27,7 +29,11 @@ class _ScanScreenState extends State<ScanScreen> {
     try {
       _cameras = await availableCameras();
       if (_cameras != null && _cameras!.isNotEmpty) {
-        _controller = CameraController(_cameras![0], ResolutionPreset.medium);
+        _controller = CameraController(
+          _cameras![0],
+          ResolutionPreset.high,
+          enableAudio: false,
+        );
         await _controller!.initialize();
         if (mounted) {
           setState(() {
@@ -61,62 +67,116 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
+  void _toggleFlash() {
+    if (_controller == null) return;
+    setState(() {
+      _isFlashOn = !_isFlashOn;
+    });
+    _controller!.setFlashMode(_isFlashOn ? FlashMode.torch : FlashMode.off);
+  }
+
+  void _pickGallery() {
+    // TODO: Implement gallery picker
+  }
+
   void _generateRecipes() {
-    final mealType = GoRouterState.of(context).extra as MealType? ?? MealType.dinner;
-    
-    context.go('/suggestions', extra: {
-      'images': _capturedImages.map((e) => e.path).toList(),
-      'mealType': mealType,
+    final mealType =
+        GoRouterState.of(context).extra as MealType? ?? MealType.dinner;
+
+    context.go(
+      '/suggestions',
+      extra: {
+        'images': _capturedImages.map((e) => e.path).toList(),
+        'mealType': mealType,
+      },
+    );
+  }
+
+  void _deleteImage(int index) {
+    setState(() {
+      _capturedImages.removeAt(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isInitializing) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
     if (_controller == null || !_controller!.value.isInitialized) {
-      return const Scaffold(body: Center(child: Text('Camera not available')));
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Text(
+            'Camera not available',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan Ingredients')),
-      body: Column(
+      backgroundColor: Colors.black,
+      body: Stack(
+        fit: StackFit.expand,
         children: [
-          Expanded(
-            child: CameraPreview(_controller!),
-          ),
-          SizedBox(
-            height: 120,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _capturedImages.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.file(File(_capturedImages[index].path)),
-                );
-              },
+          // Camera Preview
+          CameraPreview(_controller!),
+
+          // Back Button
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 8,
+            left: 8,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => context.pop(),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FloatingActionButton(
-                  onPressed: _takePicture,
-                  child: const Icon(Icons.camera),
-                ),
-                if (_capturedImages.isNotEmpty)
-                  FilledButton(
-                    onPressed: _generateRecipes,
-                    child: const Text('Generate Recipes'),
+
+          // Controls Overlay (visible only if no images captured or sheet not fully expanded)
+          if (_capturedImages.isEmpty)
+            CameraControlsOverlay(
+              onCapture: _takePicture,
+              onToggleFlash: _toggleFlash,
+              onPickGallery: _pickGallery,
+              isFlashOn: _isFlashOn,
+            ),
+
+          // If images captured, show mini controls + sheet
+          if (_capturedImages.isNotEmpty) ...[
+            Positioned(
+              bottom: 200, // Above the sheet
+              left: 0,
+              right: 0,
+              child: Center(
+                child: GestureDetector(
+                  onTap: _takePicture,
+                  child: Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 3),
+                      color: Colors.transparent,
+                    ),
+                    child: const Icon(Icons.add, color: Colors.white),
                   ),
-              ],
+                ),
+              ),
             ),
-          ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ScanPreviewSheet(
+                images: _capturedImages,
+                onGenerate: _generateRecipes,
+                onDelete: _deleteImage,
+              ),
+            ),
+          ],
         ],
       ),
     );

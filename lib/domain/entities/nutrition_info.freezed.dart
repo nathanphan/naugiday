@@ -11,6 +11,7 @@ part of 'nutrition_info.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$NutritionInfo {
 
@@ -21,6 +22,8 @@ mixin _$NutritionInfo {
 @pragma('vm:prefer-inline')
 $NutritionInfoCopyWith<NutritionInfo> get copyWith => _$NutritionInfoCopyWithImpl<NutritionInfo>(this as NutritionInfo, _$identity);
 
+  /// Serializes this NutritionInfo to a JSON map.
+  Map<String, dynamic> toJson();
 
 
 @override
@@ -28,7 +31,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is NutritionInfo&&(identical(other.calories, calories) || other.calories == calories)&&(identical(other.protein, protein) || other.protein == protein)&&(identical(other.carbs, carbs) || other.carbs == carbs)&&(identical(other.fat, fat) || other.fat == fat));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,calories,protein,carbs,fat);
 
@@ -206,11 +209,11 @@ return $default(_that.calories,_that.protein,_that.carbs,_that.fat);case _:
 }
 
 /// @nodoc
+@JsonSerializable()
 
-
-class _NutritionInfo implements NutritionInfo {
-  const _NutritionInfo({required this.calories, required this.protein, required this.carbs, required this.fat});
-  
+class _NutritionInfo extends NutritionInfo {
+  const _NutritionInfo({required this.calories, required this.protein, required this.carbs, required this.fat}): super._();
+  factory _NutritionInfo.fromJson(Map<String, dynamic> json) => _$NutritionInfoFromJson(json);
 
 @override final  int calories;
 @override final  int protein;
@@ -223,14 +226,17 @@ class _NutritionInfo implements NutritionInfo {
 @pragma('vm:prefer-inline')
 _$NutritionInfoCopyWith<_NutritionInfo> get copyWith => __$NutritionInfoCopyWithImpl<_NutritionInfo>(this, _$identity);
 
-
+@override
+Map<String, dynamic> toJson() {
+  return _$NutritionInfoToJson(this, );
+}
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _NutritionInfo&&(identical(other.calories, calories) || other.calories == calories)&&(identical(other.protein, protein) || other.protein == protein)&&(identical(other.carbs, carbs) || other.carbs == carbs)&&(identical(other.fat, fat) || other.fat == fat));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode => Object.hash(runtimeType,calories,protein,carbs,fat);
 

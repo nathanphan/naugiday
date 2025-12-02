@@ -7,7 +7,7 @@ import 'package:naugiday/presentation/theme/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  
+
   runApp(const ProviderScope(child: NauGiDayApp()));
 }
 

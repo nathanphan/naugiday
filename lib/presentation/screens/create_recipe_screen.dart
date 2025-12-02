@@ -37,7 +37,12 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
         difficulty: RecipeDifficulty.medium, // Default
         ingredients: [], // Empty for MVP
         steps: [], // Empty for MVP
-        nutrition: const NutritionInfo(calories: 0, protein: 0, carbs: 0, fat: 0),
+        nutrition: const NutritionInfo(
+          calories: 0,
+          protein: 0,
+          carbs: 0,
+          fat: 0,
+        ),
         mealType: _mealType,
         isUserCreated: true,
       );
@@ -69,7 +74,7 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<MealType>(
-              value: _mealType,
+              initialValue: _mealType,
               decoration: const InputDecoration(labelText: 'Meal Type'),
               items: MealType.values.map((e) {
                 return DropdownMenuItem(value: e, child: Text(e.name));
@@ -79,10 +84,7 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
               },
             ),
             const SizedBox(height: 32),
-            FilledButton(
-              onPressed: _save,
-              child: const Text('Save Recipe'),
-            ),
+            FilledButton(onPressed: _save, child: const Text('Save Recipe')),
           ],
         ),
       ),

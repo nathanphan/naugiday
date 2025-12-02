@@ -1,36 +1,59 @@
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/material.dart';
+import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/presentation/screens/home_screen.dart';
 
 import 'package:naugiday/presentation/screens/scan_screen.dart';
 import 'package:naugiday/presentation/screens/my_recipes_screen.dart';
 import 'package:naugiday/presentation/screens/recipe_detail_screen.dart';
 import 'package:naugiday/presentation/screens/create_recipe_screen.dart';
+import 'package:naugiday/presentation/screens/recipe_suggestions_screen.dart';
+import 'package:naugiday/presentation/screens/shopping_list_screen.dart';
+import 'package:naugiday/presentation/screens/main_scaffold.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 
 part 'app_router.g.dart';
 
 @riverpod
-GoRouter goRouter(GoRouterRef ref) {
+GoRouter goRouter(Ref ref) {
+  final rootNavigatorKey = GlobalKey<NavigatorState>();
+  final shellNavigatorKey = GlobalKey<NavigatorState>();
+
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomeScreen(),
+      ShellRoute(
+        navigatorKey: shellNavigatorKey,
+        builder: (context, state, child) {
+          return MainScaffold(child: child);
+        },
         routes: [
           GoRoute(
-            path: 'scan',
-            builder: (context, state) => const ScanScreen(),
+            path: '/',
+            builder: (context, state) => const HomeScreen(),
+            routes: [
+              GoRoute(
+                path: 'scan',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) => const ScanScreen(),
+              ),
+            ],
           ),
           GoRoute(
-            path: 'my-recipes',
+            path: '/my-recipes',
             builder: (context, state) => const MyRecipesScreen(),
+          ),
+          GoRoute(
+            path: '/shopping-list',
+            builder: (context, state) => const ShoppingListScreen(),
           ),
         ],
       ),
       GoRoute(
         path: '/suggestions',
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           return RecipeSuggestionsScreen(
@@ -41,10 +64,12 @@ GoRouter goRouter(GoRouterRef ref) {
       ),
       GoRoute(
         path: '/create-recipe',
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const CreateRecipeScreen(),
       ),
       GoRoute(
         path: '/recipe-detail',
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           return RecipeDetailScreen(
