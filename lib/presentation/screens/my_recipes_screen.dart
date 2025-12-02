@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:naugiday/presentation/providers/my_recipes_provider.dart';
+import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
 
 class MyRecipesScreen extends ConsumerWidget {
@@ -9,10 +9,19 @@ class MyRecipesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recipesAsync = ref.watch(myRecipesProvider);
+    final recipesAsync = ref.watch(recipeControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Recipes')),
+      appBar: AppBar(
+        title: const Text('My Recipes'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () =>
+                ref.read(recipeControllerProvider.notifier).refresh(),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.go('/create-recipe'),
         child: const Icon(Icons.add),
@@ -31,7 +40,7 @@ class MyRecipesScreen extends ConsumerWidget {
                     fit: BoxFit.contain,
                   ),
                   const SizedBox(height: 16),
-                  const Text('No recipes yet. Create one!'),
+                  const Text('No recipes yet. Create one! (Works offline)'),
                 ],
               ),
             );
@@ -47,7 +56,7 @@ class MyRecipesScreen extends ConsumerWidget {
                   icon: const Icon(Icons.delete),
                   onPressed: () {
                     ref
-                        .read(myRecipesProvider.notifier)
+                        .read(recipeControllerProvider.notifier)
                         .deleteRecipe(recipe.id);
                   },
                 ),

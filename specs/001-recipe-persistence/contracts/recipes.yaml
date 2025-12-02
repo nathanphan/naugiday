@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Local Recipe Persistence Contracts
+  version: "1.0.0"
+paths:
+  /recipes:
+    get:
+      summary: List saved recipes
+      responses:
+        '200':
+          description: Recipes available offline
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+    post:
+      summary: Create or update a recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+      responses:
+        '200':
+          description: Recipe saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+  /recipes/{id}:
+    get:
+      summary: Retrieve a saved recipe by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recipe found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '404':
+          description: Not found
+    delete:
+      summary: Delete a saved recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Not found
+components:
+  schemas:
+    Recipe:
+      type: object
+      required: [id, title, ingredients, steps]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+        steps:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+        nutrition:
+          $ref: '#/components/schemas/Nutrition'
+        source:
+          type: string
+          enum: [user, ai]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Ingredient:
+      type: object
+      required: [name, quantity]
+      properties:
+        name:
+          type: string
+        quantity:
+          type: string
+        isOptional:
+          type: boolean
+    Nutrition:
+      type: object
+      properties:
+        calories:
+          type: integer
+        protein:
+          type: integer
+        carbs:
+          type: integer
+        fat:
+          type: integer

@@ -22,6 +22,12 @@ RecipeDto _$RecipeDtoFromJson(Map<String, dynamic> json) => RecipeDto(
   mealTypeIndex: (json['mealTypeIndex'] as num).toInt(),
   isUserCreated: json['isUserCreated'] as bool,
   imageUrl: json['imageUrl'] as String?,
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$RecipeDtoToJson(RecipeDto instance) => <String, dynamic>{
@@ -36,4 +42,6 @@ Map<String, dynamic> _$RecipeDtoToJson(RecipeDto instance) => <String, dynamic>{
   'mealTypeIndex': instance.mealTypeIndex,
   'isUserCreated': instance.isUserCreated,
   'imageUrl': instance.imageUrl,
+  'createdAt': instance.createdAt?.toIso8601String(),
+  'updatedAt': instance.updatedAt?.toIso8601String(),
 };

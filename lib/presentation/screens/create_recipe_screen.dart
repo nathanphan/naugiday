@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
-import 'package:naugiday/presentation/providers/my_recipes_provider.dart';
+import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateRecipeScreen extends ConsumerStatefulWidget {
@@ -29,6 +29,7 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
 
   void _save() {
     if (_formKey.currentState!.validate()) {
+      final now = DateTime.now();
       final recipe = Recipe(
         id: const Uuid().v4(),
         name: _nameController.text,
@@ -45,9 +46,11 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
         ),
         mealType: _mealType,
         isUserCreated: true,
+        createdAt: now,
+        updatedAt: now,
       );
 
-      ref.read(myRecipesProvider.notifier).addRecipe(recipe);
+      ref.read(recipeControllerProvider.notifier).addRecipe(recipe);
       context.pop();
     }
   }
@@ -55,7 +58,10 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Recipe')),
+      appBar: AppBar(
+        title: const Text('Create Recipe'),
+        leading: BackButton(onPressed: () => context.pop()),
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -85,6 +91,11 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
             ),
             const SizedBox(height: 32),
             FilledButton(onPressed: _save, child: const Text('Save Recipe')),
+            TextButton.icon(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.home_outlined),
+              label: const Text('Back to home'),
+            ),
           ],
         ),
       ),

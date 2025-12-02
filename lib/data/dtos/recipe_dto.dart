@@ -19,6 +19,8 @@ class RecipeDto {
   final int mealTypeIndex;
   final bool isUserCreated;
   final String? imageUrl;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   RecipeDto({
     required this.id,
@@ -32,6 +34,8 @@ class RecipeDto {
     required this.mealTypeIndex,
     required this.isUserCreated,
     this.imageUrl,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory RecipeDto.fromDomain(Recipe recipe) {
@@ -47,6 +51,8 @@ class RecipeDto {
       mealTypeIndex: recipe.mealType.index,
       isUserCreated: recipe.isUserCreated,
       imageUrl: recipe.imageUrl,
+      createdAt: recipe.createdAt,
+      updatedAt: recipe.updatedAt,
     );
   }
 
@@ -63,6 +69,8 @@ class RecipeDto {
       mealType: MealType.values[mealTypeIndex],
       isUserCreated: isUserCreated,
       imageUrl: imageUrl,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 

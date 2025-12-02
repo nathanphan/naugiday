@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:naugiday/data/local/hive_setup.dart';
 import 'package:naugiday/presentation/router/app_router.dart';
 import 'package:naugiday/presentation/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
+  await initHiveForRecipes();
 
   runApp(const ProviderScope(child: NauGiDayApp()));
 }

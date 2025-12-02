@@ -25,7 +25,14 @@ class RecipeDetailScreen extends StatelessWidget {
         .toList();
 
     return Scaffold(
-      appBar: AppBar(title: Text(recipe.name)),
+      appBar: AppBar(
+        title: Text(recipe.name),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).maybePop(),
+          tooltip: 'Back to previous',
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -84,6 +91,16 @@ class RecipeDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: OutlinedButton.icon(
+            onPressed: () => Navigator.of(context).maybePop(),
+            icon: const Icon(Icons.home_outlined),
+            label: const Text('Back to home'),
+          ),
+        ),
       ),
     );
   }

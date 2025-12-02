@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:hive/hive.dart';
 import 'package:naugiday/data/dtos/recipe_dto.dart';
+import 'package:naugiday/data/local/hive_setup.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/repositories/recipe_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -13,30 +15,52 @@ RecipeRepository recipeRepository(Ref ref) {
 }
 
 class LocalRecipeRepository implements RecipeRepository {
-  static const String _boxName = 'recipes';
-
-  Future<Box<String>> _getBox() async {
-    if (!Hive.isBoxOpen(_boxName)) {
-      return await Hive.openBox<String>(_boxName);
+  Future<Box> _getBox() async {
+    if (!Hive.isBoxOpen(recipesBoxName)) {
+      await initHiveForRecipes();
     }
-    return Hive.box<String>(_boxName);
+    final Box box = Hive.box(recipesBoxName);
+    await _migrateLegacyStrings(box);
+    return box;
+  }
+
+  Future<void> _migrateLegacyStrings(Box box) async {
+    // Older versions stored JSON strings in the same box.
+    if (box.isEmpty) return;
+    final entries = box.toMap();
+    var mutated = false;
+    for (final entry in entries.entries) {
+      final value = entry.value;
+      if (value is String) {
+        try {
+          final dto = RecipeDto.fromJson(
+            jsonDecode(value) as Map<String, dynamic>,
+          );
+          await box.put(entry.key, dto);
+          mutated = true;
+        } catch (_) {
+          // Skip malformed legacy entry to avoid crashing; leave as-is.
+        }
+      }
+    }
+    if (mutated) {
+      await box.flush();
+    }
   }
 
   @override
   Future<List<Recipe>> getMyRecipes() async {
     final box = await _getBox();
-    return box.values.map((jsonStr) {
-      final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
-      return RecipeDto.fromJson(jsonMap).toDomain();
-    }).toList();
+    return box.values
+        .whereType<RecipeDto>()
+        .map((dto) => dto.toDomain())
+        .toList();
   }
 
   @override
   Future<void> saveRecipe(Recipe recipe) async {
     final box = await _getBox();
-    final dto = RecipeDto.fromDomain(recipe);
-    final jsonStr = jsonEncode(dto.toJson());
-    await box.put(recipe.id, jsonStr);
+    await box.put(recipe.id, RecipeDto.fromDomain(recipe));
   }
 
   @override
