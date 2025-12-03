@@ -14,10 +14,9 @@ void main() {
     );
 
     expect(find.text('NauGiDay'), findsOneWidget);
-    expect(find.text('What are we cooking for?'), findsOneWidget);
     expect(find.text('Breakfast'), findsOneWidget);
     expect(find.text('Lunch'), findsOneWidget);
     expect(find.text('Dinner'), findsOneWidget);
-    expect(find.text('Scan Ingredients'), findsOneWidget);
+    expect(find.text('Suggested Today'), findsOneWidget);
   });
 }

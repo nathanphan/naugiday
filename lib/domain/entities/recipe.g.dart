@@ -20,6 +20,12 @@ _Recipe _$RecipeFromJson(Map<String, dynamic> json) => _Recipe(
   mealType: $enumDecode(_$MealTypeEnumMap, json['mealType']),
   isUserCreated: json['isUserCreated'] as bool? ?? false,
   imageUrl: json['imageUrl'] as String?,
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$RecipeToJson(_Recipe instance) => <String, dynamic>{
@@ -34,6 +40,8 @@ Map<String, dynamic> _$RecipeToJson(_Recipe instance) => <String, dynamic>{
   'mealType': _$MealTypeEnumMap[instance.mealType]!,
   'isUserCreated': instance.isUserCreated,
   'imageUrl': instance.imageUrl,
+  'createdAt': instance.createdAt?.toIso8601String(),
+  'updatedAt': instance.updatedAt?.toIso8601String(),
 };
 
 const _$RecipeDifficultyEnumMap = {

@@ -24,6 +24,8 @@ abstract class Recipe with _$Recipe {
     required MealType mealType,
     @Default(false) bool isUserCreated,
     String? imageUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _Recipe;
 
   factory Recipe.fromJson(Map<String, dynamic> json) =>

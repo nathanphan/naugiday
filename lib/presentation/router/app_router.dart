@@ -65,7 +65,12 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/create-recipe',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const CreateRecipeScreen(),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return CreateRecipeScreen(
+            initialRecipe: extra != null ? extra['recipe'] as Recipe? : null,
+          );
+        },
       ),
       GoRoute(
         path: '/recipe-detail',
