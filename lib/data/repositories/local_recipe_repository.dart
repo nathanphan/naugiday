@@ -64,6 +64,12 @@ class LocalRecipeRepository implements RecipeRepository {
   }
 
   @override
+  Future<void> updateRecipe(Recipe recipe) async {
+    final box = await _getBox();
+    await box.put(recipe.id, RecipeDto.fromDomain(recipe));
+  }
+
+  @override
   Future<void> deleteRecipe(String id) async {
     final box = await _getBox();
     await box.delete(id);

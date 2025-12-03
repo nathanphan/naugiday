@@ -52,23 +52,31 @@ class MyRecipesScreen extends ConsumerWidget {
               return ListTile(
                 title: Text(recipe.name),
                 subtitle: Text(recipe.description),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    ref
-                        .read(recipeControllerProvider.notifier)
-                        .deleteRecipe(recipe.id);
-                  },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        context.go('/create-recipe', extra: {'recipe': recipe});
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        ref
+                            .read(recipeControllerProvider.notifier)
+                            .deleteRecipe(recipe.id);
+                      },
+                    ),
+                  ],
                 ),
                 onTap: () {
                   context.go(
                     '/recipe-detail',
                     extra: {
                       'recipe': recipe,
-                      'detected':
-                          <
-                            String
-                          >[], // No detected ingredients for manual recipes
+                      'detected': <String>[], // No detected ingredients for manual recipes
                     },
                   );
                 },

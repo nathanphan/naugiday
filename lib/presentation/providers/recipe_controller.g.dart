@@ -20,7 +20,7 @@ final class RecipeControllerProvider
         argument: null,
         retry: null,
         name: r'recipeControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class RecipeControllerProvider
   RecipeController create() => RecipeController();
 }
 
-String _$recipeControllerHash() => r'afc3476c9b454f2a391622b690832b467ea7ed5b';
+String _$recipeControllerHash() => r'46083e4fa3c7907ba2a6bc93291bb305655656d8';
 
 abstract class _$RecipeController extends $AsyncNotifier<List<Recipe>> {
   FutureOr<List<Recipe>> build();

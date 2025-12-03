@@ -38,6 +38,11 @@ class _FakeRecipeRepo implements RecipeRepository {
     _store.removeWhere((r) => r.id == recipe.id);
     _store.add(recipe);
   }
+
+  @override
+  Future<void> updateRecipe(Recipe recipe) async {
+    await saveRecipe(recipe);
+  }
 }
 
 Recipe _makeRecipe({String id = 'r1'}) => Recipe(

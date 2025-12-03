@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
+import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:naugiday/presentation/providers/recipe_controller.dart';
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends ConsumerWidget {
   final Recipe recipe;
   final List<String> detectedIngredients;
 
@@ -13,7 +16,7 @@ class RecipeDetailScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Normalize for comparison
     final detectedSet = detectedIngredients.map((e) => e.toLowerCase()).toSet();
 
@@ -32,6 +35,38 @@ class RecipeDetailScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).maybePop(),
           tooltip: 'Back to previous',
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => context.push('/create-recipe', extra: {'recipe': recipe}),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Delete recipe?'),
+                      content: Text('Remove "${recipe.name}" from My Recipes?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  ) ??
+                  false;
+              if (!confirm) return;
+              await ref.read(recipeControllerProvider.notifier).deleteRecipe(recipe.id);
+              if (context.mounted) Navigator.of(context).maybePop();
+            },
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

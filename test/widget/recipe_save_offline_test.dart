@@ -6,8 +6,8 @@ import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/repositories/recipe_repository.dart';
-import 'package:naugiday/data/repositories/local_recipe_repository.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
+import 'package:naugiday/data/repositories/local_recipe_repository.dart';
 import 'package:naugiday/presentation/screens/my_recipes_screen.dart';
 import 'package:naugiday/presentation/screens/recipe_detail_screen.dart';
 
@@ -26,6 +26,11 @@ class _MemoryRecipeRepo implements RecipeRepository {
 
   @override
   Future<void> saveRecipe(Recipe recipe) async {
+    _store[recipe.id] = recipe;
+  }
+
+  @override
+  Future<void> updateRecipe(Recipe recipe) async {
     _store[recipe.id] = recipe;
   }
 }

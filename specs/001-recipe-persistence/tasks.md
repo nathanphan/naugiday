@@ -11,7 +11,7 @@ description: "Task list template for feature implementation"
 **Tests**: Tests for critical flows (domain/use-case coverage and widget tests for recipe list/detail/scan) are REQUIRED by the constitution; add any additional tests requested in the feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
-**Constitution alignment**: Include tasks for offline/local persistence readiness, AI data handling/prompt validation, and UX/performance polish (loading/error states, dark mode/text scaling).
+**Constitution alignment**: Include tasks for offline/local persistence readiness, AI data handling/prompt validation, and UX/performance polish (loading/error states, dark mode/text scaling). Guard async state updates to avoid disposed-provider writes.
 
 ## Format: `[ID] [P?] [Story] Description`
 
@@ -77,15 +77,15 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement update recipe use case in `lib/domain/usecases/update_recipe.dart`
-- [ ] T020 [US2] Extend repository with update support in `lib/data/repositories/hive_recipe_repository.dart`
-- [ ] T021 [US2] Add edit flow UI (reuse form) in `lib/presentation/screens/recipe_edit_screen.dart`
-- [ ] T022 [US2] Add delete action with confirmation in `lib/presentation/screens/recipe_detail_screen.dart`
+- [X] T019 [US2] Implement update recipe use case in `lib/domain/usecases/update_recipe.dart`
+- [X] T020 [US2] Extend repository with update support in `lib/data/repositories/local_recipe_repository.dart`
+- [X] T021 [US2] Add edit flow UI (reuse form) in `lib/presentation/screens/create_recipe_screen.dart`
+- [X] T022 [US2] Add delete action with confirmation in `lib/presentation/screens/recipe_detail_screen.dart`
 
 ### Tests for User Story 2
 
-- [ ] T023 [P] [US2] Use-case test for update and delete persistence in `test/domain/update_delete_recipe_test.dart`
-- [ ] T024 [P] [US2] Widget test: edit/delete durability across restart in `test/widget/recipe_edit_delete_test.dart`
+- [X] T023 [P] [US2] Use-case test for update and delete persistence in `test/domain/recipe_repository_test.dart`
+- [X] T024 [P] [US2] Widget test: edit/delete durability across restart in `test/widget/recipe_edit_delete_test.dart`
 
 ---
 

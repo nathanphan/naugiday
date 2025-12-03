@@ -8,7 +8,9 @@ import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateRecipeScreen extends ConsumerStatefulWidget {
-  const CreateRecipeScreen({super.key});
+  final Recipe? initialRecipe;
+
+  const CreateRecipeScreen({super.key, this.initialRecipe});
 
   @override
   ConsumerState<CreateRecipeScreen> createState() => _CreateRecipeScreenState();
@@ -27,31 +29,61 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
     super.dispose();
   }
 
-  void _save() {
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.initialRecipe;
+    if (existing != null) {
+      _nameController.text = existing.name;
+      _descController.text = existing.description;
+      _mealType = existing.mealType;
+    }
+  }
+
+  void _navigateBack() {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      router.pop();
+    } else {
+      router.go('/my-recipes');
+    }
+  }
+
+  Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
       final now = DateTime.now();
+      final base = widget.initialRecipe;
       final recipe = Recipe(
-        id: const Uuid().v4(),
+        id: base?.id ?? const Uuid().v4(),
         name: _nameController.text,
         description: _descController.text,
-        cookingTimeMinutes: 30, // Default
-        difficulty: RecipeDifficulty.medium, // Default
-        ingredients: [], // Empty for MVP
-        steps: [], // Empty for MVP
-        nutrition: const NutritionInfo(
-          calories: 0,
-          protein: 0,
-          carbs: 0,
-          fat: 0,
-        ),
+        cookingTimeMinutes: base?.cookingTimeMinutes ?? 30,
+        difficulty: base?.difficulty ?? RecipeDifficulty.medium,
+        ingredients: base?.ingredients ?? [],
+        steps: base?.steps ?? [],
+        nutrition: base?.nutrition ??
+            const NutritionInfo(
+              calories: 0,
+              protein: 0,
+              carbs: 0,
+              fat: 0,
+            ),
         mealType: _mealType,
-        isUserCreated: true,
-        createdAt: now,
+        isUserCreated: base?.isUserCreated ?? true,
+        imageUrl: base?.imageUrl,
+        createdAt: base?.createdAt ?? now,
         updatedAt: now,
       );
 
-      ref.read(recipeControllerProvider.notifier).addRecipe(recipe);
-      context.pop();
+      final notifier = ref.read(recipeControllerProvider.notifier);
+      if (base != null) {
+        await notifier.updateRecipe(recipe);
+      } else {
+        await notifier.addRecipe(recipe);
+      }
+
+      if (!mounted) return;
+      _navigateBack();
     }
   }
 
@@ -59,8 +91,8 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Recipe'),
-        leading: BackButton(onPressed: () => context.pop()),
+        title: Text(widget.initialRecipe == null ? 'Create Recipe' : 'Edit Recipe'),
+        leading: BackButton(onPressed: _navigateBack),
       ),
       body: Form(
         key: _formKey,
@@ -90,9 +122,13 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
               },
             ),
             const SizedBox(height: 32),
-            FilledButton(onPressed: _save, child: const Text('Save Recipe')),
+            FilledButton(
+              onPressed: _save,
+              child:
+                  Text(widget.initialRecipe == null ? 'Save Recipe' : 'Update Recipe'),
+            ),
             TextButton.icon(
-              onPressed: () => context.pop(),
+              onPressed: _navigateBack,
               icon: const Icon(Icons.home_outlined),
               label: const Text('Back to home'),
             ),
