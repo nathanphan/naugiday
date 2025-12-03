@@ -5,4 +5,5 @@ abstract class RecipeRepository {
   Future<void> saveRecipe(Recipe recipe);
   Future<void> updateRecipe(Recipe recipe);
   Future<void> deleteRecipe(String id);
+  Future<List<Recipe>> recoverCorruptedEntries();
 }

@@ -9,7 +9,7 @@ void main() {
   group('Recipe', () {
     test('should support value equality', () {
       const nutrition = NutritionInfo(calories: 100, protein: 10, carbs: 10, fat: 10);
-      const ingredient = Ingredient(id: '1', name: 'Test');
+      const ingredient = Ingredient(id: '1', name: 'Test', quantity: '1');
       
       final recipe1 = Recipe(
         id: '1',
@@ -30,7 +30,7 @@ void main() {
 
     test('should map to/from DTO correctly', () {
       const nutrition = NutritionInfo(calories: 100, protein: 10, carbs: 10, fat: 10);
-      const ingredient = Ingredient(id: '1', name: 'Test');
+      const ingredient = Ingredient(id: '1', name: 'Test', quantity: '1');
       
       final recipe = Recipe(
         id: '1',

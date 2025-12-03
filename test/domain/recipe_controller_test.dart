@@ -43,6 +43,11 @@ class _FakeRecipeRepo implements RecipeRepository {
   Future<void> updateRecipe(Recipe recipe) async {
     await saveRecipe(recipe);
   }
+
+  @override
+  Future<List<Recipe>> recoverCorruptedEntries() async {
+    return getMyRecipes();
+  }
 }
 
 Recipe _makeRecipe({String id = 'r1'}) => Recipe(

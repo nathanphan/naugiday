@@ -25,27 +25,53 @@ class RecipeController extends _$RecipeController {
   }
 
   Future<void> refresh() async {
+    final previous = state;
     state = const AsyncLoading();
-    final result = await AsyncValue.guard(() => _listRecipes());
-    if (!ref.mounted) return;
-    state = result;
+    try {
+      final recipes = await _listRecipes();
+      if (!ref.mounted) return;
+      state = AsyncData(recipes);
+    } catch (err, stack) {
+      if (!ref.mounted) return;
+      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+    }
   }
 
   Future<void> addRecipe(Recipe recipe) async {
-    await _saveRecipe(recipe);
-    if (!ref.mounted) return;
-    state = await AsyncValue.guard(() => _listRecipes());
+    await _runAndReload(() => _saveRecipe(recipe));
   }
 
   Future<void> updateRecipe(Recipe recipe) async {
-    await _updateRecipe(recipe);
-    if (!ref.mounted) return;
-    state = await AsyncValue.guard(() => _listRecipes());
+    await _runAndReload(() => _updateRecipe(recipe));
   }
 
   Future<void> deleteRecipe(String id) async {
-    await _repository.deleteRecipe(id);
-    if (!ref.mounted) return;
-    state = await AsyncValue.guard(() => _listRecipes());
+    await _runAndReload(() => _repository.deleteRecipe(id));
+  }
+
+  Future<void> recoverStorage() async {
+    final previous = state;
+    state = const AsyncLoading();
+    try {
+      final recipes = await _repository.recoverCorruptedEntries();
+      if (!ref.mounted) return;
+      state = AsyncData(recipes);
+    } catch (err, stack) {
+      if (!ref.mounted) return;
+      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+    }
+  }
+
+  Future<void> _runAndReload(Future<void> Function() action) async {
+    final previous = state;
+    try {
+      await action();
+      final recipes = await _listRecipes();
+      if (!ref.mounted) return;
+      state = AsyncData(recipes);
+    } catch (err, stack) {
+      if (!ref.mounted) return;
+      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+    }
   }
 }

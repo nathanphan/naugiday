@@ -35,6 +35,11 @@ NauGiDay is a Flutter application designed to help home cooks decide what to coo
     dart run build_runner build --delete-conflicting-outputs
     ```
 
+### Environment & Secrets
+
+- Pass secrets via `--dart-define` or a local `.env` that stays uncommitted; never write secrets into recipe storage.
+- Verify `.env*`, API keys, and build outputs stay git-ignored before pushing.
+
 ## Running Locally
 
 ### iOS Simulator
@@ -120,4 +125,3 @@ graph TD
 -   **Riverpod**: Chosen for its compile-time safety, easy testing overrides, and separation of UI from logic.
 -   **Hive**: Selected for local storage due to its speed and simplicity for storing NoSQL-like data (recipes).
 -   **Freezed**: Used to generate immutable data classes and unions, reducing boilerplate and ensuring data safety.
-

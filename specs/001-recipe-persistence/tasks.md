@@ -97,23 +97,24 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Add guarded write/read with validation in `lib/data/repositories/hive_recipe_repository.dart`
-- [ ] T026 [US3] Implement error states and retry messaging in `lib/presentation/providers/recipe_controller.dart`
-- [ ] T027 [US3] Add user-facing recovery UI in `lib/presentation/screens/recipe_detail_screen.dart`
+- [X] T025 [US3] Add guarded write/read with validation in `lib/data/repositories/local_recipe_repository.dart`
+- [X] T026 [US3] Implement error states and retry messaging in `lib/presentation/providers/recipe_controller.dart`
+- [X] T027 [US3] Add user-facing recovery UI in `lib/presentation/screens/my_recipes_screen.dart`
 
 ### Tests for User Story 3
 
-- [ ] T028 [P] [US3] Data test: simulate storage failure and recovery in `test/data/recipe_recovery_test.dart`
-- [ ] T029 [P] [US3] Widget test: error/retry UX for failed save in `test/widget/recipe_error_retry_test.dart`
+- [X] T028 [P] [US3] Data test: simulate storage failure and recovery in `test/data/recipe_recovery_test.dart`
+- [X] T029 [P] [US3] Widget test: error/retry UX for failed save in `test/widget/recipe_error_retry_test.dart`
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T030 Add loading skeletons/error states/back navigation UX polish in `lib/presentation/screens/recipe_list_screen.dart` and `lib/presentation/screens/recipe_detail_screen.dart`
-- [ ] T031 Run full `flutter test` and fix any regressions
-- [ ] T032 Update docs with persistence instructions in `specs/001-recipe-persistence/quickstart.md`
-- [ ] T033 Ensure secrets are excluded and env/define wiring documented in `README.md`
+- [X] T030 Add loading skeletons/error states/back navigation UX polish in `lib/presentation/screens/my_recipes_screen.dart` and `lib/presentation/screens/recipe_detail_screen.dart`
+- [X] T031 Run full `flutter test` and fix any regressions
+- [X] T032 Update docs with persistence instructions in `specs/001-recipe-persistence/quickstart.md`
+- [X] T033 Ensure secrets are excluded and env/define wiring documented in `README.md`
+- [X] T034 Check Home screen make the text in  meal selector to be fit inside of its box, not to drop.
 
 ---
 

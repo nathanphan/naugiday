@@ -63,6 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   _selectedMealType = newSelection.first;
                 });
               },
+              style: const ButtonStyle(
+                visualDensity: VisualDensity(horizontal: -2, vertical: -2),
+                padding: MaterialStatePropertyAll(
+                  EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+              ),
               showSelectedIcon: false,
             ),
             const SizedBox(height: 24),

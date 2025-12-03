@@ -33,6 +33,11 @@ class _MemoryRecipeRepo implements RecipeRepository {
   Future<void> updateRecipe(Recipe recipe) async {
     _store[recipe.id] = recipe;
   }
+
+  @override
+  Future<List<Recipe>> recoverCorruptedEntries() async {
+    return getMyRecipes();
+  }
 }
 
 void main() {
