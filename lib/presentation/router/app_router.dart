@@ -58,6 +58,9 @@ GoRouter goRouter(Ref ref) {
           final extra = state.extra as Map<String, dynamic>;
           return RecipeSuggestionsScreen(
             imagePaths: extra['images'] as List<String>,
+            labels: (extra['labels'] as List<dynamic>? ?? const <dynamic>[])
+                .map((e) => e.toString())
+                .toList(),
             mealType: extra['mealType'] as MealType,
           );
         },

@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
+import 'package:naugiday/presentation/theme/app_theme.dart';
+import 'package:naugiday/presentation/widgets/skeletons.dart';
+import 'package:share_plus/share_plus.dart';
 
-class RecipeDetailScreen extends ConsumerWidget {
+class RecipeDetailScreen extends ConsumerStatefulWidget {
   final Recipe recipe;
   final List<String> detectedIngredients;
 
@@ -16,7 +19,58 @@ class RecipeDetailScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen> {
+  bool _showSkeleton = true;
+  bool _isSaved = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(AppTheme.animFast, () {
+        if (mounted) {
+          setState(() {
+            _showSkeleton = false;
+          });
+        }
+      });
+    });
+  }
+
+  Future<void> _toggleSave(WidgetRef ref) async {
+    final notifier = ref.read(recipeControllerProvider.notifier);
+    if (_isSaved) {
+      await notifier.deleteRecipe(widget.recipe.id);
+    } else {
+      await notifier.addRecipe(widget.recipe);
+    }
+    if (!mounted) return;
+    setState(() => _isSaved = !_isSaved);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(_isSaved ? 'Recipe saved' : 'Recipe removed')),
+    );
+  }
+
+  void _shareRecipe() {
+    final recipe = widget.recipe;
+    final buffer = StringBuffer()
+      ..writeln(recipe.name)
+      ..writeln()
+      ..writeln('Ingredients:')
+      ..writeln(recipe.ingredients.map((i) => '- ${i.quantity} ${i.name}').join('\n'))
+      ..writeln()
+      ..writeln('Steps:')
+      ..writeln(recipe.steps.asMap().entries.map((e) => '${e.key + 1}. ${e.value}').join('\n'));
+    Share.share(buffer.toString(), subject: 'Recipe: ${recipe.name}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final recipe = widget.recipe;
+    final detectedIngredients = widget.detectedIngredients;
     // Normalize for comparison
     final detectedSet = detectedIngredients.map((e) => e.toLowerCase()).toSet();
 
@@ -71,60 +125,107 @@ class RecipeDetailScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: Image.asset(AppAssets.foodPlaceholder, fit: BoxFit.cover),
-          ),
+          _showSkeleton
+              ? const SkeletonBlock(height: 200)
+              : Hero(
+                  tag: recipe.id,
+                  child: SizedBox(
+                    height: 200,
+                    width: double.infinity,
+                    child: Image.asset(AppAssets.foodPlaceholder, fit: BoxFit.cover),
+                  ),
+                ),
           const SizedBox(height: 16),
-          Text(
-            recipe.description,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          if (_showSkeleton)
+            const SkeletonBlock(height: 20, width: double.infinity)
+          else
+            Text(
+              recipe.description,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           const SizedBox(height: 16),
-          _buildNutritionSection(context),
+          _showSkeleton ? const SkeletonBlock(height: 80) : _buildNutritionSection(context),
           const Divider(height: 32),
+          if (!_showSkeleton)
+            Wrap(
+              spacing: AppTheme.spacingS,
+              runSpacing: AppTheme.spacingS,
+              children: [
+                FilledButton.icon(
+                  onPressed: () => _toggleSave(ref),
+                  icon: Icon(_isSaved ? Icons.bookmark_remove : Icons.bookmark_add_outlined),
+                  label: Text(_isSaved ? 'Unsave' : 'Save'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: _shareRecipe,
+                  icon: const Icon(Icons.share_outlined),
+                  label: const Text('Share'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => context.go('/shopping-list'),
+                  icon: const Icon(Icons.playlist_add_check),
+                  label: const Text('Add missing items'),
+                ),
+              ],
+            ),
+          const SizedBox(height: 16),
           Text('Ingredients', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
-          if (haveIngredients.isNotEmpty) ...[
-            Text(
-              'From your fridge:',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(color: Colors.green),
-            ),
-            ...haveIngredients.map(
-              (i) => ListTile(
-                leading: const Icon(Icons.check, color: Colors.green),
-                title: Text(i.name),
-                dense: true,
+          if (_showSkeleton) ...[
+            const SkeletonBlock(height: 16, width: 180),
+            const SizedBox(height: 8),
+            const SkeletonBlock(height: 14, width: double.infinity),
+            const SizedBox(height: 8),
+            const SkeletonBlock(height: 14, width: double.infinity),
+          ] else ...[
+            if (haveIngredients.isNotEmpty) ...[
+              Text(
+                'From your fridge:',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(color: Colors.green),
               ),
-            ),
-          ],
-          if (missingIngredients.isNotEmpty) ...[
-            Text(
-              'You may need to buy:',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(color: Colors.orange),
-            ),
-            ...missingIngredients.map(
-              (i) => ListTile(
-                leading: const Icon(Icons.shopping_cart, color: Colors.orange),
-                title: Text(i.name),
-                dense: true,
+              ...haveIngredients.map(
+                (i) => ListTile(
+                  leading: const Icon(Icons.check, color: Colors.green),
+                  title: Text(i.name),
+                  dense: true,
+                ),
               ),
-            ),
+            ],
+            if (missingIngredients.isNotEmpty) ...[
+              Text(
+                'You may need to buy:',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(color: Colors.orange),
+              ),
+              ...missingIngredients.map(
+                (i) => ListTile(
+                  leading: const Icon(Icons.shopping_cart, color: Colors.orange),
+                  title: Text(i.name),
+                  dense: true,
+                ),
+              ),
+            ],
           ],
           const Divider(height: 32),
           Text('Steps', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
-          ...recipe.steps.asMap().entries.map(
-            (entry) => ListTile(
-              leading: CircleAvatar(child: Text('${entry.key + 1}')),
-              title: Text(entry.value),
+          if (_showSkeleton) ...[
+            const SkeletonBlock(height: 14, width: double.infinity),
+            const SizedBox(height: 8),
+            const SkeletonBlock(height: 14, width: double.infinity),
+            const SizedBox(height: 8),
+            const SkeletonBlock(height: 14, width: 200),
+          ] else ...[
+            ...recipe.steps.asMap().entries.map(
+              (entry) => ListTile(
+                leading: CircleAvatar(child: Text('${entry.key + 1}')),
+                title: Text(entry.value),
+              ),
             ),
-          ),
+          ],
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -141,6 +242,7 @@ class RecipeDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildNutritionSection(BuildContext context) {
+    final recipe = widget.recipe;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

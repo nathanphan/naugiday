@@ -4,9 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/presentation/widgets/camera_controls_overlay.dart';
 import 'package:naugiday/presentation/widgets/scan_preview_sheet.dart';
+import 'package:naugiday/presentation/theme/app_theme.dart';
+import 'package:naugiday/presentation/widgets/skeletons.dart';
+import 'package:naugiday/core/debug/debug_toggles.dart';
 
 class ScanScreen extends StatefulWidget {
-  const ScanScreen({super.key});
+  const ScanScreen({super.key, this.forceCameraUnavailable = false});
+
+  final bool forceCameraUnavailable;
 
   @override
   State<ScanScreen> createState() => _ScanScreenState();
@@ -16,17 +21,34 @@ class _ScanScreenState extends State<ScanScreen> {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   final List<XFile> _capturedImages = [];
+  List<String> _labels = [];
   bool _isInitializing = true;
   bool _isFlashOn = false;
+  bool _cameraUnavailable = false;
 
   @override
   void initState() {
     super.initState();
-    _initCamera();
+    if (widget.forceCameraUnavailable) {
+      _cameraUnavailable = true;
+      _isInitializing = false;
+    } else {
+      _initCamera();
+    }
   }
 
   Future<void> _initCamera() async {
     try {
+      if (DebugToggles.cameraMode == CameraDebugMode.unavailable) {
+        setState(() {
+          _isInitializing = false;
+          _cameraUnavailable = true;
+        });
+        return;
+      }
+      if (DebugToggles.cameraMode == CameraDebugMode.slow) {
+        await Future.delayed(const Duration(seconds: 2));
+      }
       _cameras = await availableCameras();
       if (_cameras != null && _cameras!.isNotEmpty) {
         _controller = CameraController(
@@ -41,11 +63,17 @@ class _ScanScreenState extends State<ScanScreen> {
           });
         }
       } else {
-        setState(() => _isInitializing = false);
+        setState(() {
+          _isInitializing = false;
+          _cameraUnavailable = true;
+        });
       }
     } catch (e) {
       debugPrint('Error initializing camera: $e');
-      setState(() => _isInitializing = false);
+      setState(() {
+        _isInitializing = false;
+        _cameraUnavailable = true;
+      });
     }
   }
 
@@ -87,6 +115,7 @@ class _ScanScreenState extends State<ScanScreen> {
       '/suggestions',
       extra: {
         'images': _capturedImages.map((e) => e.path).toList(),
+        'labels': _labels,
         'mealType': mealType,
       },
     );
@@ -103,18 +132,70 @@ class _ScanScreenState extends State<ScanScreen> {
     if (_isInitializing) {
       return const Scaffold(
         backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: SkeletonBlock(height: 120, shimmer: true)),
       );
     }
 
-    if (_controller == null || !_controller!.value.isInitialized) {
-      return const Scaffold(
+    if (_cameraUnavailable || _controller == null || !_controller!.value.isInitialized) {
+      return Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: Text(
-            'Camera not available',
-            style: TextStyle(color: Colors.white),
-          ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black87,
+                    Colors.black54,
+                    Colors.black87,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(AppTheme.spacingM),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.videocam_off, color: Colors.white, size: 48),
+                    const SizedBox(height: AppTheme.spacingM),
+                    const Text(
+                      'Camera not available',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppTheme.spacingS),
+                    const Text(
+                      'Check permissions or try again.',
+                      style: TextStyle(color: Colors.white70),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppTheme.spacingM),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _initCamera,
+                          icon: const Icon(Icons.refresh, color: Colors.white),
+                          label: const Text('Retry', style: TextStyle(color: Colors.white)),
+                        ),
+                        const SizedBox(width: AppTheme.spacingS),
+                        OutlinedButton.icon(
+                          onPressed: () => openAppSettings(context),
+                          icon: const Icon(Icons.settings, color: Colors.white),
+                          label: const Text('Settings', style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -172,13 +253,22 @@ class _ScanScreenState extends State<ScanScreen> {
               alignment: Alignment.bottomCenter,
               child: ScanPreviewSheet(
                 images: _capturedImages,
-                onGenerate: _generateRecipes,
+                onGenerate: (labels) {
+                  _labels = labels;
+                  _generateRecipes();
+                },
                 onDelete: _deleteImage,
               ),
             ),
           ],
         ],
       ),
+    );
+  }
+
+  void openAppSettings(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Open settings to allow camera access.')),
     );
   }
 }

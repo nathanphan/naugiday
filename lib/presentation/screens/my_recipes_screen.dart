@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/errors/recipe_storage_exception.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
+import 'package:naugiday/presentation/widgets/skeletons.dart';
+import 'package:naugiday/presentation/theme/app_theme.dart';
+import 'package:naugiday/core/debug/debug_toggles.dart';
 
-class MyRecipesScreen extends ConsumerWidget {
+class MyRecipesScreen extends ConsumerStatefulWidget {
   const MyRecipesScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final recipesAsync = ref.watch(recipeControllerProvider);
+  ConsumerState<MyRecipesScreen> createState() => _MyRecipesScreenState();
+}
+
+class _MyRecipesScreenState extends ConsumerState<MyRecipesScreen> {
+  final Set<String> _pinned = {};
+  final Set<String> _favorites = {};
+
+  @override
+  Widget build(BuildContext context) {
+    final baseAsync = ref.watch(recipeControllerProvider);
+    final AsyncValue<List<Recipe>> recipesAsync = DebugToggles.storageMode == StorageDebugMode.error
+        ? const AsyncError('Debug storage error', StackTrace.empty)
+        : DebugToggles.storageMode == StorageDebugMode.empty
+            ? const AsyncData(<Recipe>[])
+            : baseAsync;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,74 +63,158 @@ class MyRecipesScreen extends ConsumerWidget {
               ),
             );
           }
-          return ListView.builder(
-            itemCount: recipes.length,
-            itemBuilder: (context, index) {
-              final recipe = recipes[index];
-              return ListTile(
-                title: Text(recipe.name),
-                subtitle: Text(recipe.description),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        context.go('/create-recipe', extra: {'recipe': recipe});
-                      },
+          return AnimatedSwitcher(
+            duration: AppTheme.animFast,
+            child: ListView.builder(
+              key: ValueKey(recipes.length),
+              itemCount: recipes.length,
+              itemBuilder: (context, index) {
+                final recipe = recipes[index];
+                final pinned = _pinned.contains(recipe.id);
+                final favorite = _favorites.contains(recipe.id);
+                final notifier = ref.read(recipeControllerProvider.notifier);
+                return Dismissible(
+                  key: ValueKey('dismiss-${recipe.id}'),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (_) async {
+                    return await showDialog<bool>(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: const Text('Delete recipe?'),
+                            content: Text('Remove "${recipe.name}" from My Recipes?'),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Cancel')),
+                              TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Delete')),
+                            ],
+                          ),
+                        ) ??
+                        false;
+                  },
+                  onDismissed: (_) {
+                    notifier.deleteRecipe(recipe.id);
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('"${recipe.name}" deleted'),
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () => notifier.addRecipe(recipe),
+                        ),
+                      ),
+                    );
+                  },
+                  background: Container(
+                    color: Colors.redAccent,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  child: ListTile(
+                    title: Text(recipe.name),
+                    subtitle: Text(recipe.description),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            favorite ? Icons.favorite : Icons.favorite_border,
+                            color: favorite ? Colors.redAccent : null,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (favorite) {
+                                _favorites.remove(recipe.id);
+                              } else {
+                                _favorites.add(recipe.id);
+                              }
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined),
+                          onPressed: () {
+                            setState(() {
+                              if (pinned) {
+                                _pinned.remove(recipe.id);
+                              } else {
+                                _pinned.add(recipe.id);
+                              }
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            context.go('/create-recipe', extra: {'recipe': recipe});
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            notifier.deleteRecipe(recipe.id).then((_) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('"${recipe.name}" deleted'),
+                                  action: SnackBarAction(
+                                    label: 'Undo',
+                                    onPressed: () => notifier.addRecipe(recipe),
+                                  ),
+                                ),
+                              );
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        ref
-                            .read(recipeControllerProvider.notifier)
-                            .deleteRecipe(recipe.id);
-                      },
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  context.go(
-                    '/recipe-detail',
-                    extra: {
-                      'recipe': recipe,
-                      'detected': <String>[], // No detected ingredients for manual recipes
+                    onTap: () {
+                      context.go(
+                        '/recipe-detail',
+                        extra: {
+                          'recipe': recipe,
+                          'detected': <String>[], // No detected ingredients for manual recipes
+                        },
+                      );
                     },
-                  );
-                },
-              );
-            },
+                    onLongPress: () {
+                      setState(() {
+                        if (pinned) {
+                          _pinned.remove(recipe.id);
+                        } else {
+                          _pinned.add(recipe.id);
+                        }
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
           );
         },
-        loading: () => ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemBuilder: (context, index) => const _RecipeSkeleton(),
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
-          itemCount: 4,
-        ),
+        loading: () => const SkeletonList(),
         error: (err, stack) {
           final fallback = recipesAsync.asData?.value;
           return Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppTheme.spacingM),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.warning_amber, size: 48, color: Colors.orange),
-                  const SizedBox(height: 8),
+                  Image.asset(AppAssets.emptyState, height: 180),
+                  const SizedBox(height: AppTheme.spacingM),
                   Text(
                     'We hit a storage issue.',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppTheme.spacingS),
                   Text(
                     _describeError(err),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppTheme.spacingM),
                   Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: AppTheme.spacingS,
+                    runSpacing: AppTheme.spacingS,
                     children: [
                       ElevatedButton.icon(
                         onPressed: () => ref.read(recipeControllerProvider.notifier).refresh(),
@@ -128,12 +229,12 @@ class MyRecipesScreen extends ConsumerWidget {
                     ],
                   ),
                   if (fallback != null && fallback.isNotEmpty) ...[
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppTheme.spacingM),
                     Text(
                       'Your recipes are still available:',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppTheme.spacingS),
                     ...fallback.map(
                       (recipe) => ListTile(
                         title: Text(recipe.name),
@@ -167,49 +268,5 @@ class MyRecipesScreen extends ConsumerWidget {
       return err.toString();
     }
     return 'Please try again.';
-  }
-}
-
-class _RecipeSkeleton extends StatelessWidget {
-  const _RecipeSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 14,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                height: 12,
-                width: 160,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }

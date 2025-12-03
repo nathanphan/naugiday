@@ -4,15 +4,20 @@ import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/presentation/providers/suggestions_provider.dart';
+import 'package:naugiday/core/constants/app_assets.dart';
 import 'package:naugiday/presentation/widgets/recipe_card.dart';
+import 'package:naugiday/presentation/widgets/skeletons.dart';
+import 'package:naugiday/presentation/theme/app_theme.dart';
 
 class RecipeSuggestionsScreen extends ConsumerStatefulWidget {
   final List<String> imagePaths;
+  final List<String> labels;
   final MealType mealType;
 
   const RecipeSuggestionsScreen({
     super.key,
     required this.imagePaths,
+    required this.labels,
     required this.mealType,
   });
 
@@ -25,12 +30,14 @@ class _RecipeSuggestionsScreenState
     extends ConsumerState<RecipeSuggestionsScreen> {
   String _searchQuery = '';
   final Set<String> _selectedFilters = {};
+  bool _errorSnackbarShown = false;
 
   @override
   Widget build(BuildContext context) {
     final suggestionsAsync = ref.watch(
       suggestionsProvider(
         imagePaths: widget.imagePaths,
+        labels: widget.labels,
         mealType: widget.mealType,
       ),
     );
@@ -40,7 +47,9 @@ class _RecipeSuggestionsScreenState
         title: const Text('Recipe Suggestions'),
         centerTitle: true,
       ),
-      body: suggestionsAsync.when(
+      body: AnimatedSwitcher(
+        duration: AppTheme.animFast,
+        child: suggestionsAsync.when(
         data: (data) {
           final detected = data.detectedIngredients;
           var recipes = data.recipes;
@@ -171,45 +180,122 @@ class _RecipeSuggestionsScreenState
               // Recipe Grid
               Expanded(
                 child: recipes.isEmpty
-                    ? const Center(child: Text('No recipes found'))
-                    : GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.75,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
-                        itemCount: recipes.length,
-                        itemBuilder: (context, index) {
-                          final recipe = recipes[index];
-                          return RecipeCard(
-                            recipe: recipe,
-                            onTap: () {
-                              context.go(
-                                '/recipe-detail',
-                                extra: {'recipe': recipe, 'detected': detected},
-                              );
-                            },
-                          );
-                        },
+                    ? _buildEmptyState(context)
+                    : AnimatedSwitcher(
+                        duration: AppTheme.animFast,
+                        child: GridView.builder(
+                          key: ValueKey(recipes.length),
+                          padding: const EdgeInsets.all(16),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.75,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                              ),
+                          itemCount: recipes.length,
+                          itemBuilder: (context, index) {
+                            final recipe = recipes[index];
+                            return RecipeCard(
+                              recipe: recipe,
+                              onTap: () {
+                                context.go(
+                                  '/recipe-detail',
+                                  extra: {'recipe': recipe, 'detected': detected},
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
               ),
             ],
           );
         },
-        loading: () => const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        loading: () => const SkeletonCardGrid(),
+        error: (err, stack) {
+          if (!_errorSnackbarShown) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Could not load suggestions: $err')),
+              );
+            });
+            _errorSnackbarShown = true;
+          }
+          return _buildErrorState(context, err);
+        },
+      ),),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.spacingM),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(AppAssets.emptyState, height: 180),
+          const SizedBox(height: AppTheme.spacingM),
+          Text(
+            'No recipes found',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: AppTheme.spacingS),
+          const Text('Try clearing filters or rescanning ingredients.'),
+          const SizedBox(height: AppTheme.spacingM),
+          Wrap(
+            spacing: AppTheme.spacingS,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Analyzing ingredients...'),
+              OutlinedButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedFilters.clear();
+                    _searchQuery = '';
+                  });
+                },
+                child: const Text('Clear filters'),
+              ),
+              FilledButton(
+                onPressed: () => context.pop(),
+                child: const Text('Rescan'),
+              ),
             ],
           ),
-        ),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, Object err) {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.spacingM),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(AppAssets.emptyState, height: 180),
+          const SizedBox(height: AppTheme.spacingM),
+          Text(
+            'We ran into an issue.',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: AppTheme.spacingS),
+          Text('$err'),
+          const SizedBox(height: AppTheme.spacingM),
+          Wrap(
+            spacing: AppTheme.spacingS,
+            children: [
+              OutlinedButton(
+                onPressed: () => setState(() {}),
+                child: const Text('Retry'),
+              ),
+              FilledButton(
+                onPressed: () => context.pop(),
+                child: const Text('Rescan'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

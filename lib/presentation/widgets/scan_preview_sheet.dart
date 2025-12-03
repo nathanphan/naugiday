@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-class ScanPreviewSheet extends StatelessWidget {
+class ScanPreviewSheet extends StatefulWidget {
   final List<XFile> images;
-  final VoidCallback onGenerate;
+  final void Function(List<String> labels) onGenerate;
   final Function(int) onDelete;
 
   const ScanPreviewSheet({
@@ -15,10 +15,47 @@ class ScanPreviewSheet extends StatelessWidget {
   });
 
   @override
+  State<ScanPreviewSheet> createState() => _ScanPreviewSheetState();
+}
+
+class _ScanPreviewSheetState extends State<ScanPreviewSheet> {
+  late List<TextEditingController> _controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(
+      widget.images.length,
+      (_) => TextEditingController(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant ScanPreviewSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.images.length != widget.images.length) {
+      _controllers = List.generate(
+        widget.images.length,
+        (i) => TextEditingController(
+          text: i < oldWidget.images.length ? _controllers[i].text : '',
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    if (images.isEmpty) return const SizedBox.shrink();
+    if (widget.images.isEmpty) return const SizedBox.shrink();
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -38,7 +75,7 @@ class ScanPreviewSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            '${images.length} Ingredients Scanned',
+            '${widget.images.length} Ingredients Scanned',
             style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
@@ -46,7 +83,7 @@ class ScanPreviewSheet extends StatelessWidget {
             height: 100,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: images.length,
+              itemCount: widget.images.length,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
                 return Stack(
@@ -54,7 +91,7 @@ class ScanPreviewSheet extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.file(
-                        File(images[index].path),
+                        File(widget.images[index].path),
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -64,7 +101,7 @@ class ScanPreviewSheet extends StatelessWidget {
                       top: 4,
                       right: 4,
                       child: InkWell(
-                        onTap: () => onDelete(index),
+                        onTap: () => widget.onDelete(index),
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: const BoxDecoration(
@@ -84,9 +121,33 @@ class ScanPreviewSheet extends StatelessWidget {
               },
             ),
           ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 64,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _controllers.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  width: 140,
+                  child: TextField(
+                    controller: _controllers[index],
+                    decoration: const InputDecoration(
+                      labelText: 'Label',
+                      isDense: true,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           const SizedBox(height: 24),
           FilledButton(
-            onPressed: onGenerate,
+            onPressed: () {
+              final labels = _controllers.map((c) => c.text).toList();
+              widget.onGenerate(labels);
+            },
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),

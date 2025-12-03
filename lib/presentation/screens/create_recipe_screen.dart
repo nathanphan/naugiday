@@ -78,8 +78,16 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
       final notifier = ref.read(recipeControllerProvider.notifier);
       if (base != null) {
         await notifier.updateRecipe(recipe);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Recipe updated')),
+        );
       } else {
         await notifier.addRecipe(recipe);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Recipe saved')),
+        );
       }
 
       if (!mounted) return;
