@@ -10,17 +10,31 @@ import 'package:naugiday/presentation/providers/recipe_controller.dart';
 
 class _FakeRecipeRepo implements RecipeRepository {
   final List<Recipe> _store = [];
+  final Duration delay;
+
+  _FakeRecipeRepo({this.delay = Duration.zero});
 
   @override
   Future<void> deleteRecipe(String id) async {
+    if (delay != Duration.zero) {
+      await Future.delayed(delay);
+    }
     _store.removeWhere((r) => r.id == id);
   }
 
   @override
-  Future<List<Recipe>> getMyRecipes() async => List.unmodifiable(_store);
+  Future<List<Recipe>> getMyRecipes() async {
+    if (delay != Duration.zero) {
+      await Future.delayed(delay);
+    }
+    return List.unmodifiable(_store);
+  }
 
   @override
   Future<void> saveRecipe(Recipe recipe) async {
+    if (delay != Duration.zero) {
+      await Future.delayed(delay);
+    }
     _store.removeWhere((r) => r.id == recipe.id);
     _store.add(recipe);
   }
@@ -69,5 +83,17 @@ void main() {
 
     final recipes = await container.read(recipeControllerProvider.future);
     expect(recipes, isEmpty);
+  });
+
+  test('controller guards state updates after dispose', () async {
+    final repo = _FakeRecipeRepo(delay: const Duration(milliseconds: 10));
+    final container = ProviderContainer(
+      overrides: [recipeRepositoryProvider.overrideWithValue(repo)],
+    );
+
+    final notifier = container.read(recipeControllerProvider.notifier);
+    final future = notifier.addRecipe(_makeRecipe(id: 'r-late'));
+    container.dispose(); // dispose before async work completes
+    await expectLater(future, completes);
   });
 }

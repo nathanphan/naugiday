@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-Version change: (template) -> 1.0.0
-Modified principles: none (initial definition)
-Added sections: Core Principles populated; Security, Data Handling, and AI Use; Development Workflow & Quality Gates
+Version change: 1.0.0 -> 1.0.1
+Modified principles: Quality Gates & Targeted Tests (async lifecycle safety clarified)
+Added sections: none
 Removed sections: none
-Templates requiring updates: ✅ .specify/templates/plan-template.md; ✅ .specify/templates/tasks-template.md
+Templates requiring updates: ⚠ pending review (none applied)
 Follow-up TODOs: TODO(RATIFICATION_DATE): original adoption date not provided
 -->
 
@@ -23,6 +23,7 @@ User-authored recipes and scanned ingredients MUST persist locally (Hive or succ
 
 ### Quality Gates & Targeted Tests
 Critical flows (recipe list/detail, scan → generate, and persistence use cases) MUST have automated coverage: domain/use-case tests plus widget tests for primary screens. Build/format/lint and code generation MUST run clean before merge. Where new external integrations are added (e.g., Gemini), add contract or parsing tests to lock response formats.
+Async state updates MUST guard disposed providers/controllers (e.g., check `ref.mounted` or cancel work) to avoid setState-after-dispose failures; long-running work must be cancellable on dispose.
 
 ### Performance, UX Polish, and Accessibility
 The app MUST maintain smooth interactions (target 60fps) and provide clear feedback through loading skeletons, error states with retries, and purposeful animations. UI changes MUST respect dark mode and text scaling. Camera, image processing, and AI-triggered actions MUST avoid blocking the UI thread and surface progress to users.
@@ -39,4 +40,4 @@ Every feature plan/spec MUST pass the Constitution Check before Phase 0 research
 
 This constitution governs NauGiDay development; conflicting practices yield to it. Amendments occur via PRs that: state the governance impact, update this file, bump the version below per semver (major for removals/overhauls, minor for new principles/sections, patch for clarifications), and update affected templates. Compliance reviews happen during plan/spec/task creation and again at PR review; exceptions are documented with owners and deadlines. Ratification date records first adoption once known; last amended reflects the most recent approved change.
 
-**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not provided | **Last Amended**: 2025-12-02
+**Version**: 1.0.1 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not provided | **Last Amended**: 2025-12-02

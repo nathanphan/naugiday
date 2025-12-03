@@ -23,16 +23,20 @@ class RecipeController extends _$RecipeController {
 
   Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _listRecipes());
+    final result = await AsyncValue.guard(() => _listRecipes());
+    if (!ref.mounted) return;
+    state = result;
   }
 
   Future<void> addRecipe(Recipe recipe) async {
     await _saveRecipe(recipe);
+    if (!ref.mounted) return;
     state = await AsyncValue.guard(() => _listRecipes());
   }
 
   Future<void> deleteRecipe(String id) async {
     await _repository.deleteRecipe(id);
+    if (!ref.mounted) return;
     state = await AsyncValue.guard(() => _listRecipes());
   }
 }
