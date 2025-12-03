@@ -24,9 +24,10 @@ class SuggestedRecipeCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              height: 100,
+              height: 92,
               color: color ?? theme.colorScheme.tertiaryContainer,
               child: Center(
                 child: Icon(
@@ -37,7 +38,7 @@ class SuggestedRecipeCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

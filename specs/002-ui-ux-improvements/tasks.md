@@ -102,9 +102,9 @@ description: "Task list for UI/UX improvements"
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T028 Update theme tokens (typography spacing/radius/contrast) for chips/pills/bottom surfaces in `lib/presentation/theme/app_theme.dart`
-- [ ] T029 Profile animations/skeleton performance (p95 frame time ≤16ms) and record in `specs/002-ui-ux-improvements/research.md` or `quickstart.md`
-- [ ] T030 Update docs with QA toggle usage and test instructions in `specs/002-ui-ux-improvements/quickstart.md`
+- [X] T028 Update theme tokens (typography spacing/radius/contrast) for chips/pills/bottom surfaces in `lib/presentation/theme/app_theme.dart`
+- [X] T029 Profile animations/skeleton performance (p95 frame time ≤16ms) and record in `specs/002-ui-ux-improvements/research.md` or `quickstart.md`
+- [X] T030 Update docs with QA toggle usage and test instructions in `specs/002-ui-ux-improvements/quickstart.md`
 
 ---
 
