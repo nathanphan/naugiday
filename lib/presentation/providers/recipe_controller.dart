@@ -25,7 +25,6 @@ class RecipeController extends _$RecipeController {
   }
 
   Future<void> refresh() async {
-    final previous = state;
     state = const AsyncLoading();
     try {
       final recipes = await _listRecipes();
@@ -33,7 +32,7 @@ class RecipeController extends _$RecipeController {
       state = AsyncData(recipes);
     } catch (err, stack) {
       if (!ref.mounted) return;
-      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+      state = AsyncError<List<Recipe>>(err, stack);
     }
   }
 
@@ -50,7 +49,6 @@ class RecipeController extends _$RecipeController {
   }
 
   Future<void> recoverStorage() async {
-    final previous = state;
     state = const AsyncLoading();
     try {
       final recipes = await _repository.recoverCorruptedEntries();
@@ -58,12 +56,11 @@ class RecipeController extends _$RecipeController {
       state = AsyncData(recipes);
     } catch (err, stack) {
       if (!ref.mounted) return;
-      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+      state = AsyncError<List<Recipe>>(err, stack);
     }
   }
 
   Future<void> _runAndReload(Future<void> Function() action) async {
-    final previous = state;
     try {
       await action();
       final recipes = await _listRecipes();
@@ -71,7 +68,7 @@ class RecipeController extends _$RecipeController {
       state = AsyncData(recipes);
     } catch (err, stack) {
       if (!ref.mounted) return;
-      state = AsyncError<List<Recipe>>(err, stack).copyWithPrevious(previous);
+      state = AsyncError<List<Recipe>>(err, stack);
     }
   }
 }

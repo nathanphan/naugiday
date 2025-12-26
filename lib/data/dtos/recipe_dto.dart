@@ -1,8 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:naugiday/domain/entities/recipe.dart';
-import 'package:naugiday/domain/entities/meal_type.dart';
+import 'package:naugiday/data/dtos/cooking_step_dto.dart';
 import 'package:naugiday/data/dtos/ingredient_dto.dart';
 import 'package:naugiday/data/dtos/nutrition_info_dto.dart';
+import 'package:naugiday/data/dtos/recipe_image_dto.dart';
+import 'package:naugiday/domain/entities/meal_type.dart';
+import 'package:naugiday/domain/entities/recipe.dart';
 
 part 'recipe_dto.g.dart';
 
@@ -14,7 +16,12 @@ class RecipeDto {
   final int cookingTimeMinutes;
   final int difficultyIndex;
   final List<IngredientDto> ingredients;
+  @JsonKey(defaultValue: [])
   final List<String> steps;
+  @JsonKey(defaultValue: [])
+  final List<CookingStepDto> cookingSteps;
+  @JsonKey(defaultValue: [])
+  final List<RecipeImageDto> images;
   final NutritionInfoDto nutrition;
   final int mealTypeIndex;
   final bool isUserCreated;
@@ -30,6 +37,8 @@ class RecipeDto {
     required this.difficultyIndex,
     required this.ingredients,
     required this.steps,
+    this.cookingSteps = const [],
+    this.images = const [],
     required this.nutrition,
     required this.mealTypeIndex,
     required this.isUserCreated,
@@ -47,6 +56,9 @@ class RecipeDto {
       difficultyIndex: recipe.difficulty.index,
       ingredients: recipe.ingredients.map(IngredientDto.fromDomain).toList(),
       steps: recipe.steps,
+      cookingSteps:
+          recipe.cookingSteps.map(CookingStepDto.fromDomain).toList(),
+      images: recipe.images.map(RecipeImageDto.fromDomain).toList(),
       nutrition: NutritionInfoDto.fromDomain(recipe.nutrition),
       mealTypeIndex: recipe.mealType.index,
       isUserCreated: recipe.isUserCreated,
@@ -65,6 +77,8 @@ class RecipeDto {
       difficulty: RecipeDifficulty.values[difficultyIndex],
       ingredients: ingredients.map((e) => e.toDomain()).toList(),
       steps: steps,
+      cookingSteps: cookingSteps.map((e) => e.toDomain()).toList(),
+      images: images.map((e) => e.toDomain()).toList(),
       nutrition: nutrition.toDomain(),
       mealType: MealType.values[mealTypeIndex],
       isUserCreated: isUserCreated,

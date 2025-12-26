@@ -9,12 +9,18 @@ class IngredientDto {
   final String name;
   final String quantity;
   final String? category;
+  final double? quantityValue;
+  final String? quantityUnit;
+  final String? notes;
 
   IngredientDto({
     required this.id,
     required this.name,
     required this.quantity,
     this.category,
+    this.quantityValue,
+    this.quantityUnit,
+    this.notes,
   });
 
   factory IngredientDto.fromDomain(Ingredient ingredient) {
@@ -23,6 +29,9 @@ class IngredientDto {
       name: ingredient.name,
       quantity: ingredient.quantity,
       category: ingredient.category,
+      quantityValue: ingredient.quantityValue,
+      quantityUnit: ingredient.quantityUnit,
+      notes: ingredient.notes,
     );
   }
 
@@ -32,6 +41,9 @@ class IngredientDto {
       name: name,
       quantity: quantity,
       category: category,
+      quantityValue: quantityValue,
+      quantityUnit: quantityUnit,
+      notes: notes,
     );
   }
 

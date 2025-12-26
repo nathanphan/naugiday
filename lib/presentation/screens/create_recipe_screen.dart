@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
-import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:naugiday/presentation/providers/add_recipe_controller.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
-import 'package:uuid/uuid.dart';
+import 'package:naugiday/presentation/widgets/ingredient_list.dart';
+import 'package:naugiday/presentation/widgets/recipe_image_grid.dart';
+import 'package:naugiday/presentation/widgets/steps_list.dart';
 
 class CreateRecipeScreen extends ConsumerStatefulWidget {
   final Recipe? initialRecipe;
@@ -32,12 +34,7 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   @override
   void initState() {
     super.initState();
-    final existing = widget.initialRecipe;
-    if (existing != null) {
-      _nameController.text = existing.name;
-      _descController.text = existing.description;
-      _mealType = existing.mealType;
-    }
+    // Editing flow can prefill later when connected to existing recipes.
   }
 
   void _navigateBack() {
@@ -50,53 +47,29 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   }
 
   Future<void> _save() async {
-    if (_formKey.currentState!.validate()) {
-      final now = DateTime.now();
-      final base = widget.initialRecipe;
-      final recipe = Recipe(
-        id: base?.id ?? const Uuid().v4(),
-        name: _nameController.text,
-        description: _descController.text,
-        cookingTimeMinutes: base?.cookingTimeMinutes ?? 30,
-        difficulty: base?.difficulty ?? RecipeDifficulty.medium,
-        ingredients: base?.ingredients ?? [],
-        steps: base?.steps ?? [],
-        nutrition: base?.nutrition ??
-            const NutritionInfo(
-              calories: 0,
-              protein: 0,
-              carbs: 0,
-              fat: 0,
-            ),
-        mealType: _mealType,
-        isUserCreated: base?.isUserCreated ?? true,
-        imageUrl: base?.imageUrl,
-        createdAt: base?.createdAt ?? now,
-        updatedAt: now,
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final addNotifier = ref.read(addRecipeControllerProvider.notifier);
+    addNotifier.setTitle(_nameController.text);
+    addNotifier.setDescription(_descController.text);
+    addNotifier.setMealType(_mealType);
+    final success = await addNotifier.save();
+    if (!mounted) return;
+    if (success) {
+      await ref.read(recipeControllerProvider.notifier).refresh();
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Recipe saved')),
       );
-
-      final notifier = ref.read(recipeControllerProvider.notifier);
-      if (base != null) {
-        await notifier.updateRecipe(recipe);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Recipe updated')),
-        );
-      } else {
-        await notifier.addRecipe(recipe);
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Recipe saved')),
-        );
-      }
-
-      if (!mounted) return;
       _navigateBack();
+    } else {
+      final error = ref.read(addRecipeControllerProvider).error ?? 'Could not save';
+      messenger.showSnackBar(SnackBar(content: Text(error)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final addState = ref.watch(addRecipeControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.initialRecipe == null ? 'Create Recipe' : 'Edit Recipe'),
@@ -129,17 +102,65 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
                 if (v != null) setState(() => _mealType = v);
               },
             ),
+            const SizedBox(height: 24),
+            IngredientList(
+              ingredients: addState.ingredients,
+              onAdd: (ing) => ref
+                  .read(addRecipeControllerProvider.notifier)
+                  .addIngredient(ing),
+              onUpdate: (idx, ing) => ref
+                  .read(addRecipeControllerProvider.notifier)
+                  .updateIngredient(idx, ing),
+              onRemove: (idx) =>
+                  ref.read(addRecipeControllerProvider.notifier).removeIngredient(idx),
+            ),
+            const SizedBox(height: 32),
+            StepsList(
+              steps: addState.steps,
+              onAdd: (step) =>
+                  ref.read(addRecipeControllerProvider.notifier).addStep(step),
+              onUpdate: (idx, step) => ref
+                  .read(addRecipeControllerProvider.notifier)
+                  .updateStep(idx, step),
+              onRemove: (idx) =>
+                  ref.read(addRecipeControllerProvider.notifier).removeStep(idx),
+              onMoveUp: (idx) =>
+                  ref.read(addRecipeControllerProvider.notifier).moveStepUp(idx),
+              onMoveDown: (idx) =>
+                  ref.read(addRecipeControllerProvider.notifier).moveStepDown(idx),
+            ),
+            const SizedBox(height: 32),
+            RecipeImageGrid(
+              images: addState.images,
+              onAddImage: () =>
+                  ref.read(addRecipeControllerProvider.notifier).addSampleImageForTest(),
+              onRemove: (idx) =>
+                  ref.read(addRecipeControllerProvider.notifier).removeImage(idx),
+            ),
             const SizedBox(height: 32),
             FilledButton(
-              onPressed: _save,
-              child:
-                  Text(widget.initialRecipe == null ? 'Save Recipe' : 'Update Recipe'),
+              key: const Key('save-recipe-button'),
+              onPressed: addState.isSaving ? null : _save,
+              child: addState.isSaving
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(widget.initialRecipe == null ? 'Save Recipe' : 'Update Recipe'),
             ),
             TextButton.icon(
               onPressed: _navigateBack,
               icon: const Icon(Icons.home_outlined),
               label: const Text('Back to home'),
             ),
+            if (addState.error != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                addState.error!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ],
           ],
         ),
       ),

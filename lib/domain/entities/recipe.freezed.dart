@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Recipe {
 
- String get id; String get name; String get description; int get cookingTimeMinutes; RecipeDifficulty get difficulty; List<Ingredient> get ingredients; List<String> get steps; NutritionInfo get nutrition; MealType get mealType; bool get isUserCreated; String? get imageUrl; DateTime? get createdAt; DateTime? get updatedAt;
+ String get id; String get name; String get description; int get cookingTimeMinutes; RecipeDifficulty get difficulty; List<Ingredient> get ingredients; List<String> get steps; List<CookingStep> get cookingSteps; List<RecipeImage> get images; NutritionInfo get nutrition; MealType get mealType; bool get isUserCreated; String? get imageUrl; DateTime? get createdAt; DateTime? get updatedAt;
 /// Create a copy of Recipe
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RecipeCopyWith<Recipe> get copyWith => _$RecipeCopyWithImpl<Recipe>(this as Rec
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&const DeepCollectionEquality().equals(other.steps, steps)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other.ingredients, ingredients)&&const DeepCollectionEquality().equals(other.steps, steps)&&const DeepCollectionEquality().equals(other.cookingSteps, cookingSteps)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(ingredients),const DeepCollectionEquality().hash(steps),nutrition,mealType,isUserCreated,imageUrl,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(ingredients),const DeepCollectionEquality().hash(steps),const DeepCollectionEquality().hash(cookingSteps),const DeepCollectionEquality().hash(images),nutrition,mealType,isUserCreated,imageUrl,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'Recipe(id: $id, name: $name, description: $description, cookingTimeMinutes: $cookingTimeMinutes, difficulty: $difficulty, ingredients: $ingredients, steps: $steps, nutrition: $nutrition, mealType: $mealType, isUserCreated: $isUserCreated, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'Recipe(id: $id, name: $name, description: $description, cookingTimeMinutes: $cookingTimeMinutes, difficulty: $difficulty, ingredients: $ingredients, steps: $steps, cookingSteps: $cookingSteps, images: $images, nutrition: $nutrition, mealType: $mealType, isUserCreated: $isUserCreated, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RecipeCopyWith<$Res>  {
   factory $RecipeCopyWith(Recipe value, $Res Function(Recipe) _then) = _$RecipeCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String description, int cookingTimeMinutes, RecipeDifficulty difficulty, List<Ingredient> ingredients, List<String> steps, NutritionInfo nutrition, MealType mealType, bool isUserCreated, String? imageUrl, DateTime? createdAt, DateTime? updatedAt
+ String id, String name, String description, int cookingTimeMinutes, RecipeDifficulty difficulty, List<Ingredient> ingredients, List<String> steps, List<CookingStep> cookingSteps, List<RecipeImage> images, NutritionInfo nutrition, MealType mealType, bool isUserCreated, String? imageUrl, DateTime? createdAt, DateTime? updatedAt
 });
 
 
@@ -65,7 +65,7 @@ class _$RecipeCopyWithImpl<$Res>
 
 /// Create a copy of Recipe
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? cookingTimeMinutes = null,Object? difficulty = null,Object? ingredients = null,Object? steps = null,Object? nutrition = null,Object? mealType = null,Object? isUserCreated = null,Object? imageUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? cookingTimeMinutes = null,Object? difficulty = null,Object? ingredients = null,Object? steps = null,Object? cookingSteps = null,Object? images = null,Object? nutrition = null,Object? mealType = null,Object? isUserCreated = null,Object? imageUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,9 @@ as String,cookingTimeMinutes: null == cookingTimeMinutes ? _self.cookingTimeMinu
 as int,difficulty: null == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as RecipeDifficulty,ingredients: null == ingredients ? _self.ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<Ingredient>,steps: null == steps ? _self.steps : steps // ignore: cast_nullable_to_non_nullable
-as List<String>,nutrition: null == nutrition ? _self.nutrition : nutrition // ignore: cast_nullable_to_non_nullable
+as List<String>,cookingSteps: null == cookingSteps ? _self.cookingSteps : cookingSteps // ignore: cast_nullable_to_non_nullable
+as List<CookingStep>,images: null == images ? _self.images : images // ignore: cast_nullable_to_non_nullable
+as List<RecipeImage>,nutrition: null == nutrition ? _self.nutrition : nutrition // ignore: cast_nullable_to_non_nullable
 as NutritionInfo,mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,isUserCreated: null == isUserCreated ? _self.isUserCreated : isUserCreated // ignore: cast_nullable_to_non_nullable
 as bool,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -174,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  List<CookingStep> cookingSteps,  List<RecipeImage> images,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Recipe() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.cookingSteps,_that.images,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -195,10 +197,10 @@ return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  List<CookingStep> cookingSteps,  List<RecipeImage> images,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _Recipe():
-return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.cookingSteps,_that.images,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -215,10 +217,10 @@ return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String description,  int cookingTimeMinutes,  RecipeDifficulty difficulty,  List<Ingredient> ingredients,  List<String> steps,  List<CookingStep> cookingSteps,  List<RecipeImage> images,  NutritionInfo nutrition,  MealType mealType,  bool isUserCreated,  String? imageUrl,  DateTime? createdAt,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Recipe() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_that.difficulty,_that.ingredients,_that.steps,_that.cookingSteps,_that.images,_that.nutrition,_that.mealType,_that.isUserCreated,_that.imageUrl,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -230,7 +232,7 @@ return $default(_that.id,_that.name,_that.description,_that.cookingTimeMinutes,_
 @JsonSerializable()
 
 class _Recipe extends Recipe {
-  const _Recipe({required this.id, required this.name, required this.description, required this.cookingTimeMinutes, required this.difficulty, required final  List<Ingredient> ingredients, required final  List<String> steps, required this.nutrition, required this.mealType, this.isUserCreated = false, this.imageUrl, this.createdAt, this.updatedAt}): _ingredients = ingredients,_steps = steps,super._();
+  const _Recipe({required this.id, required this.name, required this.description, required this.cookingTimeMinutes, required this.difficulty, required final  List<Ingredient> ingredients, final  List<String> steps = const <String>[], final  List<CookingStep> cookingSteps = const <CookingStep>[], final  List<RecipeImage> images = const <RecipeImage>[], required this.nutrition, required this.mealType, this.isUserCreated = false, this.imageUrl, this.createdAt, this.updatedAt}): _ingredients = ingredients,_steps = steps,_cookingSteps = cookingSteps,_images = images,super._();
   factory _Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
 @override final  String id;
@@ -246,10 +248,24 @@ class _Recipe extends Recipe {
 }
 
  final  List<String> _steps;
-@override List<String> get steps {
+@override@JsonKey() List<String> get steps {
   if (_steps is EqualUnmodifiableListView) return _steps;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_steps);
+}
+
+ final  List<CookingStep> _cookingSteps;
+@override@JsonKey() List<CookingStep> get cookingSteps {
+  if (_cookingSteps is EqualUnmodifiableListView) return _cookingSteps;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_cookingSteps);
+}
+
+ final  List<RecipeImage> _images;
+@override@JsonKey() List<RecipeImage> get images {
+  if (_images is EqualUnmodifiableListView) return _images;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_images);
 }
 
 @override final  NutritionInfo nutrition;
@@ -272,16 +288,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&const DeepCollectionEquality().equals(other._steps, _steps)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Recipe&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.cookingTimeMinutes, cookingTimeMinutes) || other.cookingTimeMinutes == cookingTimeMinutes)&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&const DeepCollectionEquality().equals(other._ingredients, _ingredients)&&const DeepCollectionEquality().equals(other._steps, _steps)&&const DeepCollectionEquality().equals(other._cookingSteps, _cookingSteps)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.nutrition, nutrition) || other.nutrition == nutrition)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.isUserCreated, isUserCreated) || other.isUserCreated == isUserCreated)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(_ingredients),const DeepCollectionEquality().hash(_steps),nutrition,mealType,isUserCreated,imageUrl,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,description,cookingTimeMinutes,difficulty,const DeepCollectionEquality().hash(_ingredients),const DeepCollectionEquality().hash(_steps),const DeepCollectionEquality().hash(_cookingSteps),const DeepCollectionEquality().hash(_images),nutrition,mealType,isUserCreated,imageUrl,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'Recipe(id: $id, name: $name, description: $description, cookingTimeMinutes: $cookingTimeMinutes, difficulty: $difficulty, ingredients: $ingredients, steps: $steps, nutrition: $nutrition, mealType: $mealType, isUserCreated: $isUserCreated, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'Recipe(id: $id, name: $name, description: $description, cookingTimeMinutes: $cookingTimeMinutes, difficulty: $difficulty, ingredients: $ingredients, steps: $steps, cookingSteps: $cookingSteps, images: $images, nutrition: $nutrition, mealType: $mealType, isUserCreated: $isUserCreated, imageUrl: $imageUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -292,7 +308,7 @@ abstract mixin class _$RecipeCopyWith<$Res> implements $RecipeCopyWith<$Res> {
   factory _$RecipeCopyWith(_Recipe value, $Res Function(_Recipe) _then) = __$RecipeCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String description, int cookingTimeMinutes, RecipeDifficulty difficulty, List<Ingredient> ingredients, List<String> steps, NutritionInfo nutrition, MealType mealType, bool isUserCreated, String? imageUrl, DateTime? createdAt, DateTime? updatedAt
+ String id, String name, String description, int cookingTimeMinutes, RecipeDifficulty difficulty, List<Ingredient> ingredients, List<String> steps, List<CookingStep> cookingSteps, List<RecipeImage> images, NutritionInfo nutrition, MealType mealType, bool isUserCreated, String? imageUrl, DateTime? createdAt, DateTime? updatedAt
 });
 
 
@@ -309,7 +325,7 @@ class __$RecipeCopyWithImpl<$Res>
 
 /// Create a copy of Recipe
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? cookingTimeMinutes = null,Object? difficulty = null,Object? ingredients = null,Object? steps = null,Object? nutrition = null,Object? mealType = null,Object? isUserCreated = null,Object? imageUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? cookingTimeMinutes = null,Object? difficulty = null,Object? ingredients = null,Object? steps = null,Object? cookingSteps = null,Object? images = null,Object? nutrition = null,Object? mealType = null,Object? isUserCreated = null,Object? imageUrl = freezed,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_Recipe(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -318,7 +334,9 @@ as String,cookingTimeMinutes: null == cookingTimeMinutes ? _self.cookingTimeMinu
 as int,difficulty: null == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as RecipeDifficulty,ingredients: null == ingredients ? _self._ingredients : ingredients // ignore: cast_nullable_to_non_nullable
 as List<Ingredient>,steps: null == steps ? _self._steps : steps // ignore: cast_nullable_to_non_nullable
-as List<String>,nutrition: null == nutrition ? _self.nutrition : nutrition // ignore: cast_nullable_to_non_nullable
+as List<String>,cookingSteps: null == cookingSteps ? _self._cookingSteps : cookingSteps // ignore: cast_nullable_to_non_nullable
+as List<CookingStep>,images: null == images ? _self._images : images // ignore: cast_nullable_to_non_nullable
+as List<RecipeImage>,nutrition: null == nutrition ? _self.nutrition : nutrition // ignore: cast_nullable_to_non_nullable
 as NutritionInfo,mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,isUserCreated: null == isUserCreated ? _self.isUserCreated : isUserCreated // ignore: cast_nullable_to_non_nullable
 as bool,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable

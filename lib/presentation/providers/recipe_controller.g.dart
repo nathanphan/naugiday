@@ -33,7 +33,7 @@ final class RecipeControllerProvider
   RecipeController create() => RecipeController();
 }
 
-String _$recipeControllerHash() => r'46083e4fa3c7907ba2a6bc93291bb305655656d8';
+String _$recipeControllerHash() => r'81a229e901d7cb5ce1966846f1e68cdfd7e07c45';
 
 abstract class _$RecipeController extends $AsyncNotifier<List<Recipe>> {
   FutureOr<List<Recipe>> build();

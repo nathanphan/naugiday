@@ -11,7 +11,10 @@ abstract class Ingredient with _$Ingredient {
     required String id,
     required String name,
     required String quantity,
+    double? quantityValue,
+    String? quantityUnit,
     String? category,
+    String? notes,
   }) = _Ingredient;
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>

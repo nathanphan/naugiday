@@ -1,7 +1,5 @@
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:naugiday/data/adapters/recipe_adapter.dart';
-import 'package:naugiday/data/dtos/recipe_dto.dart';
 
 const String recipesBoxName = 'recipes';
 
@@ -22,6 +20,12 @@ Future<void> initHiveForRecipes({
   }
   if (!Hive.isAdapterRegistered(ingredientTypeId)) {
     Hive.registerAdapter(IngredientDtoAdapter());
+  }
+  if (!Hive.isAdapterRegistered(cookingStepTypeId)) {
+    Hive.registerAdapter(CookingStepDtoAdapter());
+  }
+  if (!Hive.isAdapterRegistered(recipeImageTypeId)) {
+    Hive.registerAdapter(RecipeImageDtoAdapter());
   }
   if (!Hive.isAdapterRegistered(recipeTypeId)) {
     Hive.registerAdapter(RecipeDtoAdapter());

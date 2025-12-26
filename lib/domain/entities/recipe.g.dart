@@ -15,7 +15,19 @@ _Recipe _$RecipeFromJson(Map<String, dynamic> json) => _Recipe(
   ingredients: (json['ingredients'] as List<dynamic>)
       .map((e) => Ingredient.fromJson(e as Map<String, dynamic>))
       .toList(),
-  steps: (json['steps'] as List<dynamic>).map((e) => e as String).toList(),
+  steps:
+      (json['steps'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const <String>[],
+  cookingSteps:
+      (json['cookingSteps'] as List<dynamic>?)
+          ?.map((e) => CookingStep.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <CookingStep>[],
+  images:
+      (json['images'] as List<dynamic>?)
+          ?.map((e) => RecipeImage.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <RecipeImage>[],
   nutrition: NutritionInfo.fromJson(json['nutrition'] as Map<String, dynamic>),
   mealType: $enumDecode(_$MealTypeEnumMap, json['mealType']),
   isUserCreated: json['isUserCreated'] as bool? ?? false,
@@ -36,6 +48,8 @@ Map<String, dynamic> _$RecipeToJson(_Recipe instance) => <String, dynamic>{
   'difficulty': _$RecipeDifficultyEnumMap[instance.difficulty]!,
   'ingredients': instance.ingredients,
   'steps': instance.steps,
+  'cookingSteps': instance.cookingSteps,
+  'images': instance.images,
   'nutrition': instance.nutrition,
   'mealType': _$MealTypeEnumMap[instance.mealType]!,
   'isUserCreated': instance.isUserCreated,

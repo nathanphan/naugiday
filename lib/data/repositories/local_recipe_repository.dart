@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:naugiday/data/dtos/recipe_dto.dart';
 import 'package:naugiday/data/local/hive_setup.dart';
-import 'package:naugiday/domain/errors/recipe_storage_exception.dart';
+import 'package:naugiday/data/services/image_storage_service.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:naugiday/domain/entities/recipe_image.dart';
+import 'package:naugiday/domain/errors/recipe_storage_exception.dart';
 import 'package:naugiday/domain/repositories/recipe_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,14 +19,20 @@ RecipeRepository recipeRepository(Ref ref) {
 }
 
 class LocalRecipeRepository implements RecipeRepository {
-  LocalRecipeRepository({RecipesStore? storeOverride})
-      : _storeOverride = storeOverride;
+  LocalRecipeRepository({
+    RecipesStore? storeOverride,
+    ImageStorageService? imageStorageService,
+  })  : _storeOverride = storeOverride,
+        _imageStorage = imageStorageService ?? ImageStorageService();
 
   final RecipesStore? _storeOverride;
+  final ImageStorageService _imageStorage;
 
   Future<RecipesStore> _getStore() async {
-    if (_storeOverride != null) {
-      return _storeOverride!;
+    final storeOverride = _storeOverride;
+    if (storeOverride != null) {
+      await _migrateLegacyStrings(storeOverride);
+      return storeOverride;
     }
     if (!Hive.isBoxOpen(recipesBoxName)) {
       await initHiveForRecipes();
@@ -111,16 +120,20 @@ class LocalRecipeRepository implements RecipeRepository {
 
   @override
   Future<void> saveRecipe(Recipe recipe) async {
-    await _safeWrite(
-      (store) => store.put(recipe.id, RecipeDto.fromDomain(recipe)),
-    );
+    await _safeWrite((store) async {
+      final withImages = await _persistImages(recipe);
+      final dto = RecipeDto.fromDomain(withImages);
+      await store.put(dto.id, dto);
+    });
   }
 
   @override
   Future<void> updateRecipe(Recipe recipe) async {
-    await _safeWrite(
-      (store) => store.put(recipe.id, RecipeDto.fromDomain(recipe)),
-    );
+    await _safeWrite((store) async {
+      final withImages = await _persistImages(recipe);
+      final dto = RecipeDto.fromDomain(withImages);
+      await store.put(dto.id, dto);
+    });
   }
 
   @override
@@ -143,6 +156,38 @@ class LocalRecipeRepository implements RecipeRepository {
     }
     await store.flush();
     return _readValidated(store);
+  }
+
+  Future<Recipe> _persistImages(Recipe recipe) async {
+    if (recipe.images.isEmpty) return recipe;
+    if (recipe.images.length > ImageStorageService.maxImagesPerRecipe) {
+      throw RecipeStorageException.write(
+        'Too many images (max ${ImageStorageService.maxImagesPerRecipe})',
+      );
+    }
+    final updatedImages = <RecipeImage>[];
+    for (final image in recipe.images) {
+      final existingPath = File(image.localPath);
+      final exists = await existingPath.exists();
+      if (!exists) continue;
+      final size = await existingPath.length();
+      if (!_imageStorage.isSizeAllowed(size)) {
+        throw RecipeStorageException.write(
+          'Image too large (max ${ImageStorageService.maxImageBytes} bytes)',
+        );
+      }
+      final savedFile =
+          await _imageStorage.saveImage(existingPath, recipeId: recipe.id);
+      updatedImages.add(
+        image.copyWith(
+          localPath: savedFile.path,
+          fileName: savedFile.uri.pathSegments.last,
+          fileSizeBytes: size,
+          addedAt: image.addedAt ?? DateTime.now(),
+        ),
+      );
+    }
+    return recipe.copyWith(images: updatedImages);
   }
 }
 

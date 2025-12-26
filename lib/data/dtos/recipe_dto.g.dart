@@ -15,7 +15,18 @@ RecipeDto _$RecipeDtoFromJson(Map<String, dynamic> json) => RecipeDto(
   ingredients: (json['ingredients'] as List<dynamic>)
       .map((e) => IngredientDto.fromJson(e as Map<String, dynamic>))
       .toList(),
-  steps: (json['steps'] as List<dynamic>).map((e) => e as String).toList(),
+  steps:
+      (json['steps'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+  cookingSteps:
+      (json['cookingSteps'] as List<dynamic>?)
+          ?.map((e) => CookingStepDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
+  images:
+      (json['images'] as List<dynamic>?)
+          ?.map((e) => RecipeImageDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   nutrition: NutritionInfoDto.fromJson(
     json['nutrition'] as Map<String, dynamic>,
   ),
@@ -38,6 +49,8 @@ Map<String, dynamic> _$RecipeDtoToJson(RecipeDto instance) => <String, dynamic>{
   'difficultyIndex': instance.difficultyIndex,
   'ingredients': instance.ingredients,
   'steps': instance.steps,
+  'cookingSteps': instance.cookingSteps,
+  'images': instance.images,
   'nutrition': instance.nutrition,
   'mealTypeIndex': instance.mealTypeIndex,
   'isUserCreated': instance.isUserCreated,
