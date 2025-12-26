@@ -12,6 +12,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
     expect(find.text('NauGiDay'), findsOneWidget);
     expect(find.text('Breakfast'), findsOneWidget);

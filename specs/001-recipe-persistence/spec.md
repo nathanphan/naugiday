@@ -67,7 +67,7 @@ The app protects saved recipes from corruption, showing clear recovery guidance 
 - **FR-004**: The app MUST allow users to delete saved recipes and ensure they are removed from local listings and detail views after restart.
 - **FR-005**: The storage layer MUST validate reads/writes to prevent corrupted entries from being surfaced; on failure, it MUST present actionable recovery guidance without losing existing good data.
 - **FR-006**: The app MUST prevent sensitive data (e.g., API keys) from being stored alongside user recipes and MUST avoid logging recipe content during storage operations.
-- **FR-007**: The app MUST handle schema evolution so existing recipes remain accessible when fields are added in future updates.
+- **FR-007**: The app MUST handle schema evolution so existing recipes remain accessible when fields are added in future updates, with new fields defaulted or migrated to keep legacy entries readable.
 - **FR-008**: The recipe detail experience MUST include a clear control to navigate back to the home or previous page without data loss.
 
 ### Key Entities *(include if feature involves data)*
@@ -81,6 +81,6 @@ The app protects saved recipes from corruption, showing clear recovery guidance 
 ### Measurable Outcomes
 
 - **SC-001**: 100% of saved recipes remain available and readable after app restart and when the device is offline.
-- **SC-002**: 95% of save/edit/delete actions complete in under 2 seconds on mid-range devices with typical recipe sizes.
+- **SC-002**: 95% of save/edit/delete actions complete in under 2 seconds on mid-range devices with typical recipe sizes (validated via profile/release timing).
 - **SC-003**: 0% data loss observed across app updates that add new recipe fields (measured in release testing).
-- **SC-004**: User-reported issues related to missing or corrupted saved recipes are under 1% of active users per release.
+- **SC-004**: User-reported issues related to missing or corrupted saved recipes are under 1% of active users per release (tracked via pre-release QA checklist and issue triage).

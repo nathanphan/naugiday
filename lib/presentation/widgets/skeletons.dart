@@ -173,3 +173,4 @@ class SkeletonList extends StatelessWidget {
     );
   }
 }
+// ignore_for_file: unnecessary_underscores

@@ -6,6 +6,8 @@ import 'package:naugiday/presentation/widgets/home_cta_card.dart';
 import 'package:naugiday/presentation/widgets/quick_actions_row.dart';
 import 'package:naugiday/presentation/widgets/suggested_recipe_card.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
+import 'package:naugiday/presentation/widgets/skeletons.dart';
+import 'package:naugiday/presentation/theme/app_theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +18,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   MealType _selectedMealType = MealType.dinner;
+  bool _showSuggestionsSkeleton = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(AppTheme.animMedium, () {
+        if (mounted) {
+          setState(() {
+            _showSuggestionsSkeleton = false;
+          });
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               style: const ButtonStyle(
                 visualDensity: VisualDensity(horizontal: -2, vertical: -2),
-                padding: MaterialStatePropertyAll(
+                padding: WidgetStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 ),
               ),
@@ -91,25 +108,31 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 16),
             SizedBox(
               height: 220,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  SuggestedRecipeCard(
-                    title: 'Spicy Tomato Pasta',
-                    time: '30m',
-                    calories: '450 kcal',
-                  ),
-                  SuggestedRecipeCard(
-                    title: 'Grilled Chicken Salad',
-                    time: '20m',
-                    calories: '320 kcal',
-                  ),
-                  SuggestedRecipeCard(
-                    title: 'Avocado Toast',
-                    time: '10m',
-                    calories: '250 kcal',
-                  ),
-                ],
+              child: AnimatedSwitcher(
+                duration: AppTheme.animFast,
+                child: _showSuggestionsSkeleton
+                    ? const _SuggestedSkeletonRow()
+                    : ListView(
+                        key: const ValueKey('suggested-cards'),
+                        scrollDirection: Axis.horizontal,
+                        children: const [
+                          SuggestedRecipeCard(
+                            title: 'Spicy Tomato Pasta',
+                            time: '30m',
+                            calories: '450 kcal',
+                          ),
+                          SuggestedRecipeCard(
+                            title: 'Grilled Chicken Salad',
+                            time: '20m',
+                            calories: '320 kcal',
+                          ),
+                          SuggestedRecipeCard(
+                            title: 'Avocado Toast',
+                            time: '10m',
+                            calories: '250 kcal',
+                          ),
+                        ],
+                      ),
               ),
             ),
           ],
@@ -145,3 +168,22 @@ class CenterTitleAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+
+class _SuggestedSkeletonRow extends StatelessWidget {
+  const _SuggestedSkeletonRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      key: const ValueKey('suggested-skeleton'),
+      scrollDirection: Axis.horizontal,
+      itemCount: 3,
+      separatorBuilder: (_, __) => const SizedBox(width: AppTheme.spacingM),
+      itemBuilder: (_, __) => const SizedBox(
+        width: 180,
+        child: SkeletonBlock(height: 200),
+      ),
+    );
+  }
+}
+// ignore_for_file: unnecessary_underscores

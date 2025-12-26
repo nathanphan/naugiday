@@ -12,7 +12,7 @@ import 'package:naugiday/main.dart';
 void main() {
   testWidgets('App renders root shell', (tester) async {
     await tester.pumpWidget(const ProviderScope(child: NauGiDayApp()));
-    await tester.pump();
+    await tester.pumpAndSettle(const Duration(milliseconds: 300));
 
     expect(find.text('NauGiDay'), findsWidgets);
   });

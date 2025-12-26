@@ -8,7 +8,6 @@ import 'package:naugiday/domain/entities/ingredient.dart';
 import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/repositories/ai_recipe_service.dart';
 import 'package:naugiday/data/datasources/fake_ai_recipe_service.dart';
-import 'package:naugiday/presentation/providers/suggestions_provider.dart';
 import 'package:naugiday/presentation/screens/my_recipes_screen.dart';
 import 'package:naugiday/presentation/screens/recipe_suggestions_screen.dart';
 

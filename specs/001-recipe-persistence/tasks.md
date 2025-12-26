@@ -60,7 +60,7 @@ description: "Task list template for feature implementation"
 - [X] T013 [US1] Implement use case for list recipes offline in `lib/domain/usecases/list_recipes.dart`
 - [X] T014 [US1] Add persistence workflow in `lib/presentation/providers/recipe_controller.dart` to call save/list use cases
 - [X] T015 [US1] Add recipe save form/back-home control in `lib/presentation/screens/recipe_edit_screen.dart`
-- [X] T016 [US1] Add offline-aware recipe list/detail UI in `lib/presentation/screens/recipe_list_screen.dart` and `lib/presentation/screens/recipe_detail_screen.dart`
+- [X] T016 [US1] Add offline-aware recipe list/detail UI in `lib/presentation/screens/my_recipes_screen.dart` and `lib/presentation/screens/recipe_detail_screen.dart`
 
 ### Tests for User Story 1
 
@@ -100,11 +100,13 @@ description: "Task list template for feature implementation"
 - [X] T025 [US3] Add guarded write/read with validation in `lib/data/repositories/local_recipe_repository.dart`
 - [X] T026 [US3] Implement error states and retry messaging in `lib/presentation/providers/recipe_controller.dart`
 - [X] T027 [US3] Add user-facing recovery UI in `lib/presentation/screens/my_recipes_screen.dart`
+- [ ] T035 [US3] Add schema versioning/default migrations for future fields in `lib/data/repositories/local_recipe_repository.dart` and `lib/data/adapters/recipe_adapter.dart` (define defaults, bump adapters, handle missing/extra fields safely)
 
 ### Tests for User Story 3
 
 - [X] T028 [P] [US3] Data test: simulate storage failure and recovery in `test/data/recipe_recovery_test.dart`
 - [X] T029 [P] [US3] Widget test: error/retry UX for failed save in `test/widget/recipe_error_retry_test.dart`
+- [ ] T036 [P] [US3] Migration test for forward compatibility when adding fields in `test/data/recipe_migration_test.dart` (seed legacy entries missing new fields; verify defaults and no crash)
 
 ---
 
@@ -114,7 +116,9 @@ description: "Task list template for feature implementation"
 - [X] T031 Run full `flutter test` and fix any regressions
 - [X] T032 Update docs with persistence instructions in `specs/001-recipe-persistence/quickstart.md`
 - [X] T033 Ensure secrets are excluded and env/define wiring documented in `README.md`
-- [X] T034 Check Home screen make the text in  meal selector to be fit inside of its box, not to drop.
+- [X] T034 Check Home screen make the text in  meal selector to be fit inside of its box, not to drop. (cross-cutting UI polish)
+- [ ] T037 Add performance check (save/edit/delete <2s) in profile mode on mid-range device/emulator; document results in `specs/001-recipe-persistence/research.md` or `quickstart.md`
+- [ ] T038 Add corruption QA checklist/bug triage gate before release and document in `specs/001-recipe-persistence/quickstart.md` (no open P1/P2 corruption bugs)
 
 ---
 

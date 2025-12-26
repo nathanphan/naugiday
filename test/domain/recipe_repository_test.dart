@@ -27,7 +27,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Recipe _recipe({String id = 'r-save'}) => Recipe(
+  Recipe recipeFixture({String id = 'r-save'}) => Recipe(
         id: id,
         name: 'Bun Cha',
         description: 'Hanoi grilled pork with noodles',
@@ -48,7 +48,7 @@ void main() {
       );
 
   test('save and list recipes', () async {
-    final recipe = _recipe();
+    final recipe = recipeFixture();
     await repository.saveRecipe(recipe);
 
     final recipes = await repository.getMyRecipes();
@@ -57,7 +57,7 @@ void main() {
   });
 
   test('delete recipe removes entry', () async {
-    final recipe = _recipe();
+    final recipe = recipeFixture();
     await repository.saveRecipe(recipe);
     await repository.deleteRecipe(recipe.id);
 
@@ -67,7 +67,7 @@ void main() {
 
   test('migrates legacy string entries to RecipeDto', () async {
     final box = Hive.box(recipesBoxName);
-    final legacy = RecipeDto.fromDomain(_recipe(id: 'legacy'));
+    final legacy = RecipeDto.fromDomain(recipeFixture(id: 'legacy'));
     await box.put('legacy', jsonEncode(legacy.toJson()));
 
     final recipes = await repository.getMyRecipes();

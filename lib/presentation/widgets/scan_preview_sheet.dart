@@ -158,3 +158,4 @@ class _ScanPreviewSheetState extends State<ScanPreviewSheet> {
     );
   }
 }
+// ignore_for_file: deprecated_member_use, unnecessary_underscores

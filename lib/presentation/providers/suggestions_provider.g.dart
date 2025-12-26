@@ -30,7 +30,12 @@ final class SuggestionsProvider
         > {
   const SuggestionsProvider._({
     required SuggestionsFamily super.from,
-    required ({List<String> imagePaths, MealType mealType}) super.argument,
+    required ({
+      List<String> imagePaths,
+      MealType mealType,
+      List<String>? labels,
+    })
+    super.argument,
   }) : super(
          retry: null,
          name: r'suggestionsProvider',
@@ -61,11 +66,17 @@ final class SuggestionsProvider
     Ref ref,
   ) {
     final argument =
-        this.argument as ({List<String> imagePaths, MealType mealType});
+        this.argument
+            as ({
+              List<String> imagePaths,
+              MealType mealType,
+              List<String>? labels,
+            });
     return suggestions(
       ref,
       imagePaths: argument.imagePaths,
       mealType: argument.mealType,
+      labels: argument.labels,
     );
   }
 
@@ -80,13 +91,13 @@ final class SuggestionsProvider
   }
 }
 
-String _$suggestionsHash() => r'd4f71fc0925fd028b010200bec29bbabd66e53e5';
+String _$suggestionsHash() => r'd43fb361ab1e5694f77b26382cfba5f93d8793e6';
 
 final class SuggestionsFamily extends $Family
     with
         $FunctionalFamilyOverride<
           FutureOr<({List<String> detectedIngredients, List<Recipe> recipes})>,
-          ({List<String> imagePaths, MealType mealType})
+          ({List<String> imagePaths, MealType mealType, List<String>? labels})
         > {
   const SuggestionsFamily._()
     : super(
@@ -100,8 +111,9 @@ final class SuggestionsFamily extends $Family
   SuggestionsProvider call({
     required List<String> imagePaths,
     required MealType mealType,
+    List<String>? labels,
   }) => SuggestionsProvider._(
-    argument: (imagePaths: imagePaths, mealType: mealType),
+    argument: (imagePaths: imagePaths, mealType: mealType, labels: labels),
     from: this,
   );
 

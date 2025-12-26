@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
-import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/presentation/providers/suggestions_provider.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
 import 'package:naugiday/presentation/widgets/recipe_card.dart';

@@ -7,7 +7,6 @@ import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/repositories/ai_recipe_service.dart';
-import 'package:naugiday/presentation/providers/suggestions_provider.dart';
 import 'package:naugiday/presentation/screens/recipe_suggestions_screen.dart';
 
 class _StubAiService implements AiRecipeService {
