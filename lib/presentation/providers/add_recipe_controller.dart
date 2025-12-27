@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:naugiday/domain/entities/cooking_step.dart';
 import 'package:naugiday/domain/entities/ingredient.dart';
@@ -172,10 +172,11 @@ class AddRecipeController extends _$AddRecipeController {
 
   Future<void> addSampleImageForTest() async {
     final dir = await Directory.systemTemp.createTemp('recipe_img');
-    final file = File('${dir.path}/${_uuid.v4()}.jpg');
-    final random = Random();
-    final bytes = List<int>.generate(1024, (_) => random.nextInt(255));
-    await file.writeAsBytes(bytes);
+    final file = File('${dir.path}/${_uuid.v4()}.png');
+    const samplePngBase64 =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/xcAAgMBg5pYpVQAAAAASUVORK5CYII=';
+    final bytes = base64Decode(samplePngBase64);
+    await file.writeAsBytes(bytes, flush: true);
     await addImageFromFile(file);
   }
 

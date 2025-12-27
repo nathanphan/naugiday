@@ -136,7 +136,7 @@ class RecipeDtoAdapter extends TypeAdapter<RecipeDto> {
     for (var i = 0; i < stepCount; i++) {
       steps.add(reader.readString());
     }
-    // Cooking steps and images may be absent in legacy entries.
+    // Cooking steps may be absent in legacy entries.
     List<CookingStepDto> cookingSteps = const [];
     if (reader.availableBytes > 0) {
       final count = reader.readInt();
@@ -146,6 +146,18 @@ class RecipeDtoAdapter extends TypeAdapter<RecipeDto> {
       }
       cookingSteps = list;
     }
+    final id = reader.readString();
+    final name = reader.readString();
+    final description = reader.readString();
+    final cookingTimeMinutes = reader.readInt();
+    final difficultyIndex = reader.readInt();
+    final nutrition = reader.read() as NutritionInfoDto;
+    final mealTypeIndex = reader.readInt();
+    final isUserCreated = reader.readBool();
+    final imageUrl = reader.read();
+    final createdAt = reader.read() as DateTime?;
+    final updatedAt = reader.read() as DateTime?;
+    // Images may be absent in legacy entries.
     List<RecipeImageDto> images = const [];
     if (reader.availableBytes > 0) {
       final count = reader.readInt();
@@ -157,21 +169,21 @@ class RecipeDtoAdapter extends TypeAdapter<RecipeDto> {
     }
 
     return RecipeDto(
-      id: reader.readString(),
-      name: reader.readString(),
-      description: reader.readString(),
-      cookingTimeMinutes: reader.readInt(),
-      difficultyIndex: reader.readInt(),
+      id: id,
+      name: name,
+      description: description,
+      cookingTimeMinutes: cookingTimeMinutes,
+      difficultyIndex: difficultyIndex,
       ingredients: ingredients,
       steps: steps,
       cookingSteps: cookingSteps,
       images: images,
-      nutrition: reader.read() as NutritionInfoDto,
-      mealTypeIndex: reader.readInt(),
-      isUserCreated: reader.readBool(),
-      imageUrl: reader.read(),
-      createdAt: reader.read() as DateTime?,
-      updatedAt: reader.read() as DateTime?,
+      nutrition: nutrition,
+      mealTypeIndex: mealTypeIndex,
+      isUserCreated: isUserCreated,
+      imageUrl: imageUrl,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 

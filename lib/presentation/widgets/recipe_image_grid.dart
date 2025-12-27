@@ -42,24 +42,26 @@ class RecipeImageGrid extends StatelessWidget {
           children: images.asMap().entries.map((entry) {
             final idx = entry.key;
             final image = entry.value;
+            final file = File(image.localPath);
+            final hasFile = file.existsSync();
             return Stack(
               children: [
-                Container(
-                  width: 96,
-                  height: 96,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: 96,
+                    height: 96,
                     color: Colors.grey.shade200,
-                    image: File(image.localPath).existsSync()
-                        ? DecorationImage(
-                            image: FileImage(File(image.localPath)),
+                    child: hasFile
+                        ? Image.file(
+                            file,
                             fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(Icons.image_not_supported),
+                            ),
                           )
-                        : null,
+                        : const Center(child: Icon(Icons.image_not_supported)),
                   ),
-                  child: !File(image.localPath).existsSync()
-                      ? const Icon(Icons.image_not_supported)
-                      : null,
                 ),
                 Positioned(
                   top: 0,
