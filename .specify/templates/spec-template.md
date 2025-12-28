@@ -95,6 +95,22 @@
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
+### Non-Functional Requirements (Constitution)
+
+- **NFR-001**: Feature MUST work offline for core user flows; specify any
+  graceful-degradation behavior.
+- **NFR-002**: UI MUST include loading, empty, and error states and support dark
+  mode + text scaling.
+- **NFR-003**: Performance target MUST be defined (e.g., p95 frame time ≤16ms).
+- **NFR-004**: Secrets MUST be provided via env/`--dart-define`; no hardcoded
+  keys or debug-only toggles in production.
+- **NFR-005**: App Store purpose strings/privacy details MUST be captured for
+  any platform capability usage.
+- **NFR-006**: Crash reporting MUST be enabled with PII-safe metadata.
+- **NFR-007**: Analytics MUST be minimal and logging MUST avoid PII.
+- **NFR-008**: Feature flags/kill-switches MUST exist for critical flows.
+- **NFR-009**: AI calls MUST go through a server proxy; no client secrets.
+
 ### Key Entities *(include if feature involves data)*
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]

@@ -8,10 +8,15 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests for critical flows (domain/use-case coverage and widget tests for recipe list/detail/scan) are REQUIRED by the constitution; add any additional tests requested in the feature specification.
+**Tests**: Constitution requires tests for critical flows (domain/use-case and
+widget or integration coverage). Add additional tests only if requested in the
+feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
-**Constitution alignment**: Include tasks for offline/local persistence readiness, AI data handling/prompt validation, and UX/performance polish (loading/error states, dark mode/text scaling).
+**Constitution alignment**: Include tasks for offline resilience, UX
+loading/error/empty states, performance checks, accessibility (tap targets and
+VoiceOver labels), PII-safe logging/minimal analytics, feature flags/kill-switch
+tasks, and guarded async state updates where relevant.
 
 ## Format: `[ID] [P?] [Story] Description`
 

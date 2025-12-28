@@ -3,7 +3,7 @@
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
-**Note**: This template is filled in by the `/speckit.plan` command. Constitution guardrails live in `.specify/memory/constitution.md`; use them as gates and approvals.
+**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
@@ -31,11 +31,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- Architecture boundaries: presentation (Flutter + Riverpod + GoRouter) depends only on domain contracts; domain stays pure Dart; integrations live in data layer.
-- Data handling and AI scope: ingredient-led Vietnamese recipes, structured responses, secrets supplied via env/defines, no hardcoded keys.
-- Offline resilience: My Recipes stored locally (Hive or successor) and flows degrade gracefully when network/AI/camera is unavailable.
-- Quality gates: planned tests for domain use cases, widget coverage for recipe list/detail/scan, lint/format/codegen steps listed.
-- UX/performance: loading skeletons, error/retry states, dark mode/text scaling, and animation/performance expectations (smooth/60fps target).
+- Architecture boundaries: presentation depends on domain contracts; domain is
+  pure Dart; integrations live in data layer.
+- Offline-first persistence: core flows work offline; schema changes avoid data
+  loss; graceful degradation when network/AI/camera is unavailable.
+- UX/performance/accessibility: loading/empty/error states, dark mode/text
+  scaling, tap targets/VoiceOver, 60fps target (≤16ms frame budget).
+- Quality gates: critical flows have automated tests; async state updates are
+  guarded; codegen/lint/format steps accounted for.
+- Data handling & safety: secrets via env/`--dart-define`; minimal analytics and
+  PII-safe logging; feature flags/kill-switches in place.
+- Production readiness: App Store purpose strings/privacy details captured,
+  crash reporting enabled, AI via server proxy only, CI checks defined.
 
 ## Project Structure
 

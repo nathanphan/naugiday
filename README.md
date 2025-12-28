@@ -15,7 +15,9 @@ NauGiDay is a Flutter application designed to help home cooks decide what to coo
 
 -   [Flutter SDK](https://flutter.dev/docs/get-started/install) (Stable channel)
 -   CocoaPods (for iOS)
--   Android Studio / Xcode
+-   Xcode
+
+**Platform scope**: iOS-only for this phase. Android/Web builds are out of scope.
 
 ### Installation
 
@@ -38,6 +40,7 @@ NauGiDay is a Flutter application designed to help home cooks decide what to coo
 ### Environment & Secrets
 
 - Pass secrets via `--dart-define` or a local `.env` that stays uncommitted; never write secrets into recipe storage.
+- AI calls must go through a server proxy; do not ship provider keys in the client.
 - Verify `.env*`, API keys, and build outputs stay git-ignored before pushing.
 
 ## Running Locally
@@ -50,14 +53,6 @@ NauGiDay is a Flutter application designed to help home cooks decide what to coo
     flutter run -d iphone
     ```
     *Note: The camera feature might not work fully on the simulator without mock data or specific simulator settings.*
-
-### Android Emulator
-
-1.  Start an Android Emulator via Android Studio.
-2.  Run the app:
-    ```bash
-    flutter run -d android
-    ```
 
 ## Testing
 

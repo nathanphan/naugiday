@@ -1,6 +1,9 @@
-model = "gpt-5.1-codex-max"
+model = "gpt-5.2-codex"
 [projects."/Users/god/Work/NauGiDay"]
 trust_level = "untrusted"
 
 [notice]
 "hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[notice.model_migrations]
+"gpt-5.1-codex-max" = "gpt-5.2-codex"

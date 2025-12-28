@@ -1,43 +1,104 @@
 <!--
 Sync Impact Report
-Version change: 1.0.0 -> 1.0.1
-Modified principles: Quality Gates & Targeted Tests (async lifecycle safety clarified)
-Added sections: none
-Removed sections: none
-Templates requiring updates: ⚠ pending review (none applied)
-Follow-up TODOs: TODO(RATIFICATION_DATE): original adoption date not provided
+Version change: 1.0.0 -> 1.1.0
+Modified principles:
+- III. UX Performance & Accessibility -> III. UX Performance & Accessibility (expanded: tap targets,
+  VoiceOver, perf budgets)
+- V. Data Handling, Secrets, and Debug Controls -> V. Data Handling, Telemetry, and Control
+Added sections:
+- VI. Production Readiness & App Store Compliance
+Removed sections: None
+Templates requiring updates:
+- ✅ .specify/templates/plan-template.md
+- ✅ .specify/templates/spec-template.md
+- ✅ .specify/templates/tasks-template.md
+- ⚠ pending: .specify/templates/commands/ (directory not found)
+- ✅ README.md
+Follow-up TODOs:
+- TODO(RATIFICATION_DATE): original adoption date not recorded.
 -->
-
 # NauGiDay Constitution
 
 ## Core Principles
 
-### Ingredient-Led Vietnamese Recipes
-AI-generated and curated recipes MUST be grounded in the ingredients the user provides and stay within the Vietnamese cuisine focus unless explicitly labeled otherwise. Prompts and responses MUST favor structured JSON outputs that can be parsed deterministically. Recipes MUST avoid hallucinated ingredients, clearly separate optional pantry items, and call out allergen or safety notes when applicable.
+### I. Clean Architecture Boundaries
+Presentation (Flutter UI + Riverpod + GoRouter) MUST depend only on domain
+contracts. The domain layer MUST remain pure Dart with no Flutter, storage, or
+platform dependencies. All integrations (Hive, image picker, AI stubs) MUST live
+in the data layer behind repository interfaces. This enforces testability and
+keeps feature scope contained.
 
-### Layered Clean Architecture (Flutter + Riverpod)
-The presentation layer (Flutter UI with Riverpod and GoRouter) MUST depend on domain contracts only; domain entities and use cases remain pure Dart with no Flutter or IO dependencies. The data layer owns integrations (Hive, AI clients) behind repositories. New dependencies are added at the lowest layer possible and injected upward. Code generation (Freezed, Hive adapters, Riverpod annotations) is kept current before merging.
+### II. Offline-First Persistence
+Core user flows (save, edit, reopen recipes; attached images) MUST work without
+network connectivity. Local storage is the source of truth in this phase (Hive
+or successor) and schema evolution MUST not lose data. When camera, network, or
+AI are unavailable, the UI MUST degrade gracefully with recovery guidance. This
+protects user trust and app reliability.
 
-### Local Data Ownership & Offline Resilience
-User-authored recipes and scanned ingredients MUST persist locally (Hive or successor) and remain available offline. All flows MUST provide graceful degradation for missing network, AI failures, or camera limitations, including retries or manual entry paths. API keys and secrets MUST be supplied via environment configuration, never hardcoded or logged.
+### III. UX Performance & Accessibility
+UI work MUST preserve smooth 60fps interactions with a 16ms frame budget target.
+Every screen MUST include loading, empty, and error states, and MUST support
+dark mode and text scaling. Tap targets MUST meet iOS accessibility sizing and
+VoiceOver MUST expose actionable controls with meaningful labels. Animations and
+shimmer effects MUST use Flutter SDK primitives and be profiled when they could
+affect performance. This keeps the experience polished and inclusive.
 
-### Quality Gates & Targeted Tests
-Critical flows (recipe list/detail, scan → generate, and persistence use cases) MUST have automated coverage: domain/use-case tests plus widget tests for primary screens. Build/format/lint and code generation MUST run clean before merge. Where new external integrations are added (e.g., Gemini), add contract or parsing tests to lock response formats.
-Async state updates MUST guard disposed providers/controllers (e.g., check `ref.mounted` or cancel work) to avoid setState-after-dispose failures; long-running work must be cancellable on dispose.
+### IV. Quality Gates & Async Safety
+Critical flows MUST have automated tests (domain/use-case and widget or
+integration coverage for each user story). Data migrations MUST include forward
+compatibility tests. Async state updates MUST be guarded (e.g., `ref.mounted`)
+to avoid disposed-provider writes. This prevents regressions and runtime
+crashes.
 
-### Performance, UX Polish, and Accessibility
-The app MUST maintain smooth interactions (target 60fps) and provide clear feedback through loading skeletons, error states with retries, and purposeful animations. UI changes MUST respect dark mode and text scaling. Camera, image processing, and AI-triggered actions MUST avoid blocking the UI thread and surface progress to users.
+### V. Data Handling, Telemetry, and Control
+Recipe data MUST stay local and ingredient-led (Vietnamese recipes scope) with
+structured AI responses when used. Secrets MUST be provided via `--dart-define`
+or `.env` and MUST never be hardcoded or stored in recipe data. Analytics MUST
+be minimal, opt-in where required by policy, and logging MUST avoid PII. Feature
+flags and kill-switches MUST exist for critical flows and be remote-configurable
+without client secrets. This keeps data safe, observable, and controllable.
 
-## Security, Data Handling, and AI Use
+### VI. Production Readiness & App Store Compliance
+The iOS build MUST include required App Store privacy details, purpose strings,
+and review-ready compliance notes. Crash reporting MUST be enabled with
+PII-safe metadata. All AI calls MUST go through a server proxy; the client MUST
+never ship provider keys. CI MUST run core checks (tests, lint, formatting, and
+build where applicable) before releases. This ensures day-1 production readiness.
 
-Protect user content by storing recipes locally by default; if remote calls are required, transmit only the minimal data needed. Secrets (API keys, bundle IDs) live in env/define-time configuration and are never committed. AI prompts must avoid sending photos unless required, and responses are validated for structure before use. Sensitive data is excluded from logs and analytics.
+## Product & Platform Constraints
+
+- iOS-only distribution for this phase; Android/Web builds are out of scope.
+- Flutter stable (Dart 3.x) with Material 3.
+- State management via Riverpod (annotations + codegen); navigation via GoRouter.
+- Persistence via Hive boxes; image files stored in app documents/cache with
+  recipe-bound references.
+- Image selection via `image_picker` or platform picker; no new backend
+  dependencies in this phase.
+- Shimmer/animations must use Flutter SDK (no new animation packages).
+- App Store purpose strings and privacy details must be kept current for any
+  capability (camera, photos, local storage, network).
 
 ## Development Workflow & Quality Gates
 
-Every feature plan/spec MUST pass the Constitution Check before Phase 0 research. PRs MUST demonstrate adherence to architecture boundaries, offline fallbacks, and required tests for critical flows. Each merge request documents which principles were exercised and any temporary exceptions with a time-bound follow-up. Release artifacts include notes on data handling changes and user-facing UX impacts.
+- Specs, plans, and tasks MUST include a Constitution Check aligned to the core
+  principles before implementation starts.
+- Schema or adapter changes MUST document migration steps and include tests for
+  backward/forward compatibility.
+- Performance-sensitive UI changes MUST include profiling notes (target p95
+  frame time ≤16ms) in research or quickstart docs.
+- Codegen (`build_runner`), lint, and format steps MUST be listed in plans and
+  kept passing for feature completion.
+- CI MUST include tests, lint, formatting, and a release-mode iOS build check
+  for App Store compliance.
 
 ## Governance
 
-This constitution governs NauGiDay development; conflicting practices yield to it. Amendments occur via PRs that: state the governance impact, update this file, bump the version below per semver (major for removals/overhauls, minor for new principles/sections, patch for clarifications), and update affected templates. Compliance reviews happen during plan/spec/task creation and again at PR review; exceptions are documented with owners and deadlines. Ratification date records first adoption once known; last amended reflects the most recent approved change.
+- This constitution supersedes local conventions and feature specs when in
+  conflict.
+- Amendments require updating this file, bumping the version per semantic
+  versioning, and recording dates.
+- Compliance must be verified in feature planning (plan/spec/tasks). Exceptions
+  require explicit justification in plan "Complexity Tracking."
+- Runtime guidance lives in `README.md` and the active feature specs in `specs/`.
 
-**Version**: 1.0.1 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not provided | **Last Amended**: 2025-12-02
+**Version**: 1.1.0 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not recorded. | **Last Amended**: 2025-12-28
