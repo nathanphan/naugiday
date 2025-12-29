@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shopping List - NauGiDay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ec1313",
+              "background-light": "#f8f6f6",
+              "background-dark": "#221010",
+              "surface-light": "#ffffff",
+              "surface-dark": "#2d1616",
+              "text-light": "#1b0d0d",
+              "text-dark": "#fcf8f8",
+              "text-secondary-light": "#9a4c4c",
+              "text-secondary-dark": "#dcbaba",
+              "border-light": "#e7cfcf",
+              "border-dark": "#4a2424",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            boxShadow: {
+               "soft": "0 2px 10px rgba(0, 0, 0, 0.03)",
+            }
+          },
+        },
+      }
+    </script>
+<style>/* Custom scrollbar hide for cleaner mobile look */
+.no-scrollbar::-webkit-scrollbar {
+    display: none
+    }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none
+    }
+/* Custom Checkbox SVG */
+.custom-checkbox:checked {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuA1is6DC-Ye-uuCs-IdXNkF_cNwHD9iihMr0M2xN1ENDyOhVLYuteB3E6oxAFMcfVXf1NyL9yYDJyAGn0XSf2jHspHL7bS2X9l0X_F18LWt9Y8LGRMOhdex1n2cRvlZelGzpJ2pDg89W-X5QKuJXvTzz5yT91-peGnIfOU3MZvTFWPqEGRIV-wwv4FmURyh9t6YFfiR1Istx774PS0YNvvdb9Ys8KAGKz6J7xb_TJQvM2PpXiGikNrG5t3x0_MWtA34yleM6cWgqDk)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark antialiased selection:bg-primary selection:text-white">
+<div class="relative mx-auto flex h-full min-h-screen w-full max-w-md flex-col overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Status Bar Area (Mock) -->
+<div class="h-12 w-full bg-background-light dark:bg-background-dark"></div>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-10 flex items-center justify-between bg-background-light/90 dark:bg-background-dark/90 px-6 pb-2 pt-2 backdrop-blur-md">
+<div class="flex flex-1 items-center gap-3">
+<h2 class="text-2xl font-extrabold leading-tight tracking-tight text-text-light dark:text-text-dark">Shopping List</h2>
+</div>
+<div class="flex items-center justify-end">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-primary hover:bg-primary/10 active:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-[24px]">more_horiz</span>
+</button>
+</div>
+</header>
+<!-- Search Bar -->
+<div class="px-4 pb-2">
+<div class="relative flex items-center w-full h-12 rounded-xl focus-within:shadow-lg bg-surface-light dark:bg-surface-dark border border-transparent focus-within:border-primary/20 shadow-soft transition-all overflow-hidden">
+<div class="grid place-items-center h-full w-12 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="peer h-full w-full outline-none text-sm text-text-light dark:text-text-dark bg-transparent pr-2 placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark/50" id="search" placeholder="Search ingredients..." type="text"/>
+</div>
+</div>
+<!-- SegmentedButtons -->
+<div class="flex px-4 py-3">
+<div class="flex h-12 flex-1 items-center justify-center rounded-xl bg-[#e8dede] dark:bg-[#3a2020] p-1 relative">
+<!-- Active Indicator Background Animation Logic would go here in JS, mocked with static styles for now -->
+<label class="group relative z-10 flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 transition-all">
+<input checked="" class="peer invisible w-0 absolute" name="list_type" type="radio" value="To Buy"/>
+<div class="absolute inset-0 bg-surface-light dark:bg-surface-dark shadow-sm opacity-0 peer-checked:opacity-100 transition-opacity duration-200 rounded-lg scale-95 peer-checked:scale-100"></div>
+<span class="relative z-10 truncate text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark peer-checked:text-text-light dark:peer-checked:text-text-dark transition-colors">To Buy</span>
+</label>
+<label class="group relative z-10 flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 transition-all">
+<input class="peer invisible w-0 absolute" name="list_type" type="radio" value="Purchased"/>
+<div class="absolute inset-0 bg-surface-light dark:bg-surface-dark shadow-sm opacity-0 peer-checked:opacity-100 transition-opacity duration-200 rounded-lg scale-95 peer-checked:scale-100"></div>
+<span class="relative z-10 truncate text-sm font-bold text-text-secondary-light dark:text-text-secondary-dark peer-checked:text-text-light dark:peer-checked:text-text-dark transition-colors">Purchased</span>
+</label>
+</div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto pb-24 no-scrollbar">
+<!-- Category: Recipes -->
+<div class="pt-2">
+<div class="flex items-center justify-between px-6 pb-2 pt-4">
+<h3 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">Spaghetti Bolognese</h3>
+<button class="text-xs font-semibold text-primary hover:text-primary/80 uppercase tracking-wider">Clear</button>
+</div>
+<div class="px-4 space-y-2">
+<!-- Item 1 -->
+<label class="group flex items-center justify-between gap-x-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative flex items-center">
+<input class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-border-light dark:border-border-dark bg-transparent transition-all checked:border-primary checked:bg-primary hover:border-primary/50 focus:ring-0 focus:ring-offset-0 custom-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-base font-semibold text-text-light dark:text-text-dark group-has-[:checked]:text-text-secondary-light dark:group-has-[:checked]:text-text-secondary-dark group-has-[:checked]:line-through transition-colors">Ground Beef</span>
+</div>
+</div>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shrink-0">500g</p>
+</label>
+<!-- Item 2 (Checked) -->
+<label class="group flex items-center justify-between gap-x-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative flex items-center">
+<input checked="" class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-border-light dark:border-border-dark bg-transparent transition-all checked:border-primary checked:bg-primary hover:border-primary/50 focus:ring-0 focus:ring-offset-0 custom-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-base font-semibold text-text-light dark:text-text-dark group-has-[:checked]:text-text-secondary-light dark:group-has-[:checked]:text-text-secondary-dark group-has-[:checked]:line-through transition-colors">Tomato Paste</span>
+</div>
+</div>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shrink-0">1 can</p>
+</label>
+<!-- Item 3 -->
+<label class="group flex items-center justify-between gap-x-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative flex items-center">
+<input class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-border-light dark:border-border-dark bg-transparent transition-all checked:border-primary checked:bg-primary hover:border-primary/50 focus:ring-0 focus:ring-offset-0 custom-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-base font-semibold text-text-light dark:text-text-dark group-has-[:checked]:text-text-secondary-light dark:group-has-[:checked]:text-text-secondary-dark group-has-[:checked]:line-through transition-colors">Onions</span>
+</div>
+</div>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shrink-0">2 medium</p>
+</label>
+</div>
+</div>
+<!-- Category: General -->
+<div class="pt-4">
+<div class="flex items-center justify-between px-6 pb-2 pt-4">
+<h3 class="text-xl font-bold tracking-tight text-text-light dark:text-text-dark">General Items</h3>
+</div>
+<div class="px-4 space-y-2">
+<!-- Item 4 -->
+<label class="group flex items-center justify-between gap-x-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative flex items-center">
+<input class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-border-light dark:border-border-dark bg-transparent transition-all checked:border-primary checked:bg-primary hover:border-primary/50 focus:ring-0 focus:ring-offset-0 custom-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-base font-semibold text-text-light dark:text-text-dark group-has-[:checked]:text-text-secondary-light dark:group-has-[:checked]:text-text-secondary-dark group-has-[:checked]:line-through transition-colors">Milk</span>
+</div>
+</div>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shrink-0">1L</p>
+</label>
+<!-- Item 5 -->
+<label class="group flex items-center justify-between gap-x-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-primary/10">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative flex items-center">
+<input class="peer h-6 w-6 cursor-pointer appearance-none rounded-full border-2 border-border-light dark:border-border-dark bg-transparent transition-all checked:border-primary checked:bg-primary hover:border-primary/50 focus:ring-0 focus:ring-offset-0 custom-checkbox" type="checkbox"/>
+</div>
+<div class="flex flex-col">
+<span class="text-base font-semibold text-text-light dark:text-text-dark group-has-[:checked]:text-text-secondary-light dark:group-has-[:checked]:text-text-secondary-dark group-has-[:checked]:line-through transition-colors">Eggs</span>
+</div>
+</div>
+<p class="text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark shrink-0">1 dozen</p>
+</label>
+</div>
+</div>
+<!-- Empty Space at bottom for scrolling past FAB -->
+<div class="h-24"></div>
+</div>
+<!-- Floating Action Button -->
+<div class="fixed bottom-[100px] right-6 z-20">
+<button class="group flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+</div>
+<!-- Bottom Tab Bar -->
+<nav class="fixed bottom-0 z-30 w-full max-w-md border-t border-border-light dark:border-border-dark bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-lg pb-safe">
+<div class="flex h-16 items-center justify-around px-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">lunch_dining</span>
+<span class="text-[10px] font-medium">Recipes</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">kitchen</span>
+<span class="text-[10px] font-medium">Fridge</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-filled">shopping_cart</span>
+<span class="text-[10px] font-bold">List</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+<!-- Safe Area Spacer for iOS Home Bar -->
+<div class="h-5 w-full"></div>
+</nav>
+</div>
+</body></html>

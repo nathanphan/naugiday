@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Recipe - NauGiDay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display h-screen flex flex-col overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center justify-between px-4 py-3 bg-background-light dark:bg-background-dark shrink-0 z-20 border-b border-transparent dark:border-white/5">
+<button class="flex items-center justify-center w-10 h-10 -ml-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors text-slate-800 dark:text-white">
+<span class="material-symbols-outlined" style="font-size: 28px;">close</span>
+</button>
+<h1 class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Create Recipe</h1>
+<button class="text-primary font-bold text-base px-2 hover:opacity-80 transition-opacity">Save</button>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-32">
+<!-- Image Upload Section -->
+<section class="px-5 py-4">
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-5 px-5">
+<!-- Add Button -->
+<button class="shrink-0 w-32 h-32 rounded-2xl border-2 border-dashed border-primary/30 flex flex-col items-center justify-center bg-primary/5 active:bg-primary/10 transition-colors group">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2 group-hover:bg-primary group-hover:text-white transition-colors text-primary">
+<span class="material-symbols-outlined text-2xl">add_a_photo</span>
+</div>
+<span class="text-xs font-bold text-primary">Add Photo</span>
+</button>
+<!-- Existing Image 1 -->
+<div class="relative shrink-0 w-32 h-32 rounded-2xl overflow-hidden shadow-sm group">
+<div class="w-full h-full bg-cover bg-center transition-transform hover:scale-110 duration-500" data-alt="Close up of a bowl of spicy noodle soup with beef" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBR3Qd0a8-c29HeJYFJ8LSMFeZlmdJ-boUlXp0WQzZuV5dZhrxqINHDPo0tSSvxUMYaqU1KgHL-8BNc-nWSVwsMbMcEaTzqfGC4oixJEB-M5cHbKzBLPONaxK2k0FuYJT3RmjlX64wmvbEcxClOgLrVq6kYfNJNj9x2QrKWtPz5BgMnyJ1PLubgj5rBVyXA4ikDCt3OzK6wX86ZqYfOjlq6FE0geqSHfrnMGYjnl-4uQYqUESPk9tTYAUxwwE1ROElH6KZUlya8Y0');"></div>
+<button class="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-100 backdrop-blur-sm hover:bg-red-600 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</div>
+<!-- Existing Image 2 -->
+<div class="relative shrink-0 w-32 h-32 rounded-2xl overflow-hidden shadow-sm group">
+<div class="w-full h-full bg-cover bg-center transition-transform hover:scale-110 duration-500" data-alt="Fresh ingredients including green onions and chili laid out on a table" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtQ3o0UggcVC-D0XXX67XuLKqb5U4xjTNw3LBr7LvvAFql_j_bvZYNnfZVsEvhI2YT2_kKy1AEGOyvsCOTOkZcJAmPNJk9UAxLkhiJgQ3iHfJcDYHd_80Zyq2CA9A7FrcRAcRf53VNmXKJcN5yIHlJE6R5uq-ERHO7Ynr-x85tqXGBl5-E1RrH5KJqqurXSuzduVSzZPO1XXW73m_bUVFgL21eP-HyjXwFkxYmjLnh93yAdpez61BqNfh3QIV3iMoCEB5k_jzvR5o');"></div>
+<button class="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 opacity-100 backdrop-blur-sm hover:bg-red-600 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Basic Info Form -->
+<section class="px-5 space-y-6">
+<!-- Recipe Name -->
+<div class="space-y-2">
+<label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Recipe Name</label>
+<input class="w-full bg-white dark:bg-white/5 border-none rounded-xl px-4 py-3.5 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 text-lg font-semibold shadow-sm transition-shadow" placeholder="e.g., Spicy Beef Noodle Soup" type="text"/>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Description</label>
+<span class="text-[10px] text-gray-400 font-medium">0/200</span>
+</div>
+<textarea class="w-full bg-white dark:bg-white/5 border-none rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 resize-none shadow-sm leading-relaxed transition-shadow" placeholder="Share the story behind this dish..." rows="3"></textarea>
+</div>
+<!-- Category / Meal Type -->
+<div class="space-y-2.5">
+<label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</label>
+<div class="flex flex-wrap gap-2.5">
+<button class="px-5 py-2.5 rounded-full text-sm font-bold bg-primary text-white shadow-md shadow-primary/25 hover:bg-red-600 transition-all active:scale-95">Breakfast</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-medium bg-white dark:bg-white/5 text-slate-600 dark:text-gray-300 border border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 transition-all active:scale-95">Lunch</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-medium bg-white dark:bg-white/5 text-slate-600 dark:text-gray-300 border border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 transition-all active:scale-95">Dinner</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-medium bg-white dark:bg-white/5 text-slate-600 dark:text-gray-300 border border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 transition-all active:scale-95">Snack</button>
+</div>
+</div>
+</section>
+<div class="h-px bg-gray-200 dark:bg-gray-800 mx-5 my-8"></div>
+<!-- Ingredients Section -->
+<section class="px-5 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Ingredients</h3>
+<span class="text-xs text-gray-500 bg-gray-100 dark:bg-white/10 px-2 py-1 rounded font-bold">4 ITEMS</span>
+</div>
+<div class="space-y-3">
+<!-- Ingredient Item 1 -->
+<div class="flex items-start gap-2 group animate-[fadeIn_0.3s_ease-out]">
+<div class="flex-1 flex gap-0 bg-white dark:bg-white/5 rounded-xl border border-transparent dark:border-white/5 shadow-sm overflow-hidden focus-within:ring-1 focus-within:ring-primary/50 focus-within:border-primary/50 transition-all">
+<input class="w-20 bg-transparent border-none py-3.5 pl-3 pr-2 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-0 font-bold text-right text-sm" placeholder="Qty" type="text" value="500g"/>
+<div class="w-px bg-gray-100 dark:bg-white/10 my-2"></div>
+<input class="flex-1 bg-transparent border-none py-3.5 px-3 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-0 font-medium text-sm" placeholder="Ingredient name" type="text" value="Beef, thinly sliced"/>
+</div>
+<button class="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors self-center">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Ingredient Item 2 -->
+<div class="flex items-start gap-2 group">
+<div class="flex-1 flex gap-0 bg-white dark:bg-white/5 rounded-xl border border-transparent dark:border-white/5 shadow-sm overflow-hidden focus-within:ring-1 focus-within:ring-primary/50 focus-within:border-primary/50 transition-all">
+<input class="w-20 bg-transparent border-none py-3.5 pl-3 pr-2 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-0 font-bold text-right text-sm" placeholder="Qty" type="text" value="2 tbsp"/>
+<div class="w-px bg-gray-100 dark:bg-white/10 my-2"></div>
+<input class="flex-1 bg-transparent border-none py-3.5 px-3 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-0 font-medium text-sm" placeholder="Ingredient name" type="text" value="Soy Sauce"/>
+</div>
+<button class="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors self-center">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<button class="w-full py-3.5 mt-2 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 font-bold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                Add Ingredient
+            </button>
+</section>
+<div class="h-px bg-gray-200 dark:bg-gray-800 mx-5 my-8"></div>
+<!-- Instructions Section -->
+<section class="px-5 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Instructions</h3>
+<span class="text-xs text-gray-500 bg-gray-100 dark:bg-white/10 px-2 py-1 rounded font-bold">2 STEPS</span>
+</div>
+<div class="space-y-6">
+<!-- Step 1 -->
+<div class="flex gap-4">
+<div class="shrink-0 flex flex-col items-center pt-1">
+<div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold shadow-sm shadow-primary/30">1</div>
+<div class="w-0.5 h-full bg-gray-200 dark:bg-white/10 my-1 rounded-full"></div>
+</div>
+<div class="flex-1 relative group">
+<div class="absolute right-0 top-0 p-2 opacity-50 cursor-grab active:cursor-grabbing hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400">drag_handle</span>
+</div>
+<textarea class="w-full bg-white dark:bg-white/5 border-none rounded-xl p-4 pr-10 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 resize-none shadow-sm leading-relaxed text-sm transition-shadow" placeholder="Describe this step..." rows="2">Boil water in a large pot. Add a pinch of salt to enhance flavor.</textarea>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4">
+<div class="shrink-0 flex flex-col items-center pt-1">
+<div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold shadow-sm shadow-primary/30">2</div>
+<div class="w-0.5 h-full bg-gray-200 dark:bg-white/10 my-1 rounded-full opacity-0"></div> <!-- Hiding line for last item visually but keeping spacing if needed -->
+</div>
+<div class="flex-1 relative group">
+<div class="absolute right-0 top-0 p-2 opacity-50 cursor-grab active:cursor-grabbing hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400">drag_handle</span>
+</div>
+<textarea class="w-full bg-white dark:bg-white/5 border-none rounded-xl p-4 pr-10 text-slate-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 resize-none shadow-sm leading-relaxed text-sm transition-shadow" placeholder="Describe this step..." rows="3">Cook the noodles according to package instructions until al dente. Strain and rinse with cold water.</textarea>
+</div>
+</div>
+</div>
+<button class="w-full py-3.5 mt-2 flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 font-bold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+                Add Step
+            </button>
+</section>
+</main>
+<!-- Sticky Footer CTA -->
+<footer class="absolute bottom-0 w-full bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl border-t border-gray-200 dark:border-white/5 p-5 z-30 pb-8">
+<button class="w-full bg-primary hover:bg-red-600 text-white font-bold text-lg h-14 rounded-xl shadow-xl shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined filled-icon">check_circle</span>
+            Save Recipe
+        </button>
+</footer>
+</body></html>

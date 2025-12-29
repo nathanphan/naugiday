@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Suggestions - AI Disabled</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e3703b",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211611",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding if needed */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#1b120e] dark:text-[#fbf9f8] font-display">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-sm">
+<!-- TopAppBar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-50">
+<div class="flex size-12 shrink-0 items-center justify-center cursor-pointer rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[#1b120e] dark:text-[#fbf9f8]" style="font-size: 24px;">arrow_back</span>
+</div>
+<h2 class="text-[#1b120e] dark:text-[#fbf9f8] text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Suggestions</h2>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-1 flex-col items-center justify-center px-6 py-8">
+<!-- EmptyState / Hero -->
+<div class="flex flex-col items-center gap-8 w-full">
+<!-- Illustration Container -->
+<div class="bg-center bg-no-repeat bg-cover rounded-xl w-full aspect-square max-w-[280px] shadow-sm bg-white dark:bg-[#2a1d17] flex items-center justify-center p-8 border border-stone-100 dark:border-stone-800" data-alt="Illustration of a cute robot chef sleeping with ZZZs floating above its head" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDc-sVJxrbruS7Yk83LwPzMQ8cCo5qu6J0oUsstVUJJNUJ0ZgckyPC_XbM5pJTSOJ1qx65MX1h4ucRcKO8zRHVQgxhD7xlUC9JygEpXvWLFtkvPQuHJw5kYHxcO5FiltoOwuLT5wQTsoOl72uKSIzJ4tyOiUeZFk3_qFiLK0RBAjIBI5yrKJgaoepqN3YNjb2d5uQJLB9MRJW_FizvutnYQEHKE6RRKZSuFHrARPWBE7qXmVMR64vRzfmVTUNxrjDDVI2InoxfYeFU");'>
+<!-- Note: Using a placeholder image since I cannot generate a custom vector. 
+                          Ideally this would be the custom vector described in the plan. -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-xl flex items-end justify-center pb-6">
+<span class="material-symbols-outlined text-white/80" style="font-size: 64px;">soup_kitchen</span>
+</div>
+</div>
+<div class="flex max-w-[480px] flex-col items-center gap-3 text-center">
+<h3 class="text-[#1b120e] dark:text-[#fbf9f8] text-2xl font-bold leading-tight tracking-[-0.015em]">
+                        Our AI Chef is on break
+                    </h3>
+<p class="text-[#956650] dark:text-[#d4b8aa] text-base font-normal leading-relaxed max-w-[320px]">
+                        We’ve temporarily paused AI recipe generation for a quick tune-up. You can still scan ingredients or cook from your saved favorites!
+                    </p>
+</div>
+</div>
+<!-- Spacer -->
+<div class="h-8"></div>
+<!-- ButtonGroup -->
+<div class="flex w-full flex-col gap-3 max-w-[320px]">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-primary hover:bg-primary/90 transition-colors text-white text-base font-bold leading-normal tracking-[0.015em] shadow-sm">
+<span class="truncate">Scan Ingredients</span>
+</button>
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-transparent border-2 border-[#e3703b] hover:bg-[#e3703b]/5 transition-colors text-[#e3703b] text-base font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Go to My Cookbook</span>
+</button>
+</div>
+<!-- MetaText / Refresh Link -->
+<div class="mt-8">
+<button class="flex items-center gap-2 group cursor-pointer">
+<span class="material-symbols-outlined text-[#956650] dark:text-[#d4b8aa] group-hover:text-primary transition-colors text-sm">refresh</span>
+<p class="text-[#956650] dark:text-[#d4b8aa] group-hover:text-primary transition-colors text-sm font-medium leading-normal underline decoration-2 decoration-transparent group-hover:decoration-primary underline-offset-4">
+                        Tap to refresh status
+                    </p>
+</button>
+</div>
+</div>
+</div>
+</body></html>

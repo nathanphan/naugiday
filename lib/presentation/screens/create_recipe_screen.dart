@@ -5,6 +5,8 @@ import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/presentation/providers/add_recipe_controller.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
+import 'package:naugiday/presentation/providers/telemetry_provider.dart';
 import 'package:naugiday/presentation/widgets/ingredient_list.dart';
 import 'package:naugiday/presentation/widgets/recipe_image_grid.dart';
 import 'package:naugiday/presentation/widgets/steps_list.dart';
@@ -34,11 +36,23 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   @override
   void initState() {
     super.initState();
-    // Editing flow can prefill later when connected to existing recipes.
+    final initial = widget.initialRecipe;
+    if (initial != null) {
+      _nameController.text = initial.name;
+      _descController.text = initial.description;
+      _mealType = initial.mealType;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(addRecipeControllerProvider.notifier).loadFromRecipe(initial);
+      });
+    }
   }
 
   void _navigateBack() {
     final router = GoRouter.of(context);
+    if (widget.initialRecipe == null) {
+      router.go('/my-recipes');
+      return;
+    }
     if (router.canPop()) {
       router.pop();
     } else {
@@ -47,12 +61,39 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   }
 
   Future<void> _save() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill the required fields.')),
+      );
+      return;
+    }
     final messenger = ScaffoldMessenger.of(context);
     final addNotifier = ref.read(addRecipeControllerProvider.notifier);
+    ref.read(telemetryControllerProvider.notifier).recordCta('save_recipe');
     addNotifier.setTitle(_nameController.text);
     addNotifier.setDescription(_descController.text);
     addNotifier.setMealType(_mealType);
+    final addState = ref.read(addRecipeControllerProvider);
+    final missingErrors = <String>[];
+    if (addState.ingredients.isEmpty) {
+      missingErrors.add('At least one ingredient is required');
+    }
+    if (addState.steps.isEmpty) {
+      missingErrors.add('At least one cooking step is required');
+    }
+    if (missingErrors.isNotEmpty) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(missingErrors.join(', '))),
+      );
+      return;
+    }
+    final validation = addNotifier.validate();
+    if (!validation.isValid) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(validation.errors.join(', '))),
+      );
+      return;
+    }
     final success = await addNotifier.save();
     if (!mounted) return;
     if (success) {
@@ -70,6 +111,8 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
   @override
   Widget build(BuildContext context) {
     final addState = ref.watch(addRecipeControllerProvider);
+    final flagsAsync = ref.watch(featureFlagControllerProvider);
+    final imagesEnabled = flagsAsync.value?.imagesEnabled ?? true;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.initialRecipe == null ? 'Create Recipe' : 'Edit Recipe'),
@@ -132,27 +175,45 @@ class _CreateRecipeScreenState extends ConsumerState<CreateRecipeScreen> {
             const SizedBox(height: 32),
             RecipeImageGrid(
               images: addState.images,
-              onAddImage: () =>
-                  ref.read(addRecipeControllerProvider.notifier).addSampleImageForTest(),
-              onRemove: (idx) =>
-                  ref.read(addRecipeControllerProvider.notifier).removeImage(idx),
+              isEnabled: imagesEnabled,
+              disabledMessage: 'Image attachments are disabled right now.',
+              onAddImage: () => ref
+                  .read(addRecipeControllerProvider.notifier)
+                  .addSampleImageForTest(),
+              onRemove: (idx) => ref
+                  .read(addRecipeControllerProvider.notifier)
+                  .removeImage(idx),
             ),
             const SizedBox(height: 32),
-            FilledButton(
-              key: const Key('save-recipe-button'),
-              onPressed: addState.isSaving ? null : _save,
-              child: addState.isSaving
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(widget.initialRecipe == null ? 'Save Recipe' : 'Update Recipe'),
+            Semantics(
+              label: widget.initialRecipe == null
+                  ? 'Save recipe'
+                  : 'Update recipe',
+              button: true,
+              child: FilledButton(
+                key: const Key('save-recipe-button'),
+                onPressed: addState.isSaving ? null : _save,
+                child: addState.isSaving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(
+                        widget.initialRecipe == null
+                            ? 'Save Recipe'
+                            : 'Update Recipe',
+                      ),
+              ),
             ),
-            TextButton.icon(
-              onPressed: _navigateBack,
-              icon: const Icon(Icons.home_outlined),
-              label: const Text('Back to home'),
+            Semantics(
+              label: 'Back to home',
+              button: true,
+              child: TextButton.icon(
+                onPressed: _navigateBack,
+                icon: const Icon(Icons.home_outlined),
+                label: const Text('Back to home'),
+              ),
             ),
             if (addState.error != null) ...[
               const SizedBox(height: 8),

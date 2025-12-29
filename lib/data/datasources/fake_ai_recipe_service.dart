@@ -4,22 +4,32 @@ import 'package:naugiday/domain/entities/nutrition_info.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/repositories/ai_recipe_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
 import 'package:uuid/uuid.dart';
 
 part 'fake_ai_recipe_service.g.dart';
 
 @riverpod
 AiRecipeService aiRecipeService(Ref ref) {
-  return FakeAiRecipeService();
+  final flagsAsync = ref.watch(featureFlagControllerProvider);
+  final aiEnabled = flagsAsync.value?.aiEnabled ?? true;
+  return FakeAiRecipeService(isEnabled: aiEnabled);
 }
 
 class FakeAiRecipeService implements AiRecipeService {
+  FakeAiRecipeService({required this.isEnabled});
+
+  final bool isEnabled;
+
   @override
   Future<({List<String> detectedIngredients, List<Recipe> recipes})>
   suggestRecipesFromImages({
     required List<String> imagePaths,
     required MealType mealType,
   }) async {
+    if (!isEnabled) {
+      throw StateError('AI suggestions disabled');
+    }
     // Simulate network delay
     await Future.delayed(const Duration(seconds: 2));
 

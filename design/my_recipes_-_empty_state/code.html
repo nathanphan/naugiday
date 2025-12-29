@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Recipes - Empty State</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden font-display text-slate-900 dark:text-slate-100">
+<!-- TopAppBar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">My Recipes</h2>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-1 flex-col items-center justify-center px-6 py-6 w-full max-w-md mx-auto">
+<!-- EmptyState Illustration & Text -->
+<div class="flex flex-col items-center gap-6 w-full">
+<!-- Illustration container -->
+<div class="relative flex items-center justify-center w-full aspect-[4/3] max-w-[300px]">
+<!-- Abstract Background Circle -->
+<div class="absolute w-48 h-48 rounded-full bg-primary/10 dark:bg-primary/20 blur-2xl"></div>
+<!-- Image -->
+<div class="relative w-full h-full bg-contain bg-center bg-no-repeat" data-alt="Illustration of a chef hat and cooking utensils representing cooking" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAH2niBzx9BojFuoyXpNcbjfeZTTnClyGpOX2Ocd4jrtYez5ZxMM1mAs_vyfjkF6I8_cMTSvUje_py0nDT3Uw0igI6KQVAM6X16PTBEnHNU8yJZOsnZ3yO1CSki23XmUSFXVy0xmx0vYNwj82_YbjqjP9Xp6KUNAKFcfDyGNN859qJgCqozuWijqDb-QV_chU2Znlg5CG8G-eVgOilnSUrmAHqGDyEyhERTAPK_YUGyR17wfWqY-EGvVHL_aIt_9Do4yvVzhFn3LLA"); border-radius: 1rem; mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%); opacity: 0.9;'>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 text-center">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight">No saved recipes yet!</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-relaxed max-w-[280px]">
+                        Your cookbook is looking a little light. Add your own creations or find inspiration from your ingredients.
+                    </p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 w-full mt-10">
+<!-- Primary Button: Create New Recipe -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-primary text-white hover:bg-red-700 transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined mr-2 text-[20px]">add_circle</span>
+<span class="text-base font-bold leading-normal tracking-[0.015em] truncate">Create New Recipe</span>
+</button>
+<!-- Secondary Button: Scan Ingredients -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-transparent border border-slate-200 dark:border-slate-700 text-primary hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined mr-2 text-[20px]">center_focus_strong</span>
+<span class="text-base font-bold leading-normal tracking-[0.015em] truncate">Scan Ingredients</span>
+</button>
+</div>
+</div>
+<!-- Spacer for Bottom Nav -->
+<div class="h-20"></div>
+<!-- BottomNavBar -->
+<div class="fixed bottom-0 w-full border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 z-20">
+<div class="flex gap-2 justify-between max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Search</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-fill">menu_book</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">My Recipes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</div>
+</div>
+<style>
+        .font-variation-settings-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</body></html>

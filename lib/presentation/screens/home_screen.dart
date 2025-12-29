@@ -6,6 +6,7 @@ import 'package:naugiday/presentation/widgets/home_cta_card.dart';
 import 'package:naugiday/presentation/widgets/quick_actions_row.dart';
 import 'package:naugiday/presentation/widgets/suggested_recipe_card.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
+import 'package:naugiday/core/constants/launch_hardening_constants.dart';
 import 'package:naugiday/presentation/widgets/skeletons.dart';
 import 'package:naugiday/presentation/theme/app_theme.dart';
 
@@ -44,6 +45,25 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CircleAvatar(backgroundImage: AssetImage(AppAssets.appIcon)),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.privacy_tip_outlined),
+            tooltip: 'Privacy policy',
+            onPressed: () {
+              showDialog<void>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Privacy Policy'),
+                  content: SelectableText(privacyPolicyUrl),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.account_circle_outlined),
             onPressed: () {}, // TODO: Profile

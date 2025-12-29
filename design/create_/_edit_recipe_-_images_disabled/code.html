@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create / Edit Recipe - Images Disabled</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for cleaner look on some devices */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        body {
+            font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-50 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 border-b border-gray-200 dark:border-gray-800 justify-between">
+<button class="flex items-center justify-center text-primary text-base font-medium leading-normal shrink-0">
+                Cancel
+            </button>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">New Recipe</h2>
+<button class="flex items-center justify-end text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0 disabled:opacity-50">
+                Save
+            </button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto pb-10">
+<!-- Disabled Image State (EmptyState adapted) -->
+<div class="flex flex-col px-4 py-6">
+<div class="flex flex-col items-center gap-4 p-4 rounded-xl bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 border-dashed">
+<!-- Disabled Visual -->
+<div class="relative flex items-center justify-center w-full aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-6xl select-none">
+                            image_not_supported
+                        </span>
+<div class="absolute inset-0 bg-black/5 dark:bg-black/20"></div>
+</div>
+<!-- Alert Message -->
+<div class="flex flex-col items-center gap-2 text-center">
+<div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">warning</span>
+<span class="text-xs font-bold uppercase tracking-wide">Maintenance Mode</span>
+</div>
+<h3 class="text-gray-900 dark:text-white text-base font-bold leading-tight">Image Uploads Paused</h3>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal max-w-[280px]">
+                            Image features are temporarily unavailable. You can still create and save your recipe details.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Recipe Basic Info -->
+<div class="px-4 py-2 space-y-4">
+<!-- Name -->
+<label class="flex flex-col gap-1.5 w-full">
+<span class="text-gray-900 dark:text-gray-100 text-base font-bold leading-normal">Recipe Name</span>
+<input class="form-input w-full rounded-xl border-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50 placeholder:text-gray-400 h-14 px-4 text-lg font-medium shadow-sm transition-all" placeholder="e.g., Spicy Tomato Pasta" type="text" value=""/>
+</label>
+<!-- Meta Details Row -->
+<div class="flex gap-4">
+<label class="flex flex-col gap-1.5 flex-1">
+<span class="text-gray-900 dark:text-gray-100 text-sm font-medium leading-normal">Prep Time</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">schedule</span>
+<input class="form-input w-full rounded-xl border-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50 placeholder:text-gray-400 h-12 pl-10 pr-4 text-base font-normal shadow-sm" placeholder="30 min" type="text"/>
+</div>
+</label>
+<label class="flex flex-col gap-1.5 flex-1">
+<span class="text-gray-900 dark:text-gray-100 text-sm font-medium leading-normal">Servings</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl">group</span>
+<input class="form-input w-full rounded-xl border-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50 placeholder:text-gray-400 h-12 pl-10 pr-4 text-base font-normal shadow-sm" placeholder="2 people" type="number"/>
+</div>
+</label>
+</div>
+</div>
+<div class="h-4"></div>
+<!-- Ingredients Section -->
+<div class="flex flex-col">
+<div class="flex items-center justify-between px-4 pb-2 pt-2">
+<h3 class="text-gray-900 dark:text-white text-lg font-bold leading-tight">Ingredients</h3>
+<span class="text-xs text-gray-500 font-medium">3 items</span>
+</div>
+<!-- Existing Items (Simulated) -->
+<div class="flex flex-col gap-2 px-4">
+<!-- Item 1 -->
+<div class="group flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+<div class="text-gray-400 flex items-center justify-center shrink-0 cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-xl">drag_indicator</span>
+</div>
+<div class="flex-1 flex gap-2">
+<input aria-label="Amount" class="bg-transparent border-none p-0 text-gray-900 dark:text-white font-bold w-16 focus:ring-0 text-base" type="text" value="200g"/>
+<input aria-label="Ingredient Name" class="bg-transparent border-none p-0 text-gray-900 dark:text-white w-full focus:ring-0 text-base" type="text" value="Spaghetti"/>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors p-1">
+<span class="material-symbols-outlined text-xl">remove_circle</span>
+</button>
+</div>
+<!-- Item 2 -->
+<div class="group flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-transparent hover:border-primary/20 transition-all">
+<div class="text-gray-400 flex items-center justify-center shrink-0 cursor-grab active:cursor-grabbing">
+<span class="material-symbols-outlined text-xl">drag_indicator</span>
+</div>
+<div class="flex-1 flex gap-2">
+<input aria-label="Amount" class="bg-transparent border-none p-0 text-gray-900 dark:text-white font-bold w-16 focus:ring-0 text-base" type="text" value="2 tbsp"/>
+<input aria-label="Ingredient Name" class="bg-transparent border-none p-0 text-gray-900 dark:text-white w-full focus:ring-0 text-base" type="text" value="Olive Oil"/>
+</div>
+<button class="text-gray-400 hover:text-red-500 transition-colors p-1">
+<span class="material-symbols-outlined text-xl">remove_circle</span>
+</button>
+</div>
+</div>
+<!-- Add Button (ListItem variant) -->
+<div class="px-4 mt-3">
+<button class="flex w-full items-center gap-3 bg-white dark:bg-gray-800 px-3 py-3 rounded-xl border border-dashed border-primary/30 hover:bg-primary/5 active:bg-primary/10 transition-colors group">
+<div class="flex items-center justify-center rounded-full bg-primary/10 text-primary shrink-0 size-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-xl">add</span>
+</div>
+<p class="text-primary text-base font-semibold leading-normal flex-1 text-left">Add Ingredient</p>
+</button>
+</div>
+</div>
+<div class="h-6"></div>
+<!-- Instructions Section -->
+<div class="flex flex-col px-4">
+<h3 class="text-gray-900 dark:text-white text-lg font-bold leading-tight pb-3">Instructions</h3>
+<div class="relative">
+<textarea class="form-textarea w-full rounded-xl border-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50 placeholder:text-gray-400 p-4 text-base font-normal leading-relaxed shadow-sm min-h-[200px] resize-y" placeholder="Step 1: Boil water in a large pot...
+
+Step 2: Add salt and pasta..."></textarea>
+<div class="absolute bottom-3 right-3 flex gap-2">
+<button aria-label="Add list formatting" class="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300">
+<span class="material-symbols-outlined text-lg">format_list_numbered</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Spacer for safe area -->
+<div class="h-12"></div>
+</div>
+</div>
+</body></html>

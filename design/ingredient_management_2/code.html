@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ingredient Management - NauGiDay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d1a1a",
+                        "text-main-light": "#1b0d0d",
+                        "text-main-dark": "#fcf8f8",
+                        "text-sub-light": "#6b5c5c",
+                        "text-sub-dark": "#d4c5c5",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>.scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-display min-h-screen flex flex-col overflow-x-hidden antialiased selection:bg-primary selection:text-white">
+<header class="sticky top-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+<div class="flex items-center p-4 justify-between h-[60px]">
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">My Ingredients</h2>
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</header>
+<div class="px-4 py-2 mt-2">
+<label class="flex flex-col w-full">
+<div class="group flex w-full flex-1 items-center rounded-xl h-12 bg-white dark:bg-surface-dark shadow-sm border border-transparent focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+<div class="text-primary flex items-center justify-center pl-4 pr-2">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 bg-transparent text-text-main-light dark:text-text-main-dark focus:outline-0 border-none h-full placeholder:text-gray-400 dark:placeholder:text-gray-500 px-2 text-base font-medium" placeholder="Search your ingredients..." value=""/>
+<button class="pr-4 text-gray-400 hover:text-primary hidden group-focus-within:block" type="button">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+</button>
+</div>
+</label>
+</div>
+<div class="w-full overflow-x-auto scrollbar-hide">
+<div class="flex gap-3 px-4 py-3 min-w-max">
+<button class="flex h-9 items-center justify-center rounded-full bg-primary text-white px-5 shadow-md shadow-primary/30 transition-transform active:scale-95">
+<p class="text-sm font-semibold">All</p>
+</button>
+<button class="flex h-9 items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-surface-dark/80 transition-colors">
+<p class="text-sm font-medium">Fridge</p>
+</button>
+<button class="flex h-9 items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-surface-dark/80 transition-colors">
+<p class="text-sm font-medium">Pantry</p>
+</button>
+<button class="flex h-9 items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-surface-dark/80 transition-colors">
+<p class="text-sm font-medium">Freezer</p>
+</button>
+<button class="flex h-9 items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-gray-700 px-5 text-text-main-light dark:text-text-main-dark hover:bg-gray-50 dark:hover:bg-surface-dark/80 transition-colors">
+<p class="text-sm font-medium">Spices</p>
+</button>
+</div>
+</div>
+<div class="flex-1 px-4 py-2 space-y-3 pb-24">
+<div class="flex justify-between items-end pt-2 pb-1">
+<h3 class="text-sm font-bold text-text-sub-light dark:text-text-sub-dark uppercase tracking-wider">Expiring Soon</h3>
+<button class="text-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<div class="group relative flex items-center justify-between gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-200 overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-red-500 rounded-l-xl"></div>
+<div class="flex items-center gap-4 flex-1 min-w-0 pl-2">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-14 shadow-inner" data-alt="Fresh red tomatoes on a vine" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDQPxY8qiYkxnNbLBCJZEzL-O-SVvtO5TztZiaQ8hdT3P_jbMQ171WJRgR1CAJfll--hDj3DC3qph0fbPa98sntTYRTyYYb_rh4lxsr1mPHoYbg4qWYKqj9X9l1rQ4uz50Fxu2uiur_kK1qKMShblQye4iw0IfXLbrWwrVWuwt2Gw2XmmY2W9qqSDm5MYaOApk0bto1Svkn9LMTFQ3ZjDhIa-zs4fusOYi5f6noIXHIC4qSuO3od4lV042uL3IRVnjdpI1U5gP7yE");'></div>
+<div class="absolute -bottom-1 -right-1 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-red-200 dark:border-red-800">
+                    2d
+                </div>
+</div>
+<div class="flex flex-col justify-center min-w-0 py-0.5">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight truncate">Tomatoes</p>
+<div class="flex flex-wrap items-center gap-2 mt-1.5">
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">shopping_bag</span>
+<span>Buy: Oct 18</span>
+</div>
+<div class="inline-flex items-center gap-1 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/30 px-1.5 py-0.5 rounded text-[10px] font-bold text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-[12px]">event_busy</span>
+<span>Exp: Oct 20</span>
+</div>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-3">
+<div class="flex items-center bg-gray-50 dark:bg-white/5 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-8 text-center text-sm font-bold text-text-main-light dark:text-text-main-dark tabular-nums">5</span>
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="group relative flex items-center justify-between gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-200">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-400 rounded-l-xl"></div>
+<div class="flex items-center gap-4 flex-1 min-w-0 pl-2">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-14 shadow-inner" data-alt="Raw chicken breast on a wooden board" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCexEC25pXyzIkp0sWgWOkHu3Ki3WEP-3ForQtpjwnaoRyG8-Qp-5jZPrdx3t-0D3lpNh-jN_mmDITnaiS2HdmWL-2TS3mfOJ0eWwMYhXD4-6Ghfzn37Db1eY4AJiueG2-Ql0Ai8VQdSS0bYslSagwSAhkoBMdAtNn_IpfthE19BILegHzRDrYp5yrDs2bmrAA0R_eQvQHFWOdo0Ws_xFNOqRw1EMZW51InTRQELeW7z_tbcCSNkwVMkhG8weBHpyowlLi17VUp8SI");'></div>
+<div class="absolute -bottom-1 -right-1 bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-orange-200 dark:border-orange-800">
+                    4d
+                </div>
+</div>
+<div class="flex flex-col justify-center min-w-0 py-0.5">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight truncate">Chicken Breast</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-[11px] font-medium mb-1">Fridge • Meat</p>
+<div class="flex flex-wrap items-center gap-2">
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">shopping_bag</span>
+<span>Buy: Oct 15</span>
+</div>
+<div class="inline-flex items-center gap-1 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/30 px-1.5 py-0.5 rounded text-[10px] font-bold text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined text-[12px]">event_busy</span>
+<span>Exp: Oct 24</span>
+</div>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-1">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-bold">500g</p>
+<button class="text-xs text-primary font-medium hover:underline">Edit</button>
+</div>
+</div>
+<div class="flex justify-between items-end pt-4 pb-1">
+<h3 class="text-sm font-bold text-text-sub-light dark:text-text-sub-dark uppercase tracking-wider">In Stock</h3>
+</div>
+<div class="group flex items-center justify-between gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-200">
+<div class="flex items-center gap-4 flex-1 min-w-0 pl-1">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-14 shadow-inner bg-gray-100" data-alt="Bottle of golden olive oil" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBrQa-kIB3KWT_Ei2zgwlg31yO1SMQK3rs4ZlLwLmv_151jJPAVv5r_dUHaW16UPy33WXxLNcx7Mbl73536dRBUObQ8Do7hZqhHbZMdd5oHWnQZmZmQskIt-E72cCYZJl68UgoGUK0Mlwx9DUfyclkesfb08glTCeZmg6z3-RVlWTQK04v5KZYAZwTmcV-sMbxPLlzs1B05srL7PNYJPKFGSSrPhwNWoAa79P-vDSaUNjgRa3NtsAT9DTPVNBInX-CIk7aew8rM2lc");'></div>
+<div class="flex flex-col justify-center min-w-0 py-0.5">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight truncate">Olive Oil</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-[11px] font-medium mb-1">Pantry</p>
+<div class="flex flex-wrap items-center gap-2">
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">shopping_bag</span>
+<span>Buy: Sep 01</span>
+</div>
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">event</span>
+<span>Exp: Aug 15</span>
+</div>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-3">
+<div class="flex items-center bg-gray-50 dark:bg-white/5 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-16 text-center text-sm font-bold text-text-main-light dark:text-text-main-dark tabular-nums truncate px-1">1 btl</span>
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="group flex items-center justify-between gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-200">
+<div class="flex items-center gap-4 flex-1 min-w-0 pl-1">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-14 shadow-inner bg-gray-100" data-alt="Carton of fresh eggs" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCqLs4LAly6wZk4mJotQ7KoHzK-VKX51DEl0oHR4pKj1i2ivnFljNANwIpvIMnBHG0cTywmlJc3BaAtXUojntHe2o9AkOqBGoCLoVlLxVcIvRRsyiaE-hbZMLKjdyxpwj3g0RCpEWNWsSx1R-M9mAlgSInX-AYsIu77_855-sxzYUg_QfsdSqGrQSg1BFyJBux9AoMUNr3iSX4n2gZ1AraL2BYbiLQaEWEzVchZSvq43xsoStX_9rsbhIKcoxvhkU8Eo1-0miMp9Lc");'></div>
+<div class="flex flex-col justify-center min-w-0 py-0.5">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight truncate">Eggs</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-[11px] font-medium mb-1">Fridge • Dairy</p>
+<div class="flex flex-wrap items-center gap-2">
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">shopping_bag</span>
+<span>Buy: Oct 10</span>
+</div>
+<div class="inline-flex items-center gap-1 bg-gray-100 dark:bg-surface-light/5 px-1.5 py-0.5 rounded text-[10px] font-medium text-text-sub-light dark:text-text-sub-dark">
+<span class="material-symbols-outlined text-[12px] text-gray-400">event</span>
+<span>Exp: Oct 30</span>
+</div>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-3">
+<div class="flex items-center bg-gray-50 dark:bg-white/5 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="w-8 text-center text-sm font-bold text-text-main-light dark:text-text-main-dark tabular-nums">12</span>
+<button class="text-primary hover:bg-white dark:hover:bg-white/10 flex size-7 items-center justify-center rounded-md transition-colors active:scale-90">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="group flex items-center justify-between gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all duration-200 opacity-60">
+<div class="flex items-center gap-4 flex-1 min-w-0 pl-1">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-14 shadow-inner grayscale" data-alt="Glass bottle of milk" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCmVNEr7yDaDu74rtBcZGBEymyJJev6BEP2zod3nVYS7Zpfz4IPcbeqVJn-gkvO2zsPCJpJpBlpJ875mOm7wd8cmsdBdV7PUYINLgHtgF6lu0iHlg1p6h2Mj9eLkyo3AEwyZ7n6o9RnZ4LncdoLN63v4a1zNt9aZENLi4c0uS9EDzjVCVlxj9ueZb4Z_jtJ-Bnm2ZxslVZAIB0UXx9ahqTCYKlaPOgafY2EK1N_-wMuMUp6d180P_QKhuGb2ClS2MY2oLAXaOQ32oE");'></div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight truncate decoration-slice">Whole Milk</p>
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium mt-1 italic">Out of stock</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="text-xs font-bold bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded-lg transition-colors">
+                Add to List
+            </button>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark pt-8 pointer-events-none z-40">
+<button class="pointer-events-auto w-full bg-primary hover:bg-red-700 text-white font-bold text-lg h-14 rounded-xl shadow-lg shadow-primary/40 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[24px]">add_circle</span>
+        Add Ingredient
+    </button>
+</div>
+
+</body></html>

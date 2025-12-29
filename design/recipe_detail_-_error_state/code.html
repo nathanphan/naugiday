@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Detail - Error State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen w-full flex flex-col font-display antialiased overflow-x-hidden transition-colors duration-300">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between p-4 pb-2 bg-background-light dark:bg-background-dark z-20 sticky top-0">
+<button aria-label="Go Back" class="flex items-center justify-center size-10 shrink-0 text-gray-900 dark:text-white rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back_ios_new</span>
+</button>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Recipe Detail</h2>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-6 py-6 w-full max-w-md mx-auto">
+<!-- EmptyState Content -->
+<div class="flex flex-col items-center gap-8 w-full">
+<!-- Illustration Area -->
+<div class="relative w-full aspect-square max-w-[280px] rounded-full bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center shadow-sm">
+<div class="absolute inset-0 rounded-full opacity-20 bg-[radial-gradient(#ec1313_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<!-- Icon representing spilled pot/error -->
+<div class="relative z-10 flex flex-col items-center justify-center text-primary/80 dark:text-primary">
+<span class="material-symbols-outlined" style="font-size: 84px;">soup_kitchen</span>
+<span class="material-symbols-outlined absolute -bottom-2 -right-2 text-background-light dark:text-background-dark bg-primary rounded-full p-1" style="font-size: 32px;">priority_high</span>
+</div>
+<!-- Hidden descriptive image for accessibility/layout purposes if needed by design system -->
+<div class="hidden bg-center bg-no-repeat bg-cover w-full h-full" data-alt="Abstract illustration of a kitchen accident or spilled food" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA0w7msCc3_E3-h1yQxX0_NSsZwHxlPDKMnIQ6IwH9-G816ItZiaXPbhhwIAL1vnSGsl8pBF9pq2f1Yu6cUxQkxYFk_u1xmeNTVTuCmFl58PjFcSR95xPXPbYVQ0ICq0saOHnSTJj0yAVh_XF9atp3ewORlMwnrIEXqbrOxXUsTrDh_flr8BIAjMGttbwHNynUuMaRQmlI6vmfVoqoOXJiwyf1ye8I22aI3t7nvblf5OAIdCklnLvENJIclLmEO8h6Je2tfWr4YchA");'></div>
+</div>
+<!-- Text Content -->
+<div class="flex flex-col items-center gap-3 text-center">
+<h1 class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-tight max-w-[300px]">
+                    Something went wrong
+                </h1>
+<p class="text-gray-600 dark:text-gray-400 text-base font-normal leading-relaxed max-w-[320px]">
+                    We encountered a problem loading this recipe. It might be a connection issue or the recipe is temporarily unavailable.
+                </p>
+</div>
+<!-- Buttons -->
+<div class="flex flex-col w-full gap-3 mt-2">
+<!-- Primary Action: Try Again -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-red-600 text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform active:scale-[0.98] shadow-lg shadow-primary/20">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span class="truncate">Try Again</span>
+</span>
+</button>
+<!-- Secondary Action: Go Back (SingleButton adapted) -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary/10 dark:bg-white/10 text-primary dark:text-white hover:bg-primary/20 dark:hover:bg-white/20 text-base font-bold leading-normal tracking-[0.015em] transition-colors active:scale-[0.98]">
+<span class="truncate">Go Back</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer / MetaText -->
+<div class="pb-8 pt-4">
+<button class="w-full text-center group">
+<p class="text-gray-500 dark:text-gray-500 text-sm font-medium leading-normal underline decoration-gray-300 dark:decoration-gray-700 underline-offset-4 group-hover:text-primary group-hover:decoration-primary transition-all">
+                Report this issue
+            </p>
+</button>
+</div>
+</body></html>

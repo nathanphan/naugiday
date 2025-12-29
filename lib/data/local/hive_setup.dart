@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:naugiday/core/constants/launch_hardening_constants.dart';
 import 'package:naugiday/data/adapters/recipe_adapter.dart';
 
 const String recipesBoxName = 'recipes';
@@ -38,13 +39,22 @@ Future<void> initHiveForRecipes({
       await Hive.openBox(recipesBoxName);
     } on HiveError catch (err) {
       final message = err.message;
-      final shouldRecover = recoverOnTypeIdMismatch &&
-          message != null &&
-          message.contains('unknown typeId');
+      final shouldRecover =
+          recoverOnTypeIdMismatch && message.contains('unknown typeId');
       if (!shouldRecover) rethrow;
       // Destructive recovery for schema mismatches in debug builds.
       await Hive.deleteBoxFromDisk(recipesBoxName);
       await Hive.openBox(recipesBoxName);
     }
+  }
+
+  if (!Hive.isBoxOpen(featureFlagsBoxName)) {
+    await Hive.openBox(featureFlagsBoxName);
+  }
+  if (!Hive.isBoxOpen(telemetryQueueBoxName)) {
+    await Hive.openBox(telemetryQueueBoxName);
+  }
+  if (!Hive.isBoxOpen(releaseChecklistBoxName)) {
+    await Hive.openBox(releaseChecklistBoxName);
   }
 }

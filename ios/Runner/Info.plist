@@ -47,5 +47,9 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>We need camera access to scan ingredients.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo access to attach ingredient photos to recipes.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We save recipe photos to your library when you choose to.</string>
 </dict>
 </plist>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Detail - Empty State</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e3703b",
+                        "primary-dark": "#cc5a28", 
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211611",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2f221c",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background-light/60 dark:supports-[backdrop-filter]:bg-background-dark/60">
+<button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-slate-900 dark:text-white">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em] text-slate-900 dark:text-white absolute left-1/2 -translate-x-1/2">
+                Recipe Detail
+            </h1>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-6 pb-10 w-full max-w-md mx-auto">
+<!-- Empty State Illustration -->
+<div class="mb-8 relative group">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-50 dark:opacity-30 group-hover:opacity-70 transition-opacity duration-500"></div>
+<div class="relative bg-center bg-no-repeat bg-cover rounded-2xl aspect-square w-64 shadow-sm border border-stone-100 dark:border-stone-800" data-alt="Illustration of a cute sad chef character looking into an empty cooking pot with a question mark floating above" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7qbyN-R0LtrVUg-jivX1v_JmZ44rjbIJr-AHwA4aKXXF3-0j138SvbwVA_FJubff5_g9yj5f5XX48HyYjip5OUzdDXZyZoJ3SOW8qtuq5Qav30hSaKmKUUFwYoRRSGLlKBj8KZ83Kt6k8y7NkavZCs-4M7-z1Tx_iHla4NUARmnmZhA9qOTWqrGBann7SRXycAsRykNfZ8oSnsPNKhA9zs66JcrrhBFLrLM91FtjF26qpISpH4fsq0Znjhij3t3-qsRgvxbAc8kg");'>
+<!-- Overlay to ensure text readability if image is busy, or to tint it to match theme -->
+<div class="absolute inset-0 bg-gradient-to-t from-background-light via-transparent to-transparent dark:from-background-dark opacity-20"></div>
+</div>
+</div>
+<!-- Empty State Text -->
+<div class="flex flex-col items-center gap-3 text-center mb-10">
+<h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                    Oops! Nothing Cooking Here
+                </h2>
+<p class="text-stone-500 dark:text-stone-400 text-base font-medium leading-relaxed max-w-[320px]">
+                    We couldn't find the details for this recipe. It might have been removed or the connection was lost.
+                </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 w-full">
+<!-- Primary Action -->
+<button class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl h-14 bg-primary hover:bg-primary-dark active:bg-primary-dark text-white font-bold text-base tracking-wide shadow-lg shadow-primary/25 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined" style="font-size: 20px;">center_focus_strong</span>
+<span>Scan Ingredients Again</span>
+</button>
+<!-- Secondary Action -->
+<button class="flex w-full cursor-pointer items-center justify-center rounded-xl h-12 bg-transparent text-stone-500 dark:text-stone-400 hover:text-primary dark:hover:text-primary hover:bg-stone-100 dark:hover:bg-white/5 font-semibold text-base transition-colors">
+                    Back to Suggestions
+                </button>
+</div>
+</main>
+<!-- Bottom padding for safe area on phones -->
+<div class="h-6"></div>
+</div>
+</body></html>

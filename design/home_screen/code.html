@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NauGiDay Home Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FADBC9", // Peach color from Scan card and active tab
+                        secondary: "#EAE2CF", // Light beige for suggested recipe bg
+                        accent: "#F28C5F", // Orange camera icon
+                        "text-main": "#3D312E", // Dark brown/black text
+                        "text-sub": "#7A706D", // Lighter text
+                        "background-light": "#FAF6F3", // Very light warm white
+                        "background-dark": "#1E1C1A", // Dark warm grey for dark mode
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#2C2826",
+                    },
+                    fontFamily: {
+                        display: ["Urbanist", "sans-serif"],
+                        body: ["Urbanist", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'xl': '1.5rem',
+                        '2xl': '2rem',
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'Urbanist', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen flex justify-center w-full">
+<div class="w-full max-w-md h-full min-h-screen bg-background-light dark:bg-background-dark flex flex-col relative pb-24 shadow-2xl overflow-hidden">
+<header class="flex justify-between items-center px-6 pt-12 pb-4">
+<div class="w-10 h-10 rounded-full bg-secondary/30 dark:bg-white/10 flex items-center justify-center overflow-hidden">
+<div class="grid grid-cols-3 gap-0.5 p-1 opacity-60">
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+<div class="w-1 h-1 bg-accent rounded-full"></div>
+</div>
+</div>
+<h1 class="text-2xl font-semibold tracking-tight text-text-main dark:text-white">NauGiDay</h1>
+<div class="flex items-center gap-3">
+<button class="p-1 rounded-full text-text-main dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 transition">
+<span class="material-icons-round text-2xl">info_outline</span>
+</button>
+<button class="p-1 rounded-full text-text-main dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/10 transition">
+<span class="material-icons-round text-2xl">account_circle</span>
+</button>
+</div>
+</header>
+<div class="px-6 mb-8">
+<div class="flex rounded-full border border-gray-300 dark:border-gray-700 overflow-hidden bg-white dark:bg-surface-dark shadow-sm h-12">
+<button class="flex-1 flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+<span class="material-icons-round text-base opacity-70">wb_sunny</span>
+                    Breakfast
+                </button>
+<div class="w-[1px] bg-gray-300 dark:bg-gray-700 h-full"></div>
+<button class="flex-1 flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<span class="material-icons-round text-base opacity-70">restaurant</span>
+                    Lunch
+                </button>
+<div class="w-[1px] bg-gray-300 dark:bg-gray-700 h-full"></div>
+<button class="flex-1 flex items-center justify-center gap-2 text-sm font-medium bg-primary text-text-main hover:opacity-90 transition-colors">
+<span class="material-icons-round text-base opacity-70 -rotate-45">nights_stay</span>
+                    Dinner
+                </button>
+</div>
+</div>
+<section class="px-6 mb-8">
+<div class="bg-primary relative rounded-3xl p-6 h-48 flex flex-col justify-center overflow-hidden shadow-sm">
+<div class="z-10 relative pr-16">
+<p class="text-text-main text-base font-medium mb-1 opacity-90">What's in your fridge?</p>
+<h2 class="text-text-main text-3xl font-bold leading-tight">Scan Ingredients</h2>
+</div>
+<div class="absolute right-6 top-1/2 transform -translate-y-1/2">
+<div class="text-accent">
+<span class="material-icons-round text-[5rem] drop-shadow-sm">photo_camera</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-10 w-32 h-32 bg-white/20 rounded-full blur-2xl"></div>
+</div>
+</section>
+<section class="px-6 mb-10">
+<div class="flex justify-between px-4">
+<div class="flex flex-col items-center gap-2">
+<button class="w-16 h-16 rounded-full bg-primary/60 dark:bg-primary/40 flex items-center justify-center text-text-main hover:scale-105 active:scale-95 transition-transform">
+<span class="material-icons-round text-2xl">receipt_long</span>
+</button>
+<span class="text-xs font-medium text-text-main dark:text-gray-300">My Recipes</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<button class="w-16 h-16 rounded-full bg-primary/60 dark:bg-primary/40 flex items-center justify-center text-text-main hover:scale-105 active:scale-95 transition-transform">
+<span class="material-icons-round text-2xl">shopping_cart</span>
+</button>
+<span class="text-xs font-medium text-text-main dark:text-gray-300">Shopping</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<button class="w-16 h-16 rounded-full bg-primary/60 dark:bg-primary/40 flex items-center justify-center text-text-main hover:scale-105 active:scale-95 transition-transform opacity-70">
+<span class="material-icons-round text-2xl">bookmark</span>
+</button>
+<span class="text-xs font-medium text-text-main dark:text-gray-300">Saved</span>
+</div>
+</div>
+</section>
+<section class="pl-6 mb-8 flex-1">
+<h3 class="text-xl font-semibold mb-4 text-text-main dark:text-white">Suggested Today</h3>
+<div class="flex overflow-x-auto gap-4 pb-8 pr-6 hide-scrollbar">
+<div class="flex-shrink-0 w-44 flex flex-col">
+<div class="bg-secondary/60 dark:bg-gray-800 h-40 rounded-2xl flex items-center justify-center mb-3 relative overflow-hidden group">
+<div class="flex flex-col items-center justify-center opacity-80 text-text-main dark:text-gray-300 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-icons-round text-6xl rotate-45">restaurant_menu</span>
+</div>
+</div>
+<div class="px-1">
+<h4 class="font-bold text-lg leading-tight mb-2 text-text-main dark:text-white">Spicy Tomato Pasta</h4>
+<div class="flex items-center gap-3 text-sm text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-sm">schedule</span>
+<span>30m</span>
+</div>
+</div>
+<div class="text-sm text-text-sub dark:text-gray-400 mt-1">450 kcal</div>
+</div>
+</div>
+<div class="flex-shrink-0 w-44 flex flex-col">
+<div class="bg-secondary/60 dark:bg-gray-800 h-40 rounded-2xl flex items-center justify-center mb-3 relative overflow-hidden group">
+<div class="flex flex-col items-center justify-center opacity-80 text-text-main dark:text-gray-300 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-icons-round text-6xl rotate-45">restaurant_menu</span>
+</div>
+</div>
+<div class="px-1">
+<h4 class="font-bold text-lg leading-tight mb-2 text-text-main dark:text-white">Grilled Chicken Salad</h4>
+<div class="flex items-center gap-3 text-sm text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-sm">schedule</span>
+<span>20m</span>
+</div>
+</div>
+<div class="text-sm text-text-sub dark:text-gray-400 mt-1">320 kcal</div>
+</div>
+</div>
+<div class="flex-shrink-0 w-44 flex flex-col opacity-50">
+<div class="bg-secondary/60 dark:bg-gray-800 h-40 rounded-2xl flex items-center justify-center mb-3 relative overflow-hidden">
+</div>
+<div class="px-1">
+<h4 class="font-bold text-lg leading-tight mb-2 text-text-main dark:text-white">Avocado Toast</h4>
+<div class="flex items-center gap-3 text-sm text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1">
+<span class="material-icons-round text-sm">schedule</span>
+<span>10m</span>
+</div>
+</div>
+<div class="text-sm text-text-sub dark:text-gray-400 mt-1">250 kcal</div>
+</div>
+</div>
+</div>
+</section>
+<button class="absolute bottom-28 right-6 w-14 h-14 rounded-2xl bg-primary shadow-lg shadow-orange-900/10 flex items-center justify-center hover:bg-orange-200 transition-colors z-20">
+<span class="material-icons-round text-text-main text-2xl">tune</span>
+</button>
+<nav class="absolute bottom-0 w-full bg-primary/20 dark:bg-surface-dark border-t border-white/50 dark:border-white/5 backdrop-blur-xl pb-6 pt-2 px-6 flex justify-between items-center z-30">
+<button class="flex flex-col items-center justify-center w-16 gap-1 group">
+<div class="w-12 h-8 rounded-full bg-primary/50 dark:bg-primary/20 flex items-center justify-center group-hover:bg-primary/70 dark:group-hover:bg-primary/30 transition-colors">
+<span class="material-icons-round text-text-main dark:text-white text-2xl">home</span>
+</div>
+<span class="text-[10px] font-bold text-text-main dark:text-white">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-16 gap-1 group opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-icons-round text-text-main dark:text-gray-300 text-2xl">receipt</span>
+</div>
+<span class="text-[10px] font-medium text-text-main dark:text-gray-300">My Recipes</span>
+</button>
+<button class="flex flex-col items-center justify-center w-16 gap-1 group opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-12 h-8 rounded-full flex items-center justify-center">
+<span class="material-icons-round text-text-main dark:text-gray-300 text-2xl">shopping_cart</span>
+</div>
+<span class="text-[10px] font-medium text-text-main dark:text-gray-300">Shopping</span>
+</button>
+</nav>
+</div>
+
+</body></html>

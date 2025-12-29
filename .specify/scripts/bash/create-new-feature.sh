@@ -5,6 +5,7 @@ set -e
 JSON_MODE=false
 SHORT_NAME=""
 BRANCH_NUMBER=""
+NUMBER_PROVIDED=false
 ARGS=()
 i=1
 while [ $i -le $# ]; do
@@ -39,6 +40,7 @@ while [ $i -le $# ]; do
                 exit 1
             fi
             BRANCH_NUMBER="$next_arg"
+            NUMBER_PROVIDED=true
             ;;
         --help|-h) 
             echo "Usage: $0 [--json] [--short-name <name>] [--number N] <feature_description>"
@@ -149,6 +151,28 @@ check_existing_branches() {
     echo $((max_num + 1))
 }
 
+prefix_in_use() {
+    local prefix="$1"
+    local specs_dir="$2"
+    local has_git_repo="$3"
+    local spec_match=""
+    local branch_match=""
+
+    spec_match=$(ls -d "$specs_dir"/"$prefix"-* 2>/dev/null | head -n 1 || true)
+    if [ -n "$spec_match" ]; then
+        return 0
+    fi
+
+    if [ "$has_git_repo" = true ]; then
+        branch_match=$(git branch -a 2>/dev/null | sed 's/^[* ]*//; s|^remotes/[^/]*/||' | grep -E "^${prefix}-" | head -n 1 || true)
+        if [ -n "$branch_match" ]; then
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
 # Function to clean and format a branch name
 clean_branch_name() {
     local name="$1"
@@ -244,6 +268,24 @@ if [ -z "$BRANCH_NUMBER" ]; then
         HIGHEST=$(get_highest_from_specs "$SPECS_DIR")
         BRANCH_NUMBER=$((HIGHEST + 1))
     fi
+fi
+
+# Ensure prefix uniqueness (avoid duplicate numeric prefixes)
+if [ "$NUMBER_PROVIDED" = true ]; then
+    FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
+    if prefix_in_use "$FEATURE_NUM" "$SPECS_DIR" "$HAS_GIT"; then
+        echo "Error: feature number $FEATURE_NUM already exists. Choose a different --number." >&2
+        exit 1
+    fi
+else
+    while true; do
+        FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
+        if prefix_in_use "$FEATURE_NUM" "$SPECS_DIR" "$HAS_GIT"; then
+            BRANCH_NUMBER=$((10#$BRANCH_NUMBER + 1))
+            continue
+        fi
+        break
+    done
 fi
 
 # Force base-10 interpretation to prevent octal conversion (e.g., 010 → 8 in octal, but should be 10 in decimal)

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Recipes - NauGiDay</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ec1313",
+              "background-light": "#f8f6f6",
+              "background-dark": "#221010",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans", "sans-serif"],
+              "body": ["Noto Sans", "sans-serif"],
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1b0d0d] dark:text-white transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 pt-12 pb-2">
+<div class="flex items-center justify-between">
+<h2 class="text-3xl font-bold leading-tight tracking-tight flex-1">My Recipes</h2>
+<div class="flex items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-white dark:bg-[#382020] shadow-sm text-primary hover:bg-primary/5 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl font-bold">add</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Filters -->
+<div class="sticky top-[88px] z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm w-full border-b border-gray-100 dark:border-white/5">
+<div class="flex gap-3 px-4 py-3 overflow-x-auto no-scrollbar scroll-smooth">
+<!-- Active Pill -->
+<button class="flex h-9 shrink-0 items-center justify-center px-5 rounded-full bg-primary text-white shadow-md shadow-primary/20 transition-transform active:scale-95">
+<span class="text-sm font-bold">All</span>
+</button>
+<!-- Inactive Pills -->
+<button class="flex h-9 shrink-0 items-center justify-center px-5 rounded-full bg-white dark:bg-[#382020] border border-transparent hover:border-gray-200 dark:hover:border-white/10 text-gray-600 dark:text-gray-300 transition-all active:scale-95">
+<span class="text-sm font-medium">Favorites</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center px-5 rounded-full bg-white dark:bg-[#382020] border border-transparent hover:border-gray-200 dark:hover:border-white/10 text-gray-600 dark:text-gray-300 transition-all active:scale-95">
+<span class="text-sm font-medium">Created</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center px-5 rounded-full bg-white dark:bg-[#382020] border border-transparent hover:border-gray-200 dark:hover:border-white/10 text-gray-600 dark:text-gray-300 transition-all active:scale-95">
+<span class="text-sm font-medium">AI Suggested</span>
+</button>
+</div>
+</div>
+<!-- Recipe List -->
+<main class="flex flex-col px-4 pt-4 gap-4">
+<!-- Item 1: Pho Bo -->
+<div class="group relative flex items-center bg-white dark:bg-[#2a1515] p-3 rounded-xl shadow-sm border border-gray-100 dark:border-white/5 active:scale-[0.99] transition-all duration-200">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-20 shrink-0 shadow-inner" data-alt="Steaming bowl of Pho Bo beef noodle soup with herbs" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_WgQ3oGySgPSV7GHnQS1sPn7XzeQhgbtwCU5x9Joqcf1s-9TYE6KZoFeUfw02Ku51Bi2M1mHhBtaGwQczxEQNHM-WcnA2KBx8CFnpYak8fXviMl1HN4JB3TFgHb1cXIulw8hBmX7KV9sIz2v25DYA1Wu91olypvuZft2k_MBR37DBFVjhLRDh8VTgtPGW6msTy7-zzeFs95avCGiOr9nGNEmzuGb7LrYq9f5wabiOJZ5oHcQXCjOlcockGWSER-UzIDKJgY5BD3c");'>
+</div>
+<div class="flex flex-col flex-1 px-4 justify-center gap-1">
+<h3 class="text-base font-bold leading-tight line-clamp-1">Pho Bo (Beef Noodle Soup)</h3>
+<div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>2h 30m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-orange-400">bar_chart</span>
+<span>Hard</span>
+</div>
+</div>
+</div>
+<button class="shrink-0 size-10 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-'FILL'-1">favorite</span>
+</button>
+</div>
+<!-- Item 2: Fresh Summer Rolls -->
+<div class="group relative flex items-center bg-white dark:bg-[#2a1515] p-3 rounded-xl shadow-sm border border-gray-100 dark:border-white/5 active:scale-[0.99] transition-all duration-200">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-20 shrink-0 shadow-inner" data-alt="Fresh vietnamese summer rolls with shrimp and herbs" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkWk-lXUt_Oak4q3R4Dk45SUya8l4NwT8eI0wVtJ4wQCsBvyLcakTCOPjXbj3NvlRz7xxcTYjX89lhewBcbuUGFFXKFfzsuMKfs6mjbqJlkrjuyiWbOVhnHyAo50Vy1gAwWMsa890N2x_-u7KbTqMhY60I2zwuQGEDtm5StNDidcbo__IDwf-98KS3p-_Onpku1xf1ch8KN43-KNdaQR_fl3w0kZRNu9UvWRdiPvQqFzT26sVfmo7yqM_rN-QQc8a6uLvz57wOIEA");'>
+</div>
+<div class="flex flex-col flex-1 px-4 justify-center gap-1">
+<h3 class="text-base font-bold leading-tight line-clamp-1">Fresh Summer Rolls</h3>
+<div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>20m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-green-500">eco</span>
+<span>Easy</span>
+</div>
+</div>
+</div>
+<button class="shrink-0 size-10 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-'FILL'-1">favorite</span>
+</button>
+</div>
+<!-- Item 3: Lemongrass Chicken (Swiped State) -->
+<!-- Container for the swipe action -->
+<div class="relative w-full h-[106px] rounded-xl overflow-hidden">
+<!-- Background Action Layer -->
+<div class="absolute inset-0 bg-primary flex items-center justify-end pr-6 rounded-xl">
+<div class="flex flex-col items-center justify-center text-white gap-1">
+<span class="material-symbols-outlined text-2xl">delete</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Delete</span>
+</div>
+</div>
+<!-- Foreground Content Layer (Shifted) -->
+<div class="absolute inset-0 flex items-center bg-white dark:bg-[#2a1515] p-3 rounded-xl shadow-sm border border-gray-100 dark:border-white/5 translate-x-[-90px] transition-transform duration-300 ease-out">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-20 shrink-0 shadow-inner" data-alt="Grilled lemongrass chicken with rice" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAABylTZp7n5-2Z0i6-4YBo2gV00kvdJ_pAvlkTZ0mQ3Ke3fF7ns6TtuTs9f6sz3HYzt4i1fJLMw4ieTZE1Bqv3r-F4jOxRoMtkQbrVvKL8owsrXCH67K4EdJLNAumhokVT-pLQsMI2Xy2cHGySMFcvX1BMrpEgdhL1A62JH0O0E6qWnmauDTRTlSigG7BkbtcBxMlZ8FkEmVCO0tDRQKH9PmbdIgxsPoa59ujSIcRSrouxFwnpGheIC6MQjMFfMQin-04TyTE-q4U");'>
+</div>
+<div class="flex flex-col flex-1 px-4 justify-center gap-1">
+<h3 class="text-base font-bold leading-tight line-clamp-1">Lemongrass Chicken</h3>
+<div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>45m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-yellow-500">equalizer</span>
+<span>Medium</span>
+</div>
+</div>
+</div>
+<button class="shrink-0 size-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 transition-colors">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</button>
+</div>
+</div>
+<!-- Item 4: Mango Sticky Rice -->
+<div class="group relative flex items-center bg-white dark:bg-[#2a1515] p-3 rounded-xl shadow-sm border border-gray-100 dark:border-white/5 active:scale-[0.99] transition-all duration-200">
+<div class="bg-center bg-no-repeat bg-cover rounded-lg size-20 shrink-0 shadow-inner" data-alt="Thai mango sticky rice dessert with coconut milk" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBIol1EqqBjYl3x4NVoAqntSZXeKJFS1xtOzCMVMbaOrpcXIyRJMENupRlQ9S1RA9C-kkdV8oWWeXrPA4ApzIPXve_knC2b_mi5eW2I7xYWi9ub2FappiKZGCWuWAiboM6v9BmTLGTWdqrH6aZBDoln17_DvD5UM4pd5lmdq8n_UoBzHjPt36CC9owbfMXwC8zeBPEYs_a1Sk-PrK___MCVUtAqUY6gSWvFyKUXnglTlKqK7EVD0FdmyXlN4xG9QXKElwWN_OQa3ac");'>
+</div>
+<div class="flex flex-col flex-1 px-4 justify-center gap-1">
+<h3 class="text-base font-bold leading-tight line-clamp-1">Mango Sticky Rice</h3>
+<div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>30m</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-green-500">eco</span>
+<span>Easy</span>
+</div>
+</div>
+</div>
+<button class="shrink-0 size-10 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] font-variation-settings-'FILL'-1">favorite</span>
+</button>
+</div>
+<!-- Empty state filler to allow scrolling -->
+<div class="h-24"></div>
+</main>
+<!-- Undo Toast / Snackbar -->
+<div class="fixed bottom-[96px] left-4 right-4 z-40 animate-bounce-slight">
+<div class="bg-[#1b0d0d] dark:bg-white text-white dark:text-[#1b0d0d] px-4 py-3 rounded-lg shadow-lg flex items-center justify-between">
+<span class="text-sm font-medium">Recipe deleted</span>
+<button class="text-primary font-bold text-sm px-2 py-1 rounded hover:bg-white/10 dark:hover:bg-black/5 transition-colors">
+                    Undo
+                </button>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 w-full h-[84px] bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-gray-200 dark:border-white/10 flex items-start justify-around pt-3 pb-8 z-50">
+<button class="flex flex-col items-center gap-1 w-16 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-symbols-outlined text-[26px]">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-symbols-outlined text-[26px]">search</span>
+<span class="text-[10px] font-medium">Search</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 text-primary">
+<span class="material-symbols-outlined text-[26px] font-variation-settings-'FILL'-1">menu_book</span>
+<span class="text-[10px] font-bold">Recipes</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-symbols-outlined text-[26px]">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</nav>
+</div>
+</body></html>

@@ -64,6 +64,8 @@ class AddRecipeState {
 class AddRecipeController extends _$AddRecipeController {
   late final RecipeRepository _repository;
   static const _uuid = Uuid();
+  String? _editingRecipeId;
+  DateTime? _editingCreatedAt;
 
   @override
   AddRecipeState build() {
@@ -88,6 +90,31 @@ class AddRecipeController extends _$AddRecipeController {
 
   void setMealType(MealType mealType) {
     state = state.copyWith(mealType: mealType, error: null);
+  }
+
+  void loadFromRecipe(Recipe recipe) {
+    _editingRecipeId = recipe.id;
+    _editingCreatedAt = recipe.createdAt;
+    final steps = recipe.cookingSteps.isNotEmpty
+        ? List<CookingStep>.from(recipe.cookingSteps)
+        : [
+            for (var i = 0; i < recipe.steps.length; i++)
+              CookingStep(
+                id: _uuid.v4(),
+                position: i + 1,
+                instruction: recipe.steps[i],
+              ),
+          ];
+    state = state.copyWith(
+      title: recipe.name,
+      description: recipe.description,
+      mealType: recipe.mealType,
+      ingredients: List.from(recipe.ingredients),
+      steps: steps,
+      images: List.from(recipe.images),
+      isSaving: false,
+      error: null,
+    );
   }
 
   void addIngredient(Ingredient ingredient) {
@@ -189,23 +216,23 @@ class AddRecipeController extends _$AddRecipeController {
     state = state.copyWith(error: 'Permission denied for photos');
   }
 
-  Recipe _toRecipe() {
+  Recipe _toRecipe({String? id, DateTime? createdAt}) {
     final now = DateTime.now();
     final steps = state.steps;
-    final stepTexts = steps.isEmpty
+    final sortedSteps = steps.isEmpty ? const <CookingStep>[] : [...steps]
+      ..sort((a, b) => a.position.compareTo(b.position));
+    final stepTexts = sortedSteps.isEmpty
         ? const <String>[]
-        : (steps..sort((a, b) => a.position.compareTo(b.position)))
-            .map((e) => e.instruction)
-            .toList();
+        : sortedSteps.map((e) => e.instruction).toList();
     return Recipe(
-      id: _uuid.v4(),
+      id: id ?? _uuid.v4(),
       name: state.title,
       description: state.description,
       cookingTimeMinutes: 30,
       difficulty: RecipeDifficulty.medium,
       ingredients: state.ingredients,
       steps: stepTexts,
-      cookingSteps: steps,
+      cookingSteps: sortedSteps,
       images: state.images,
       nutrition: const NutritionInfo(
         calories: 0,
@@ -215,7 +242,7 @@ class AddRecipeController extends _$AddRecipeController {
       ),
       mealType: state.mealType,
       isUserCreated: true,
-      createdAt: now,
+      createdAt: createdAt ?? now,
       updatedAt: now,
     );
   }
@@ -232,7 +259,15 @@ class AddRecipeController extends _$AddRecipeController {
     }
     state = state.copyWith(isSaving: true, error: null);
     try {
-      await _repository.saveRecipe(_toRecipe());
+      final recipe = _toRecipe(
+        id: _editingRecipeId,
+        createdAt: _editingCreatedAt,
+      );
+      if (_editingRecipeId == null) {
+        await _repository.saveRecipe(recipe);
+      } else {
+        await _repository.updateRecipe(recipe);
+      }
       state = state.copyWith(isSaving: false);
       return true;
     } catch (err) {

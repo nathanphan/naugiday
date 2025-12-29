@@ -2,7 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/material.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
+import 'package:naugiday/presentation/providers/telemetry_provider.dart';
 import 'package:naugiday/presentation/screens/home_screen.dart';
+import 'package:naugiday/presentation/screens/release_checklist_screen.dart';
 
 import 'package:naugiday/presentation/screens/scan_screen.dart';
 import 'package:naugiday/presentation/screens/my_recipes_screen.dart';
@@ -22,6 +24,7 @@ GoRouter goRouter(Ref ref) {
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
+    observers: [TelemetryRouteObserver(ref)],
     initialLocation: '/',
     routes: [
       ShellRoute(
@@ -32,10 +35,12 @@ GoRouter goRouter(Ref ref) {
         routes: [
           GoRoute(
             path: '/',
+            name: 'home',
             builder: (context, state) => const HomeScreen(),
             routes: [
               GoRoute(
                 path: 'scan',
+                name: 'scan',
                 parentNavigatorKey: rootNavigatorKey,
                 builder: (context, state) => const ScanScreen(),
               ),
@@ -43,16 +48,24 @@ GoRouter goRouter(Ref ref) {
           ),
           GoRoute(
             path: '/my-recipes',
+            name: 'my-recipes',
             builder: (context, state) => const MyRecipesScreen(),
           ),
           GoRoute(
             path: '/shopping-list',
+            name: 'shopping-list',
             builder: (context, state) => const ShoppingListScreen(),
+          ),
+          GoRoute(
+            path: '/release-checklist',
+            name: 'release-checklist',
+            builder: (context, state) => const ReleaseChecklistScreen(),
           ),
         ],
       ),
       GoRoute(
         path: '/suggestions',
+        name: 'suggestions',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
@@ -67,6 +80,7 @@ GoRouter goRouter(Ref ref) {
       ),
       GoRoute(
         path: '/create-recipe',
+        name: 'create-recipe',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
@@ -77,6 +91,7 @@ GoRouter goRouter(Ref ref) {
       ),
       GoRoute(
         path: '/recipe-detail',
+        name: 'recipe-detail',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
@@ -88,4 +103,29 @@ GoRouter goRouter(Ref ref) {
       ),
     ],
   );
+}
+
+class TelemetryRouteObserver extends NavigatorObserver {
+  TelemetryRouteObserver(this._ref);
+
+  final Ref _ref;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _record(route);
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    if (newRoute != null) {
+      _record(newRoute);
+    }
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+  }
+
+  void _record(Route<dynamic> route) {
+    final name = route.settings.name ?? route.settings.toString();
+    _ref.read(telemetryControllerProvider.notifier).recordScreenView(name);
+  }
 }

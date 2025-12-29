@@ -24,7 +24,8 @@ class IngredientTile extends StatelessWidget {
       ),
       title: Text(ingredient.name),
       subtitle: Text(ingredient.quantity),
-      dense: true,
+      dense: false,
+      minVerticalPadding: 12,
     );
   }
 }

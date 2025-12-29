@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shopping List - Empty State</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body>
+<div class="relative flex h-full min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden font-display transition-colors duration-200">
+<!-- Top Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<!-- Status bar spacer usually handled by OS, adding left space for balance -->
+<div class="w-12"></div>
+<div class="flex w-12 items-center justify-end">
+<button class="text-gray-400 text-base font-bold leading-normal tracking-[0.015em] shrink-0 disabled:opacity-50 cursor-default" disabled="">Edit</button>
+</div>
+</div>
+<!-- Large Title -->
+<div class="px-4 pb-4 bg-background-light dark:bg-background-dark">
+<h1 class="text-[#1b0d0d] dark:text-white tracking-tight text-[34px] font-extrabold leading-tight text-left">Shopping List</h1>
+</div>
+<!-- Main Content (Empty State) -->
+<div class="flex-1 flex flex-col justify-center items-center px-6 -mt-10 pb-24">
+<!-- Illustration -->
+<div class="w-full max-w-[280px] aspect-square mb-6 relative">
+<div class="w-full h-full bg-center bg-contain bg-no-repeat" data-alt="Minimalist illustration of an empty shopping basket with abstract shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDfEAs_xT0pUiBy3LyWhl0yXucpZJNK7JryHGAWE6k_Ng3yazh4eyJQ46mMQkQSuYi_pSaK__E_W3fsR6DdLTLa0pCSmJHdVSUA1plI6tJwZddj35CT14LLXTWW1Dxlkrlqh9EaXMGBMZlTnGN9a8aTJiftiduDHNDXFC0Zv2CKGgLiQG2kQDR7o0GufvszSXokQqkf95IFghbK448e3efSHMn81vE9fOcixSlAa4i47PSGAL5_7wPppe2UoEAlPk7h8N704PLZtLM"); border-radius: 1rem; opacity: 0.9; mask-image: linear-gradient(to bottom, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);'>
+</div>
+<!-- Overlay gradient to blend bottom if needed, though mask handles it -->
+</div>
+<!-- Empty State Text -->
+<h2 class="text-[#1b0d0d] dark:text-white tracking-tight text-[24px] font-bold leading-tight text-center mb-3">
+                Your basket is empty
+            </h2>
+<p class="text-gray-500 dark:text-gray-400 text-base font-medium leading-relaxed text-center max-w-[300px] mb-10">
+                Add ingredients manually or explore recipes to generate a shopping list instantly.
+            </p>
+<!-- Action Buttons -->
+<div class="w-full max-w-sm space-y-3">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-red-600 text-white font-bold text-lg h-14 rounded-full shadow-lg shadow-red-500/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">add</span>
+                    Add Item
+                </button>
+<button class="w-full flex items-center justify-center gap-2 bg-transparent text-primary hover:bg-primary/5 font-bold text-lg h-14 rounded-full border-2 border-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[24px]">restaurant_menu</span>
+                    Explore Recipes
+                </button>
+</div>
+</div>
+<!-- Bottom Tab Bar -->
+<div class="fixed bottom-0 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 pb-safe z-20">
+<div class="flex justify-around items-center h-[88px] pb-5">
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[28px]">home</span>
+<span class="text-[10px] font-semibold">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[28px]">search</span>
+<span class="text-[10px] font-semibold">Discover</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-primary gap-1 relative">
+<span class="material-symbols-outlined text-[28px] fill-current">shopping_basket</span>
+<span class="text-[10px] font-bold">Shop</span>
+<div class="absolute top-3 right-6 w-2 h-2 bg-primary rounded-full hidden"></div>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-primary transition-colors gap-1">
+<span class="material-symbols-outlined text-[28px]">person</span>
+<span class="text-[10px] font-semibold">Profile</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

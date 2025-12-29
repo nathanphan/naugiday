@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scan Screen - Initializing State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e3703b",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211611",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom spinner animation */
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display h-screen w-full overflow-hidden flex flex-col relative text-gray-900 dark:text-white">
+<!-- Top App Bar -->
+<header class="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 pt-12 pb-4 bg-gradient-to-b from-black/50 to-transparent">
+<button class="flex items-center justify-center size-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="text-white text-lg font-bold tracking-tight drop-shadow-md">Scan Ingredients</h2>
+<button class="flex items-center justify-center size-10 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</header>
+<!-- Main Content Area (Camera Viewport Placeholder) -->
+<main class="flex-1 relative w-full h-full bg-gray-900 flex flex-col items-center justify-center overflow-hidden">
+<!-- Blurred Background Image simulating camera feed -->
+<div class="absolute inset-0 z-0 opacity-40 blur-xl scale-110">
+<div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1495195134817-aeb325a55b65?q=80&amp;w=2076&amp;auto=format&amp;fit=crop')] bg-cover bg-center" data-alt="Abstract blurred kitchen counter with vegetables"></div>
+</div>
+<!-- Scanning Grid Overlay (Decorative) -->
+<div class="absolute inset-0 z-0 opacity-10 pointer-events-none" style="background-image: linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px); background-size: 40px 40px;">
+</div>
+<!-- Initialization Card -->
+<div class="relative z-10 mx-6 w-full max-w-sm">
+<div class="bg-white/95 dark:bg-[#2A2A2A]/95 backdrop-blur-xl rounded-xl p-8 shadow-2xl border border-white/20 flex flex-col items-center gap-6 text-center transform transition-all duration-500 ease-out">
+<!-- Animated Icon -->
+<div class="relative size-16 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-t-primary border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+<span class="material-symbols-outlined text-primary text-3xl animate-pulse">videocam</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-xl font-bold text-gray-900 dark:text-white">Warming up the kitchen...</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Starting camera, get your ingredients ready!</p>
+</div>
+<!-- Progress Bar Simulation -->
+<div class="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mt-2">
+<div class="h-full bg-primary w-2/3 rounded-full animate-pulse"></div>
+</div>
+</div>
+</div>
+<!-- Focus Frame (Subtle visual cue) -->
+<div class="absolute pointer-events-none inset-x-8 inset-y-32 border-2 border-white/20 rounded-3xl z-0">
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white/60 rounded-tl-2xl -mt-[2px] -ml-[2px]"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white/60 rounded-tr-2xl -mt-[2px] -mr-[2px]"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white/60 rounded-bl-2xl -mb-[2px] -ml-[2px]"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white/60 rounded-br-2xl -mb-[2px] -mr-[2px]"></div>
+</div>
+</main>
+<!-- Bottom Controls (Disabled/Ghost State) -->
+<div class="absolute bottom-0 left-0 right-0 z-20 pb-8 pt-12 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+<!-- Mode Selector -->
+<div class="flex justify-center gap-8 mb-8 text-sm font-medium text-white/50">
+<span class="text-white drop-shadow-md">Ingredients</span>
+<span class="hover:text-white/80 transition-colors cursor-not-allowed">Barcode</span>
+<span class="hover:text-white/80 transition-colors cursor-not-allowed">Dish</span>
+</div>
+<!-- Camera Controls -->
+<div class="flex items-center justify-around px-8 opacity-50 pointer-events-none grayscale">
+<!-- Gallery Button -->
+<button class="flex flex-col items-center gap-1 group">
+<div class="size-12 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-white backdrop-blur-sm">
+<span class="material-symbols-outlined">photo_library</span>
+</div>
+</button>
+<!-- Shutter Button (Ghosted) -->
+<button class="relative group">
+<div class="size-20 rounded-full border-4 border-white/30 flex items-center justify-center p-1">
+<div class="size-full rounded-full bg-white/20"></div>
+</div>
+</button>
+<!-- Flash/Torch Button -->
+<button class="flex flex-col items-center gap-1 group">
+<div class="size-12 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-white backdrop-blur-sm">
+<span class="material-symbols-outlined">flash_on</span>
+</div>
+</button>
+</div>
+<!-- Bottom Safe Area Spacer -->
+<div class="h-6 w-full"></div>
+</div>
+</body></html>

@@ -8,8 +8,18 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.path;
+    final bool hideFab = location.startsWith('/my-recipes');
     return Scaffold(
       body: child,
+      floatingActionButton: hideFab
+          ? null
+          : FloatingActionButton(
+              heroTag: 'main-scaffold-fab',
+              tooltip: 'Release checklist',
+              onPressed: () => context.go('/release-checklist'),
+              child: const Icon(Icons.checklist),
+            ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _calculateSelectedIndex(context),
         onDestinationSelected: (index) => _onItemTapped(index, context),

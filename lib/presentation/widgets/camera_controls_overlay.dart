@@ -27,6 +27,7 @@ class CameraControlsOverlay extends StatelessWidget {
             IconButton.filledTonal(
               onPressed: onToggleFlash,
               icon: Icon(isFlashOn ? Icons.flash_on : Icons.flash_off),
+              tooltip: isFlashOn ? 'Flash on' : 'Flash off',
               style: IconButton.styleFrom(
                 backgroundColor: Colors.black54,
                 foregroundColor: Colors.white,
@@ -34,21 +35,25 @@ class CameraControlsOverlay extends StatelessWidget {
             ),
 
             // Shutter Button
-            GestureDetector(
-              onTap: onCapture,
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 4),
-                  color: Colors.transparent,
-                ),
+            Semantics(
+              label: 'Capture photo',
+              button: true,
+              child: GestureDetector(
+                onTap: onCapture,
                 child: Container(
-                  margin: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    border: Border.all(color: Colors.white, width: 4),
+                    color: Colors.transparent,
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -58,6 +63,7 @@ class CameraControlsOverlay extends StatelessWidget {
             IconButton.filledTonal(
               onPressed: onPickGallery,
               icon: const Icon(Icons.photo_library),
+              tooltip: 'Choose from photos',
               style: IconButton.styleFrom(
                 backgroundColor: Colors.black54,
                 foregroundColor: Colors.white,

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NauGiDay - User Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#341a1a",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#452525",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 flex items-center bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm p-4 pb-2 justify-between border-b border-transparent dark:border-border-dark transition-colors">
+<!-- Invisible spacer to balance the layout -->
+<div class="w-12"></div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] text-center">Profile</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-full h-10 w-10 text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+</header>
+<!-- Profile Header -->
+<section class="flex flex-col items-center pt-6 pb-8 px-4">
+<div class="relative group">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-32 w-32 shadow-lg border-4 border-white dark:border-surface-dark mb-4" data-alt="Portrait of a smiling chef wearing a white apron" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdSy_js8cLeBYwtS_aFzs44-EypA_WPWKB9FdfK71u_co7jKnIVi3jbRrczT5YKnlxnk6KUXEUTV9u5w2ZEWNUKzoJWpFpGl9nc2T6HGrWiqIV1bns5h823X-sO2R7XII30T-QxPl5wmiPHWI6o7qCSImIlr-D2YVNNNYl3MtoXadfFZDL7_SrlA1Jjb4ZrbivIbEp3c73OpMVH2_PX6dBNGbbUu1Tfnaw1FU6hYtnznBzHejs5uGYNAtRz2OryoTo4EYA3M7prQs");'>
+</div>
+<button class="absolute bottom-4 right-0 bg-primary text-white p-2 rounded-full shadow-md hover:bg-red-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</button>
+</div>
+<div class="flex flex-col items-center justify-center gap-1">
+<h1 class="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">Chef Mario</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Member since 2023</p>
+</div>
+</section>
+<!-- Quick Stats Grid -->
+<section class="px-4 pb-6">
+<div class="grid grid-cols-2 gap-4">
+<!-- My Recipes Card -->
+<button class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 shadow-sm hover:shadow-md transition-all active:scale-95 text-left group">
+<div class="flex items-center justify-between w-full">
+<div class="flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-primary h-10 w-10 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-full dark:bg-primary/20">24</span>
+</div>
+<div>
+<h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight">My Recipes</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">View saved</p>
+</div>
+</button>
+<!-- Shopping List Card -->
+<button class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 shadow-sm hover:shadow-md transition-all active:scale-95 text-left group">
+<div class="flex items-center justify-between w-full">
+<div class="flex items-center justify-center rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 h-10 w-10 group-hover:bg-green-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">shopping_basket</span>
+</div>
+<span class="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 text-xs font-bold px-2 py-1 rounded-full">5</span>
+</div>
+<div>
+<h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Shopping List</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">5 items needed</p>
+</div>
+</button>
+</div>
+</section>
+<!-- Preferences Section -->
+<section class="px-4 pb-6">
+<h3 class="text-slate-900 dark:text-white text-sm font-bold uppercase tracking-wider opacity-60 mb-3 ml-1">Preferences</h3>
+<div class="flex flex-col rounded-xl overflow-hidden border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm divide-y divide-border-light dark:divide-border-dark">
+<!-- Dietary Restrictions -->
+<button class="flex items-center gap-4 p-4 min-h-[64px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center rounded-lg bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 shrink-0 h-10 w-10">
+<span class="material-symbols-outlined">spa</span>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Dietary Restrictions</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">None</span>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</div>
+</button>
+<!-- Units (Segmented Control style) -->
+<div class="flex items-center gap-4 p-4 min-h-[64px] bg-surface-light dark:bg-surface-dark">
+<div class="flex items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shrink-0 h-10 w-10">
+<span class="material-symbols-outlined">straighten</span>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Measurement Units</p>
+</div>
+<div class="shrink-0 bg-slate-100 dark:bg-black/20 p-1 rounded-lg flex items-center">
+<!-- Active State -->
+<div class="px-3 py-1 bg-white dark:bg-border-dark rounded shadow-sm text-xs font-bold text-slate-900 dark:text-white cursor-pointer select-none">Metric</div>
+<!-- Inactive State -->
+<div class="px-3 py-1 rounded text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 cursor-pointer select-none transition-colors">Imperial</div>
+</div>
+</div>
+<!-- Excluded Ingredients -->
+<button class="flex items-center gap-4 p-4 min-h-[64px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-primary shrink-0 h-10 w-10">
+<span class="material-symbols-outlined">no_food</span>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Excluded Ingredients</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">3 items</span>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</div>
+</button>
+<!-- Skill Level -->
+<button class="flex items-center gap-4 p-4 min-h-[64px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 shrink-0 h-10 w-10">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-medium leading-normal">Skill Level</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">Intermediate</span>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- Account Section -->
+<section class="px-4 pb-8">
+<h3 class="text-slate-900 dark:text-white text-sm font-bold uppercase tracking-wider opacity-60 mb-3 ml-1">Account</h3>
+<div class="flex flex-col rounded-xl overflow-hidden border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-sm divide-y divide-border-light dark:divide-border-dark">
+<!-- Notifications -->
+<button class="flex items-center gap-4 p-4 min-h-[60px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center shrink-0 w-8">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal">Notifications</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</button>
+<!-- Help & Support -->
+<button class="flex items-center gap-4 p-4 min-h-[60px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center shrink-0 w-8">
+<span class="material-symbols-outlined text-slate-400">help</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal">Help &amp; Support</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</button>
+<!-- About -->
+<button class="flex items-center gap-4 p-4 min-h-[60px] hover:bg-slate-50 dark:hover:bg-white/5 transition-colors w-full text-left">
+<div class="flex items-center justify-center shrink-0 w-8">
+<span class="material-symbols-outlined text-slate-400">info</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-white text-base font-normal leading-normal">About NauGiDay</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-xs bg-slate-100 dark:bg-white/10 px-2 py-0.5 rounded">v2.1.0</span>
+<span class="material-symbols-outlined text-slate-400 text-[20px]">chevron_right</span>
+</div>
+</button>
+</div>
+<!-- Log Out Button -->
+<button class="mt-8 w-full py-3.5 rounded-lg border border-red-100 dark:border-red-900/30 bg-surface-light dark:bg-surface-dark text-primary font-bold text-base hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors shadow-sm">
+                Log Out
+            </button>
+<p class="text-center text-xs text-slate-400 mt-6 pb-6">NauGiDay Inc. © 2023</p>
+</section>
+</div>
+</body></html>

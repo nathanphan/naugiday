@@ -19,6 +19,13 @@ RecipeValidationResult validateRecipeDraft(Recipe recipe) {
   if (recipe.ingredients.any((ing) => !isIngredientValid(ing))) {
     errors.add('Ingredient names and quantities must be valid');
   }
+  if (recipe.cookingSteps.isNotEmpty &&
+      !areStepsOrdered(recipe.cookingSteps)) {
+    errors.add('Steps must be ordered and non-empty');
+  }
+  if (recipe.steps.isEmpty && recipe.cookingSteps.isEmpty) {
+    errors.add('At least one cooking step is required');
+  }
   if (recipe.images.length > 5) {
     errors.add('Too many images (max 5)');
   }

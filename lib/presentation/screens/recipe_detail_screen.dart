@@ -26,6 +26,15 @@ class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen> {
   bool _showSkeleton = true;
   bool _isSaved = true;
 
+  void _navigateBack() {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      router.pop();
+    } else {
+      router.go('/my-recipes');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,7 +95,7 @@ class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen> {
         title: Text(recipe.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: _navigateBack,
           tooltip: 'Back to previous',
         ),
         actions: [
@@ -117,7 +126,7 @@ class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen> {
                   false;
               if (!confirm) return;
               await ref.read(recipeControllerProvider.notifier).deleteRecipe(recipe.id);
-              if (context.mounted) Navigator.of(context).maybePop();
+              if (context.mounted) _navigateBack();
             },
           ),
         ],
@@ -232,7 +241,7 @@ class _RecipeDetailScreenState extends ConsumerState<RecipeDetailScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: OutlinedButton.icon(
-            onPressed: () => Navigator.of(context).maybePop(),
+            onPressed: _navigateBack,
             icon: const Icon(Icons.home_outlined),
             label: const Text('Back to home'),
           ),

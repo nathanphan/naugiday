@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/meal_type.dart';
 import 'package:naugiday/presentation/providers/suggestions_provider.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
+import 'package:naugiday/presentation/providers/telemetry_provider.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
 import 'package:naugiday/presentation/widgets/recipe_card.dart';
 import 'package:naugiday/presentation/widgets/skeletons.dart';
@@ -32,7 +34,49 @@ class _RecipeSuggestionsScreenState
   bool _errorSnackbarShown = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(telemetryControllerProvider.notifier).recordCta('generate_recipe');
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final flagsAsync = ref.watch(featureFlagControllerProvider);
+    if (flagsAsync.value != null && !flagsAsync.value!.aiEnabled) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Recipe Suggestions'),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(AppTheme.spacingM),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppAssets.emptyState, height: 180),
+              const SizedBox(height: AppTheme.spacingM),
+              Text(
+                'AI suggestions are currently unavailable.',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppTheme.spacingS),
+              const Text(
+                'Try again later or rescan ingredients.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppTheme.spacingM),
+              FilledButton(
+                onPressed: () => context.pop(),
+                child: const Text('Rescan'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final suggestionsAsync = ref.watch(
       suggestionsProvider(
         imagePaths: widget.imagePaths,
@@ -49,7 +93,7 @@ class _RecipeSuggestionsScreenState
       body: AnimatedSwitcher(
         duration: AppTheme.animFast,
         child: suggestionsAsync.when(
-        data: (data) {
+          data: (data) {
           final detected = data.detectedIngredients;
           var recipes = data.recipes;
 
@@ -210,21 +254,22 @@ class _RecipeSuggestionsScreenState
               ),
             ],
           );
-        },
-        loading: () => const SkeletonCardGrid(),
-        error: (err, stack) {
-          if (!_errorSnackbarShown) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Could not load suggestions: $err')),
-              );
-            });
-            _errorSnackbarShown = true;
-          }
-          return _buildErrorState(context, err);
-        },
-      ),),
+          },
+          loading: () => const SkeletonCardGrid(),
+          error: (err, stack) {
+            if (!_errorSnackbarShown) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Could not load suggestions: $err')),
+                );
+              });
+              _errorSnackbarShown = true;
+            }
+            return _buildErrorState(context, err);
+          },
+        ),
+      ),
     );
   }
 

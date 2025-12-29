@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Detail - NauGiDay</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e3703b",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211611",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d201a",
+                        "text-main-light": "#1b120e",
+                        "text-main-dark": "#f8f6f6",
+                        "text-secondary-light": "#956650",
+                        "text-secondary-dark": "#d4b8aa",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark antialiased overflow-x-hidden">
+<div class="relative min-h-screen pb-24">
+<!-- Sticky Header (Absolute over image) -->
+<div class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 bg-gradient-to-b from-black/40 to-transparent">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined text-[24px]">share</span>
+</button>
+</div>
+<!-- Hero Image -->
+<div class="relative w-full h-[45vh]">
+<div class="w-full h-full bg-center bg-cover bg-no-repeat" data-alt="Delicious spicy basil chicken dish in a bowl" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQqaUSgl4Gese9r3P-PKfpKeTg5Wzme_SlBTPJg-RHejmqlFZk-qkg5ku4D3AeTARbVEoS23WBLzqlMAgS893lFS-KNLSlRhe6UzZ8tfdQD9E1XGWvYz8pThsmEFp7cx3QvGeX99UiFqmJf_T5DF5JJmkoEI6oDBC0zSl877PM1NZsLYH0CekfmGMard8jf5w86vHe2-A7fub9qXvhtGyjyxLaUiT5RLOQ4JHZzgOIgLsjbrcPcvj0pxs57BzlNs47entWZJZKTps");'>
+</div>
+<!-- Gradient Overlay for text readability at bottom of image if needed -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+</div>
+<!-- Main Content Sheet -->
+<div class="relative -mt-10 z-10 w-full rounded-t-[32px] bg-background-light dark:bg-background-dark shadow-[-2px_-10px_30px_rgba(0,0,0,0.1)]">
+<!-- Draggable Handle Visual -->
+<div class="w-full flex justify-center pt-3 pb-1">
+<div class="w-12 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+</div>
+<div class="px-6 pt-2 pb-6">
+<!-- Title & Author -->
+<div class="flex flex-col gap-1 mb-6">
+<h1 class="text-3xl font-bold leading-tight text-text-main-light dark:text-text-main-dark">Spicy Basil Chicken</h1>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">AI</div>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-medium">By Chef AI</p>
+</div>
+</div>
+<!-- Metadata Chips -->
+<div class="flex flex-wrap gap-3 mb-8">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
+<span class="text-sm font-semibold text-text-main-light dark:text-text-main-dark">20 min</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">local_fire_department</span>
+<span class="text-sm font-semibold text-text-main-light dark:text-text-main-dark">450 kcal</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">bolt</span>
+<span class="text-sm font-semibold text-text-main-light dark:text-text-main-dark">Easy</span>
+</div>
+</div>
+<hr class="border-gray-200 dark:border-gray-800 mb-8"/>
+<!-- Ingredients Section -->
+<div class="mb-8">
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark">Ingredients</h2>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">6 items</span>
+</div>
+<div class="space-y-3">
+<!-- Ingredient Item 1 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Chicken breast</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">500g</span>
+</div>
+<!-- Ingredient Item 2 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Thai basil leaves</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">1 cup</span>
+</div>
+<!-- Ingredient Item 3 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Bird's eye chilies</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">4-5 pcs</span>
+</div>
+<!-- Ingredient Item 4 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Garlic cloves</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">5 cloves</span>
+</div>
+<!-- Ingredient Item 5 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Soy sauce</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">1 tbsp</span>
+</div>
+<!-- Ingredient Item 6 -->
+<div class="flex items-center p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-transparent hover:border-primary/20 transition-all cursor-pointer group">
+<div class="flex items-center justify-center w-6 h-6 rounded-md border-2 border-gray-300 dark:border-gray-600 mr-4 group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary text-[16px] opacity-0 group-hover:opacity-100">check</span>
+</div>
+<div class="flex-1">
+<span class="text-base font-medium text-text-main-light dark:text-text-main-dark">Fish sauce</span>
+</div>
+<span class="text-sm text-text-secondary-light dark:text-text-secondary-dark font-medium">1 tsp</span>
+</div>
+</div>
+</div>
+<hr class="border-gray-200 dark:border-gray-800 mb-8"/>
+<!-- Instructions Section -->
+<div class="mb-8">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark mb-4">Let's Cook</h2>
+<div class="space-y-6">
+<!-- Step 1 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-primary/30 shrink-0">1</div>
+<div class="w-0.5 h-full bg-gray-200 dark:bg-gray-700 my-2 rounded-full"></div>
+</div>
+<div class="pb-6">
+<h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark mb-1">Prepare the aromatics</h3>
+<p class="text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                    Peel the garlic cloves. Using a mortar and pestle, pound the garlic and chili peppers together into a coarse paste. This releases the oils for maximum flavor.
+                                </p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-light dark:bg-surface-dark border-2 border-primary text-primary flex items-center justify-center text-sm font-bold shrink-0">2</div>
+<div class="w-0.5 h-full bg-gray-200 dark:bg-gray-700 my-2 rounded-full"></div>
+</div>
+<div class="pb-6">
+<h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark mb-1">Sauté and Sear</h3>
+<p class="text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                    Heat a wok over high heat with a splash of oil. Add the garlic-chili paste and fry for 20 seconds until fragrant. Add the chicken breast and stir-fry until cooked through.
+                                </p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-light dark:bg-surface-dark border-2 border-primary text-primary flex items-center justify-center text-sm font-bold shrink-0">3</div>
+</div>
+<div>
+<h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark mb-1">Season and Serve</h3>
+<p class="text-text-secondary-light dark:text-text-secondary-dark leading-relaxed">
+                                    Add soy sauce, fish sauce, and a pinch of sugar. Toss in the basil leaves and turn off the heat immediately. The residual heat will wilt the basil perfectly.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Floating Action Button (Bottom) -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/90 dark:via-background-dark/90 to-transparent z-40">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-primary/30 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                Save to My Recipes
+            </button>
+</div>
+</div>
+</body></html>

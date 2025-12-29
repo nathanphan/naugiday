@@ -41,6 +41,7 @@ class _MyRecipesScreenState extends ConsumerState<MyRecipesScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'my-recipes-fab',
         onPressed: () => context.go('/create-recipe'),
         child: const Icon(Icons.add),
       ),

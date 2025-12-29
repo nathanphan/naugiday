@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: NauGiDay Launch Hardening API
+  version: 1.0.0
+  description: Minimal endpoints for remote feature flags and telemetry events.
+servers:
+  - url: https://api.example.com
+paths:
+  /v1/feature-flags:
+    get:
+      summary: Fetch remote feature flags
+      responses:
+        "200":
+          description: Current flag states
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureFlagsResponse"
+  /v1/telemetry/events:
+    post:
+      summary: Submit minimal telemetry events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TelemetryEventBatch"
+      responses:
+        "202":
+          description: Events accepted
+components:
+  schemas:
+    FeatureFlagsResponse:
+      type: object
+      required: [ai_enabled, images_enabled, updated_at]
+      properties:
+        ai_enabled:
+          type: boolean
+        images_enabled:
+          type: boolean
+        updated_at:
+          type: string
+          format: date-time
+    TelemetryEventBatch:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/TelemetryEvent"
+    TelemetryEvent:
+      type: object
+      required: [name, occurred_at]
+      properties:
+        name:
+          type: string
+          enum: [screen_view, scan_ingredients, save_recipe, generate_recipe]
+        occurred_at:
+          type: string
+          format: date-time
+        screen_name:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Must not include user-entered content or PII.

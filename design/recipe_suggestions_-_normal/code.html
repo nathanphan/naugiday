@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Suggestions</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e3703b",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211611",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2c201b",
+                        "text-main-light": "#1b120e",
+                        "text-main-dark": "#f3ebe8",
+                        "text-secondary-light": "#956650",
+                        "text-secondary-dark": "#bcaaa4",
+                        "input-bg-light": "#f3ebe8",
+                        "input-bg-dark": "#362924",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden mx-auto max-w-md bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Top App Bar -->
+<header class="flex items-center px-4 py-4 justify-between bg-background-light dark:bg-background-dark sticky top-0 z-10">
+<div class="flex-1">
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-medium mb-0.5">Hello, Chef!</p>
+<h2 class="text-text-main-light dark:text-text-main-dark text-2xl font-bold leading-tight tracking-[-0.015em]">What to cook today?</h2>
+</div>
+<button class="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark shadow-sm text-text-main-light dark:text-text-main-dark transition-colors hover:bg-input-bg-light dark:hover:bg-input-bg-dark">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<!-- Search Bar -->
+<div class="px-4 pb-2">
+<div class="flex w-full items-center rounded-lg bg-input-bg-light dark:bg-input-bg-dark px-3 h-12 transition-all focus-within:ring-2 focus-within:ring-primary/50">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">search</span>
+<input class="flex-1 bg-transparent border-none text-text-main-light dark:text-text-main-dark placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark focus:ring-0 px-3 text-base font-normal leading-normal" placeholder="Search recipes or ingredients..." type="text"/>
+<button class="text-primary p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">tune</span>
+</button>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 px-4 py-3 overflow-x-auto no-scrollbar">
+<!-- Active Chip -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary px-5 shadow-md shadow-primary/20 transition-transform active:scale-95">
+<p class="text-white text-sm font-medium leading-normal">All</p>
+</button>
+<!-- Inactive Chips -->
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-5 text-text-main-light dark:text-text-main-dark shadow-sm transition-transform active:scale-95">
+<p class="text-sm font-medium leading-normal">Easy</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-5 text-text-main-light dark:text-text-main-dark shadow-sm transition-transform active:scale-95">
+<p class="text-sm font-medium leading-normal">Medium</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-5 text-text-main-light dark:text-text-main-dark shadow-sm transition-transform active:scale-95">
+<p class="text-sm font-medium leading-normal">Hard</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 px-5 text-text-main-light dark:text-text-main-dark shadow-sm transition-transform active:scale-95">
+<p class="text-sm font-medium leading-normal">Under 30m</p>
+</button>
+</div>
+<!-- Recipe Grid -->
+<div class="flex-1 overflow-y-auto px-4 pb-24 no-scrollbar">
+<div class="grid grid-cols-2 gap-4 pt-2">
+<!-- Card 1 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="absolute inset-0 bg-gray-200 animate-pulse"></div> <!-- Loading Skeleton Fallback -->
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Bowl of traditional Vietnamese Pho Bo soup with herbs and beef" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCGJ7h7Iv3Ibd61IJB416b8_-eD6xdIIAw4i_5xOALqJ1OdwgK8oCkC8bCoPrKFekssKV4ehQCAaO5VYGIBNUQhv2LTn3idqdNLE5lp_P4VJwnIu0R0aU05bmCMQqXaA2dH9x2Cp8HfippC9q5PA23GWYja9Cspe62mkA04ER-dxvOu3ECo4szAaAuoPMisF_EuLw6051U8K9ZjqllTOeVM8bDzhX4J8HrqSz6_gJ7as-cw6j_lpxqPrbkDc3t7T55DzwPJtuYXT04");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 transition-colors text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                45m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Vietnam Pho Bo</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">signal_cellular_alt</span>
+                                Medium
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                500 kcal
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Fresh avocado toast with egg and seeds on a plate" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXygRVbJG-2OcbjDacTQAbIMq3RsJYQEdCi5pzsC7wtGqM9bLPcf03zKH4rjZtKuMOlwDiVLfT6gl5CSlhSfLk58xjhAlswMwq146k_AE9CtbKGXSFfT6Qi2-F7Xr3CiqYbUwdDRZkMjWMQRZpsHx0BLpQynkOprG9L56fWR6qOJA7y0RErPw6tYWFsjPj-sHgkmmtTF4Ghtrd0A05lYAix5RTMsMpGtoUgUdFT85YGB0d0dNPwq8oUTM7dcRW-XSdu6pzvRqnW90");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 transition-colors text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                10m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Avocado Toast</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-green-500" style="font-size: 14px;">eco</span>
+                                Easy
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                250 kcal
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Rich dark braised pork belly with sauce in a clay pot" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlkTjf51Y6dCXQmksGSbMWL71o5U28QG3BmUlZH3dCoZLfQRhRxyMIWDBcmr5JaRrFzTxaASIxu-7vhorHMKdXLsqNoqge9kcCvzVeV3YB8wmQA6bEV5BZeUVeOsdx-qh8MWuuV8c7A8J_i9yuyOzsi5AUbfijnk5MBYsOhLnT6H_Mrn-2aPEcwUqauA5GNIYd3QVdW7k72SBbe6B-meebTibwMn9TtRFE5GDXzbI8cYOyEhqHh1J89PdyQGoM6mCffvyuCa9m9Sw");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 transition-colors text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                60m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Braised Pork Belly</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-red-500" style="font-size: 14px;">restaurant</span>
+                                Hard
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                800 kcal
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Spicy stir fried basil chicken with rice and chili" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD9GPzxf5_1Pvr43q0497f5V_NktBLnR1hhi5CLstVfoMeff7wPPLnoFJhO-io3BAZ4BVNxFF-Pbs9Vfz0X0-lE_K76lBSk1j93CtLXdnJWHaipgBGv4OFzAZlMUEUhzt3TppVrx5IDihvL3mziC4jlZc4FpuCcSpB0ARXxKKEUf78J4HuLm2OHzbt60mWANuFef3fxwvYJ8rMXy4lj8EReSph_EA4eFD2ekL_t3w5LJKFb99EsXuHsbznCD_4zqrioJAhP_s3d30E");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md hover:bg-white text-primary shadow-sm transition-colors">
+<span class="material-symbols-outlined fill-icon" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                20m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Spicy Basil Chicken</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-green-500" style="font-size: 14px;">eco</span>
+                                Easy
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                450 kcal
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Creamy mushroom pasta with parsley on top" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkksS9r1-KP-rqK-KS-WcQhyrX2Qo2x7LtjLJfzGlv2A5pnR6kTWRJKSKau7Ks7eKcVlsWK3YMPJOG_ha0DeKu-SCTpxpY1HgEOK-J-gqrUyf6DSLvLE3khLaYb1BG2yDTJtGNa1Amd9Jqszl9vzHVJq7JK2tgrlBoDdf_z1MdnVKDSfu9Mb4e0ibGvOOXnyVNzu7gDd0VZn38vNaRTNHbzaaErY4DuJBaQ5_Z3StRv8n0Xu_gyL_AD78WMSi-WUE2WqOEUkPJtpY");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 transition-colors text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                25m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Mushroom Pasta</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">signal_cellular_alt</span>
+                                Medium
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                620 kcal
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-center bg-cover transition-transform duration-500 group-hover:scale-110" data-alt="Fresh summer salad with tomatoes cucumbers and feta cheese" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDQ2-0tc17AhZh6j06jDg2lJcser3qxprGk-l6gGB2oxBx91I4eeNigjfUtUF14ym7RjNFajurwrNKeYkrAetTtT_nl1Da96UEZmwK31-LTVss9SH1yz1m8ApynWjZ6Yf-zJy1bhiSNvLR-66YqquVwsf1AmY6TnGqie9e0r6VP63FdUSmKsn9uey4tTPs_kDpEz2o4ZTRxw1ZQYyO0Lt4f99IOWfLAsG4tkM12jTBM64ylnnAw-d2lBMIdCTJ9rmi5g6P0Z6vwjF0");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
+<button class="absolute top-2 right-2 size-8 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 transition-colors text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">favorite</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white text-xs font-medium">
+<div class="flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                15m
+                            </div>
+</div>
+</div>
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight line-clamp-2 mb-1">Summer Salad</p>
+<div class="flex items-center gap-3 text-text-secondary-light dark:text-text-secondary-dark text-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-green-500" style="font-size: 14px;">eco</span>
+                                Easy
+                            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary" style="font-size: 14px;">local_fire_department</span>
+                                180 kcal
+                            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<nav class="absolute bottom-0 w-full bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 pb-5 pt-3">
+<div class="flex items-end justify-around px-2">
+<!-- Home (Active) -->
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary cursor-pointer group" href="#">
+<div class="relative p-1">
+<span class="material-symbols-outlined fill-icon group-hover:scale-110 transition-transform">home</span>
+<span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+</div>
+<p class="text-[10px] font-bold tracking-wide">Home</p>
+</a>
+<!-- Pantry -->
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors cursor-pointer" href="#">
+<div class="p-1">
+<span class="material-symbols-outlined">kitchen</span>
+</div>
+<p class="text-[10px] font-medium tracking-wide">Pantry</p>
+</a>
+<!-- Saved -->
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors cursor-pointer" href="#">
+<div class="p-1">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<p class="text-[10px] font-medium tracking-wide">Saved</p>
+</a>
+<!-- Profile -->
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors cursor-pointer" href="#">
+<div class="p-1">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<p class="text-[10px] font-medium tracking-wide">Profile</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

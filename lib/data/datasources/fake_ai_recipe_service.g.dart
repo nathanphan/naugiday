@@ -49,4 +49,4 @@ final class AiRecipeServiceProvider
   }
 }
 
-String _$aiRecipeServiceHash() => r'af75226d01214c57adcbfb22b57126a287616447';
+String _$aiRecipeServiceHash() => r'8f56bb99ddc20eff194f724fb2935a7f4f119d65';

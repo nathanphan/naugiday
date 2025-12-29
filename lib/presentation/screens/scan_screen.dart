@@ -214,6 +214,7 @@ class _ScanScreenState extends State<ScanScreen> {
             left: 8,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
+              tooltip: 'Back',
               onPressed: () => context.pop(),
             ),
           ),
