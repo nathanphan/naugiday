@@ -20,6 +20,7 @@ class RemoteConfigService {
       return FeatureFlagRecord(
         aiEnabled: true,
         imagesEnabled: true,
+        ingredientsEnabled: true,
         updatedAt: DateTime.now(),
       );
     }

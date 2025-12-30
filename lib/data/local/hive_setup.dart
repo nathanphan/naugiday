@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/core/constants/launch_hardening_constants.dart';
+import 'package:naugiday/data/adapters/pantry_ingredient_adapter.dart';
 import 'package:naugiday/data/adapters/recipe_adapter.dart';
 
 const String recipesBoxName = 'recipes';
@@ -33,6 +35,12 @@ Future<void> initHiveForRecipes({
   if (!Hive.isAdapterRegistered(recipeTypeId)) {
     Hive.registerAdapter(RecipeDtoAdapter());
   }
+  if (!Hive.isAdapterRegistered(pantryIngredientTypeId)) {
+    Hive.registerAdapter(PantryIngredientDtoAdapter());
+  }
+  if (!Hive.isAdapterRegistered(ingredientCategoryTypeId)) {
+    Hive.registerAdapter(IngredientCategoryDtoAdapter());
+  }
 
   if (!Hive.isBoxOpen(recipesBoxName)) {
     try {
@@ -56,5 +64,11 @@ Future<void> initHiveForRecipes({
   }
   if (!Hive.isBoxOpen(releaseChecklistBoxName)) {
     await Hive.openBox(releaseChecklistBoxName);
+  }
+  if (!Hive.isBoxOpen(pantryIngredientsBoxName)) {
+    await Hive.openBox(pantryIngredientsBoxName);
+  }
+  if (!Hive.isBoxOpen(ingredientCategoriesBoxName)) {
+    await Hive.openBox(ingredientCategoriesBoxName);
   }
 }

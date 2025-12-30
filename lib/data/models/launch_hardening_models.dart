@@ -1,11 +1,13 @@
 class FeatureFlagRecord {
   final bool aiEnabled;
   final bool imagesEnabled;
+  final bool ingredientsEnabled;
   final DateTime updatedAt;
 
   const FeatureFlagRecord({
     required this.aiEnabled,
     required this.imagesEnabled,
+    required this.ingredientsEnabled,
     required this.updatedAt,
   });
 
@@ -13,6 +15,7 @@ class FeatureFlagRecord {
     return FeatureFlagRecord(
       aiEnabled: json['ai_enabled'] as bool? ?? true,
       imagesEnabled: json['images_enabled'] as bool? ?? true,
+      ingredientsEnabled: json['ingredients_enabled'] as bool? ?? true,
       updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? '') ??
           DateTime.now(),
     );
@@ -21,6 +24,7 @@ class FeatureFlagRecord {
   Map<String, dynamic> toJson() => {
         'ai_enabled': aiEnabled,
         'images_enabled': imagesEnabled,
+        'ingredients_enabled': ingredientsEnabled,
         'updated_at': updatedAt.toIso8601String(),
       };
 }

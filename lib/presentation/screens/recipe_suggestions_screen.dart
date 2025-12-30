@@ -43,6 +43,7 @@ class _RecipeSuggestionsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final flagsAsync = ref.watch(featureFlagControllerProvider);
     if (flagsAsync.value != null && !flagsAsync.value!.aiEnabled) {
       return Scaffold(
@@ -177,6 +178,20 @@ class _RecipeSuggestionsScreenState
                       FilterChip(
                         label: const Text('Easy'),
                         selected: _selectedFilters.contains('easy'),
+                        labelStyle: theme.textTheme.labelLarge?.copyWith(
+                          color: _selectedFilters.contains('easy')
+                              ? theme.colorScheme.onPrimary
+                              : theme.colorScheme.onSurface,
+                        ),
+                        backgroundColor: theme.colorScheme.surface,
+                        selectedColor: theme.colorScheme.primary,
+                        checkmarkColor: _selectedFilters.contains('easy')
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurface,
+                        showCheckmark: false,
+                        side: BorderSide(
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         onSelected: (selected) {
                           setState(() {
                             if (selected) {
@@ -191,6 +206,20 @@ class _RecipeSuggestionsScreenState
                       FilterChip(
                         label: const Text('Medium'),
                         selected: _selectedFilters.contains('medium'),
+                        labelStyle: theme.textTheme.labelLarge?.copyWith(
+                          color: _selectedFilters.contains('medium')
+                              ? theme.colorScheme.onPrimary
+                              : theme.colorScheme.onSurface,
+                        ),
+                        backgroundColor: theme.colorScheme.surface,
+                        selectedColor: theme.colorScheme.primary,
+                        checkmarkColor: _selectedFilters.contains('medium')
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurface,
+                        showCheckmark: false,
+                        side: BorderSide(
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         onSelected: (selected) {
                           setState(() {
                             if (selected) {
@@ -205,6 +234,20 @@ class _RecipeSuggestionsScreenState
                       FilterChip(
                         label: const Text('Hard'),
                         selected: _selectedFilters.contains('hard'),
+                        labelStyle: theme.textTheme.labelLarge?.copyWith(
+                          color: _selectedFilters.contains('hard')
+                              ? theme.colorScheme.onPrimary
+                              : theme.colorScheme.onSurface,
+                        ),
+                        backgroundColor: theme.colorScheme.surface,
+                        selectedColor: theme.colorScheme.primary,
+                        checkmarkColor: _selectedFilters.contains('hard')
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onSurface,
+                        showCheckmark: false,
+                        side: BorderSide(
+                          color: theme.colorScheme.outlineVariant,
+                        ),
                         onSelected: (selected) {
                           setState(() {
                             if (selected) {

@@ -26,6 +26,7 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
         FeatureFlagRecord(
           aiEnabled: true,
           imagesEnabled: true,
+          ingredientsEnabled: true,
           updatedAt: DateTime.now(),
         ),
         source: 'cache',
@@ -40,6 +41,17 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
       aiEnabled: flags.firstWhere((f) => f.name == 'ai_enabled').enabled,
       imagesEnabled:
           flags.firstWhere((f) => f.name == 'images_enabled').enabled,
+      ingredientsEnabled: flags
+          .firstWhere(
+            (f) => f.name == 'ingredients_enabled',
+            orElse: () => FeatureFlag(
+              name: 'ingredients_enabled',
+              enabled: true,
+              source: 'cache',
+              updatedAt: DateTime.now(),
+            ),
+          )
+          .enabled,
       updatedAt: DateTime.now(),
     );
     final box = Hive.box(featureFlagsBoxName);
@@ -57,6 +69,12 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
       FeatureFlag(
         name: 'images_enabled',
         enabled: record.imagesEnabled,
+        source: source,
+        updatedAt: record.updatedAt,
+      ),
+      FeatureFlag(
+        name: 'ingredients_enabled',
+        enabled: record.ingredientsEnabled,
         source: source,
         updatedAt: record.updatedAt,
       ),

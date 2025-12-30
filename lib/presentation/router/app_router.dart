@@ -13,6 +13,11 @@ import 'package:naugiday/presentation/screens/create_recipe_screen.dart';
 import 'package:naugiday/presentation/screens/recipe_suggestions_screen.dart';
 import 'package:naugiday/presentation/screens/shopping_list_screen.dart';
 import 'package:naugiday/presentation/screens/main_scaffold.dart';
+import 'package:naugiday/presentation/screens/ingredients/ingredient_list_screen.dart';
+import 'package:naugiday/presentation/screens/ingredients/ingredient_detail_screen.dart';
+import 'package:naugiday/presentation/screens/ingredients/add_ingredient_screen.dart';
+import 'package:naugiday/presentation/screens/ingredients/edit_ingredient_screen.dart';
+import 'package:naugiday/presentation/screens/ingredients/ingredient_bulk_manage_screen.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 
 part 'app_router.g.dart';
@@ -55,6 +60,44 @@ GoRouter goRouter(Ref ref) {
             path: '/shopping-list',
             name: 'shopping-list',
             builder: (context, state) => const ShoppingListScreen(),
+          ),
+          GoRoute(
+            path: '/ingredients',
+            name: 'ingredients',
+            builder: (context, state) => const IngredientListScreen(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                name: 'ingredient-add',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) => const AddIngredientScreen(),
+              ),
+              GoRoute(
+                path: 'bulk',
+                name: 'ingredient-bulk',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) =>
+                    const IngredientBulkManageScreen(),
+              ),
+              GoRoute(
+                path: ':id',
+                name: 'ingredient-detail',
+                parentNavigatorKey: rootNavigatorKey,
+                builder: (context, state) => IngredientDetailScreen(
+                  ingredientId: state.pathParameters['id'] ?? '',
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    name: 'ingredient-edit',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => EditIngredientScreen(
+                      ingredientId: state.pathParameters['id'] ?? '',
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           GoRoute(
             path: '/release-checklist',

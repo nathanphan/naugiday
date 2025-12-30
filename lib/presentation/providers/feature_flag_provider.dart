@@ -10,12 +10,14 @@ part 'feature_flag_provider.g.dart';
 class FeatureFlagState {
   final bool aiEnabled;
   final bool imagesEnabled;
+  final bool ingredientsEnabled;
   final DateTime updatedAt;
   final String source;
 
   const FeatureFlagState({
     required this.aiEnabled,
     required this.imagesEnabled,
+    required this.ingredientsEnabled,
     required this.updatedAt,
     required this.source,
   });
@@ -23,9 +25,19 @@ class FeatureFlagState {
   factory FeatureFlagState.fromFlags(List<FeatureFlag> flags) {
     final aiFlag = flags.firstWhere((f) => f.name == 'ai_enabled');
     final imageFlag = flags.firstWhere((f) => f.name == 'images_enabled');
+    final ingredientsFlag = flags.firstWhere(
+      (f) => f.name == 'ingredients_enabled',
+      orElse: () => FeatureFlag(
+        name: 'ingredients_enabled',
+        enabled: true,
+        source: aiFlag.source,
+        updatedAt: aiFlag.updatedAt,
+      ),
+    );
     return FeatureFlagState(
       aiEnabled: aiFlag.enabled,
       imagesEnabled: imageFlag.enabled,
+      ingredientsEnabled: ingredientsFlag.enabled,
       updatedAt: aiFlag.updatedAt,
       source: aiFlag.source,
     );

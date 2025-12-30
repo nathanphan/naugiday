@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: Ingredient Management
+  version: "1.0.0"
+servers:
+  - url: https://local.app
+paths:
+  /ingredients:
+    get:
+      summary: List ingredients
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Search by name
+        - in: query
+          name: categoryId
+          schema:
+            type: string
+        - in: query
+          name: inventoryState
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Ingredient list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Ingredient"
+                  total:
+                    type: integer
+    post:
+      summary: Create ingredient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngredientCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+  /ingredients/{id}:
+    get:
+      summary: Get ingredient detail
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ingredient detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+        "404":
+          description: Not found
+    put:
+      summary: Update ingredient
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngredientUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+        "404":
+          description: Not found
+    delete:
+      summary: Delete ingredient
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+  /ingredients/bulk-update:
+    post:
+      summary: Bulk update ingredients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkUpdateRequest"
+      responses:
+        "200":
+          description: Updated items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Ingredient"
+  /categories:
+    get:
+      summary: List categories
+      responses:
+        "200":
+          description: Category list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      summary: Create custom category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+components:
+  schemas:
+    Ingredient:
+      type: object
+      required:
+        - id
+        - name
+        - categoryId
+        - quantity
+        - unit
+        - inventoryState
+        - lastUpdatedAt
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        categoryId:
+          type: string
+        categoryName:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+          nullable: true
+        freshnessOverride:
+          type: boolean
+          nullable: true
+        freshnessStatus:
+          type: string
+          description: Derived from expiryDate when present, otherwise from freshnessOverride
+        inventoryState:
+          type: string
+          description: inStock, used, or bought
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    IngredientCreate:
+      type: object
+      required:
+        - name
+        - categoryId
+        - quantity
+        - unit
+      properties:
+        name:
+          type: string
+        categoryId:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+          nullable: true
+        freshnessOverride:
+          type: boolean
+          nullable: true
+    IngredientUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        categoryId:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        expiryDate:
+          type: string
+          format: date
+          nullable: true
+        freshnessOverride:
+          type: boolean
+          nullable: true
+        inventoryState:
+          type: string
+    BulkUpdateRequest:
+      type: object
+      required:
+        - ingredientIds
+      properties:
+        ingredientIds:
+          type: array
+          items:
+            type: string
+        quantityMode:
+          type: string
+          description: set, adjust, or none
+        quantityValue:
+          type: number
+        status:
+          type: string
+          description: used, bought, or none
+    Category:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        isCustom:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    CategoryCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string

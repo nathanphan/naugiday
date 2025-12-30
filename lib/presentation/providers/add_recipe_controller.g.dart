@@ -42,7 +42,7 @@ final class AddRecipeControllerProvider
 }
 
 String _$addRecipeControllerHash() =>
-    r'c31214d0323a581c2be229d08a9fb64eafa5b9e3';
+    r'1c74f1191f697c67bd69eb42aca5e21426632730';
 
 abstract class _$AddRecipeController extends $Notifier<AddRecipeState> {
   AddRecipeState build();

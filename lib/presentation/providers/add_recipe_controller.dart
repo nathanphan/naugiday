@@ -218,9 +218,8 @@ class AddRecipeController extends _$AddRecipeController {
 
   Recipe _toRecipe({String? id, DateTime? createdAt}) {
     final now = DateTime.now();
-    final steps = state.steps;
-    final sortedSteps = steps.isEmpty ? const <CookingStep>[] : [...steps]
-      ..sort((a, b) => a.position.compareTo(b.position));
+    final sortedSteps = [...state.steps];
+    sortedSteps.sort((a, b) => a.position.compareTo(b.position));
     final stepTexts = sortedSteps.isEmpty
         ? const <String>[]
         : sortedSteps.map((e) => e.instruction).toList();

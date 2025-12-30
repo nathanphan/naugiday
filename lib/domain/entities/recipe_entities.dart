@@ -23,9 +23,6 @@ RecipeValidationResult validateRecipeDraft(Recipe recipe) {
       !areStepsOrdered(recipe.cookingSteps)) {
     errors.add('Steps must be ordered and non-empty');
   }
-  if (recipe.steps.isEmpty && recipe.cookingSteps.isEmpty) {
-    errors.add('At least one cooking step is required');
-  }
   if (recipe.images.length > 5) {
     errors.add('Too many images (max 5)');
   }
