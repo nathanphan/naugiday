@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:naugiday/data/dtos/ingredient_photo_dto.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
 
 part 'pantry_ingredient_dto.g.dart';
@@ -14,6 +15,8 @@ class PantryIngredientDto {
   final DateTime? expiryDate;
   final bool? freshnessOverride;
   final String inventoryState;
+  @JsonKey(defaultValue: <IngredientPhotoDto>[])
+  final List<IngredientPhotoDto> photos;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -27,6 +30,7 @@ class PantryIngredientDto {
     this.expiryDate,
     this.freshnessOverride,
     required this.inventoryState,
+    this.photos = const [],
     required this.createdAt,
     required this.updatedAt,
   });
@@ -42,6 +46,9 @@ class PantryIngredientDto {
       expiryDate: ingredient.expiryDate,
       freshnessOverride: ingredient.freshnessOverride,
       inventoryState: ingredient.inventoryState.name,
+      photos: ingredient.photos
+          .map(IngredientPhotoDto.fromDomain)
+          .toList(growable: false),
       createdAt: ingredient.createdAt,
       updatedAt: ingredient.updatedAt,
     );
@@ -62,6 +69,7 @@ class PantryIngredientDto {
       expiryDate: expiryDate,
       freshnessOverride: freshnessOverride,
       inventoryState: inventory,
+      photos: photos.map((photo) => photo.toDomain()).toList(growable: false),
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

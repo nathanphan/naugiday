@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: Ingredient Photos API
+  version: 1.0.0
+servers:
+  - url: https://localhost
+paths:
+  /ingredients/{ingredientId}/photos:
+    get:
+      summary: List photos for an ingredient
+      parameters:
+        - name: ingredientId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of ingredient photos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientPhotoList"
+    post:
+      summary: Add a photo to an ingredient
+      parameters:
+        - name: ingredientId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                source:
+                  type: string
+                  enum: [camera, gallery]
+      responses:
+        "201":
+          description: Photo created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientPhoto"
+        "409":
+          description: Photo limit reached
+  /ingredients/{ingredientId}/photos/{photoId}:
+    delete:
+      summary: Delete a photo from an ingredient
+      parameters:
+        - name: ingredientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: photoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Photo deleted
+  /ingredients/{ingredientId}/photos/{photoId}/order:
+    put:
+      summary: Update photo display order
+      parameters:
+        - name: ingredientId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: photoId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayOrder:
+                  type: integer
+                  minimum: 0
+      responses:
+        "200":
+          description: Photo order updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngredientPhoto"
+components:
+  schemas:
+    IngredientPhoto:
+      type: object
+      properties:
+        id:
+          type: string
+        ingredientId:
+          type: string
+        path:
+          type: string
+        source:
+          type: string
+          enum: [camera, gallery]
+        displayOrder:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+    IngredientPhotoList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/IngredientPhoto"

@@ -41,6 +41,9 @@ Future<void> initHiveForRecipes({
   if (!Hive.isAdapterRegistered(ingredientCategoryTypeId)) {
     Hive.registerAdapter(IngredientCategoryDtoAdapter());
   }
+  if (!Hive.isAdapterRegistered(ingredientPhotoTypeId)) {
+    Hive.registerAdapter(IngredientPhotoDtoAdapter());
+  }
 
   if (!Hive.isBoxOpen(recipesBoxName)) {
     try {

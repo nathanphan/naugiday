@@ -1,4 +1,6 @@
+import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/domain/entities/ingredient_category.dart';
+import 'package:naugiday/domain/entities/ingredient_photo.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
 import 'package:naugiday/domain/usecases/validate_ingredient.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +19,7 @@ class IngredientFormState {
   final DateTime? expiryDate;
   final bool? freshnessOverride;
   final bool hasDuplicate;
+  final List<IngredientPhoto> photos;
   final List<String> errors;
 
   const IngredientFormState({
@@ -29,6 +32,7 @@ class IngredientFormState {
     this.expiryDate,
     this.freshnessOverride = true,
     this.hasDuplicate = false,
+    this.photos = const [],
     this.errors = const [],
   });
 
@@ -42,6 +46,7 @@ class IngredientFormState {
     Object? expiryDate = _noChange,
     Object? freshnessOverride = _noChange,
     bool? hasDuplicate,
+    List<IngredientPhoto>? photos,
     List<String>? errors,
   }) {
     return IngredientFormState(
@@ -57,6 +62,7 @@ class IngredientFormState {
           ? this.freshnessOverride
           : freshnessOverride as bool?,
       hasDuplicate: hasDuplicate ?? this.hasDuplicate,
+      photos: photos ?? this.photos,
       errors: errors ?? this.errors,
     );
   }
@@ -77,6 +83,8 @@ class IngredientFormController extends _$IngredientFormController {
     final quantityText = ingredient.quantity % 1 == 0
         ? ingredient.quantity.toStringAsFixed(0)
         : ingredient.quantity.toString();
+    final photos = [...ingredient.photos]
+      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
     state = IngredientFormState(
       name: ingredient.name,
       categoryId: ingredient.categoryId,
@@ -87,6 +95,7 @@ class IngredientFormController extends _$IngredientFormController {
       expiryDate: ingredient.expiryDate,
       freshnessOverride: ingredient.freshnessOverride,
       hasDuplicate: false,
+      photos: photos,
       errors: const [],
     );
   }
@@ -129,6 +138,28 @@ class IngredientFormController extends _$IngredientFormController {
     state = state.copyWith(freshnessOverride: value, errors: const []);
   }
 
+  void addPhoto(IngredientPhoto photo) {
+    if (state.photos.length >= maxIngredientPhotos) {
+      state = state.copyWith(
+        errors: ['You can add up to $maxIngredientPhotos photos'],
+      );
+      return;
+    }
+    final updated = [...state.photos, photo];
+    state = state.copyWith(
+      photos: _normalizePhotos(updated),
+      errors: const [],
+    );
+  }
+
+  void removePhoto(String id) {
+    final updated = state.photos.where((photo) => photo.id != id).toList();
+    state = state.copyWith(
+      photos: _normalizePhotos(updated),
+      errors: const [],
+    );
+  }
+
   void adjustQuantity(double delta) {
     final current = double.tryParse(state.quantityText.trim()) ?? 0;
     final next = (current + delta).clamp(0, double.infinity);
@@ -158,6 +189,7 @@ class IngredientFormController extends _$IngredientFormController {
       expiryDate: state.expiryDate,
       freshnessOverride: freshnessOverride,
       inventoryState: IngredientInventoryState.inStock,
+      photos: state.photos,
       createdAt: createdAtValue,
       updatedAt: updatedAt,
     );
@@ -189,8 +221,16 @@ class IngredientFormController extends _$IngredientFormController {
       expiryDate: state.expiryDate,
       freshnessOverride: freshnessOverride,
       inventoryState: inventoryState,
+      photos: state.photos,
       createdAt: createdAtValue,
       updatedAt: updatedAt,
     );
+  }
+
+  List<IngredientPhoto> _normalizePhotos(List<IngredientPhoto> photos) {
+    return [
+      for (var index = 0; index < photos.length; index += 1)
+        photos[index].copyWith(displayOrder: index),
+    ];
   }
 }

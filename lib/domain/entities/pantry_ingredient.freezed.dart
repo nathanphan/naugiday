@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PantryIngredient {
 
- String get id; String get name; String get categoryId; String? get categoryName; double get quantity; String get unit; DateTime? get expiryDate; bool? get freshnessOverride; IngredientInventoryState get inventoryState; DateTime get createdAt; DateTime get updatedAt;
+ String get id; String get name; String get categoryId; String? get categoryName; double get quantity; String get unit; DateTime? get expiryDate; bool? get freshnessOverride; IngredientInventoryState get inventoryState; List<IngredientPhoto> get photos; DateTime get createdAt; DateTime get updatedAt;
 /// Create a copy of PantryIngredient
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $PantryIngredientCopyWith<PantryIngredient> get copyWith => _$PantryIngredientCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PantryIngredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.categoryName, categoryName) || other.categoryName == categoryName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.expiryDate, expiryDate) || other.expiryDate == expiryDate)&&(identical(other.freshnessOverride, freshnessOverride) || other.freshnessOverride == freshnessOverride)&&(identical(other.inventoryState, inventoryState) || other.inventoryState == inventoryState)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PantryIngredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.categoryName, categoryName) || other.categoryName == categoryName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.expiryDate, expiryDate) || other.expiryDate == expiryDate)&&(identical(other.freshnessOverride, freshnessOverride) || other.freshnessOverride == freshnessOverride)&&(identical(other.inventoryState, inventoryState) || other.inventoryState == inventoryState)&&const DeepCollectionEquality().equals(other.photos, photos)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,categoryId,categoryName,quantity,unit,expiryDate,freshnessOverride,inventoryState,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,categoryId,categoryName,quantity,unit,expiryDate,freshnessOverride,inventoryState,const DeepCollectionEquality().hash(photos),createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'PantryIngredient(id: $id, name: $name, categoryId: $categoryId, categoryName: $categoryName, quantity: $quantity, unit: $unit, expiryDate: $expiryDate, freshnessOverride: $freshnessOverride, inventoryState: $inventoryState, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'PantryIngredient(id: $id, name: $name, categoryId: $categoryId, categoryName: $categoryName, quantity: $quantity, unit: $unit, expiryDate: $expiryDate, freshnessOverride: $freshnessOverride, inventoryState: $inventoryState, photos: $photos, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $PantryIngredientCopyWith<$Res>  {
   factory $PantryIngredientCopyWith(PantryIngredient value, $Res Function(PantryIngredient) _then) = _$PantryIngredientCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String categoryId, String? categoryName, double quantity, String unit, DateTime? expiryDate, bool? freshnessOverride, IngredientInventoryState inventoryState, DateTime createdAt, DateTime updatedAt
+ String id, String name, String categoryId, String? categoryName, double quantity, String unit, DateTime? expiryDate, bool? freshnessOverride, IngredientInventoryState inventoryState, List<IngredientPhoto> photos, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -65,7 +65,7 @@ class _$PantryIngredientCopyWithImpl<$Res>
 
 /// Create a copy of PantryIngredient
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? categoryName = freezed,Object? quantity = null,Object? unit = null,Object? expiryDate = freezed,Object? freshnessOverride = freezed,Object? inventoryState = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? categoryName = freezed,Object? quantity = null,Object? unit = null,Object? expiryDate = freezed,Object? freshnessOverride = freezed,Object? inventoryState = null,Object? photos = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -76,7 +76,8 @@ as double,unit: null == unit ? _self.unit : unit // ignore: cast_nullable_to_non
 as String,expiryDate: freezed == expiryDate ? _self.expiryDate : expiryDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,freshnessOverride: freezed == freshnessOverride ? _self.freshnessOverride : freshnessOverride // ignore: cast_nullable_to_non_nullable
 as bool?,inventoryState: null == inventoryState ? _self.inventoryState : inventoryState // ignore: cast_nullable_to_non_nullable
-as IngredientInventoryState,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as IngredientInventoryState,photos: null == photos ? _self.photos : photos // ignore: cast_nullable_to_non_nullable
+as List<IngredientPhoto>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  List<IngredientPhoto> photos,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PantryIngredient() when $default != null:
-return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.photos,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.qu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  List<IngredientPhoto> photos,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _PantryIngredient():
-return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.photos,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.qu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String categoryId,  String? categoryName,  double quantity,  String unit,  DateTime? expiryDate,  bool? freshnessOverride,  IngredientInventoryState inventoryState,  List<IngredientPhoto> photos,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _PantryIngredient() when $default != null:
-return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.quantity,_that.unit,_that.expiryDate,_that.freshnessOverride,_that.inventoryState,_that.photos,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -219,7 +220,7 @@ return $default(_that.id,_that.name,_that.categoryId,_that.categoryName,_that.qu
 @JsonSerializable()
 
 class _PantryIngredient extends PantryIngredient {
-  const _PantryIngredient({required this.id, required this.name, required this.categoryId, this.categoryName, required this.quantity, required this.unit, this.expiryDate, this.freshnessOverride, required this.inventoryState, required this.createdAt, required this.updatedAt}): super._();
+  const _PantryIngredient({required this.id, required this.name, required this.categoryId, this.categoryName, required this.quantity, required this.unit, this.expiryDate, this.freshnessOverride, required this.inventoryState, final  List<IngredientPhoto> photos = const <IngredientPhoto>[], required this.createdAt, required this.updatedAt}): _photos = photos,super._();
   factory _PantryIngredient.fromJson(Map<String, dynamic> json) => _$PantryIngredientFromJson(json);
 
 @override final  String id;
@@ -231,6 +232,13 @@ class _PantryIngredient extends PantryIngredient {
 @override final  DateTime? expiryDate;
 @override final  bool? freshnessOverride;
 @override final  IngredientInventoryState inventoryState;
+ final  List<IngredientPhoto> _photos;
+@override@JsonKey() List<IngredientPhoto> get photos {
+  if (_photos is EqualUnmodifiableListView) return _photos;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_photos);
+}
+
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
 
@@ -247,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PantryIngredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.categoryName, categoryName) || other.categoryName == categoryName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.expiryDate, expiryDate) || other.expiryDate == expiryDate)&&(identical(other.freshnessOverride, freshnessOverride) || other.freshnessOverride == freshnessOverride)&&(identical(other.inventoryState, inventoryState) || other.inventoryState == inventoryState)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PantryIngredient&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.categoryName, categoryName) || other.categoryName == categoryName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.expiryDate, expiryDate) || other.expiryDate == expiryDate)&&(identical(other.freshnessOverride, freshnessOverride) || other.freshnessOverride == freshnessOverride)&&(identical(other.inventoryState, inventoryState) || other.inventoryState == inventoryState)&&const DeepCollectionEquality().equals(other._photos, _photos)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,categoryId,categoryName,quantity,unit,expiryDate,freshnessOverride,inventoryState,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,name,categoryId,categoryName,quantity,unit,expiryDate,freshnessOverride,inventoryState,const DeepCollectionEquality().hash(_photos),createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'PantryIngredient(id: $id, name: $name, categoryId: $categoryId, categoryName: $categoryName, quantity: $quantity, unit: $unit, expiryDate: $expiryDate, freshnessOverride: $freshnessOverride, inventoryState: $inventoryState, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'PantryIngredient(id: $id, name: $name, categoryId: $categoryId, categoryName: $categoryName, quantity: $quantity, unit: $unit, expiryDate: $expiryDate, freshnessOverride: $freshnessOverride, inventoryState: $inventoryState, photos: $photos, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -267,7 +275,7 @@ abstract mixin class _$PantryIngredientCopyWith<$Res> implements $PantryIngredie
   factory _$PantryIngredientCopyWith(_PantryIngredient value, $Res Function(_PantryIngredient) _then) = __$PantryIngredientCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String categoryId, String? categoryName, double quantity, String unit, DateTime? expiryDate, bool? freshnessOverride, IngredientInventoryState inventoryState, DateTime createdAt, DateTime updatedAt
+ String id, String name, String categoryId, String? categoryName, double quantity, String unit, DateTime? expiryDate, bool? freshnessOverride, IngredientInventoryState inventoryState, List<IngredientPhoto> photos, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -284,7 +292,7 @@ class __$PantryIngredientCopyWithImpl<$Res>
 
 /// Create a copy of PantryIngredient
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? categoryName = freezed,Object? quantity = null,Object? unit = null,Object? expiryDate = freezed,Object? freshnessOverride = freezed,Object? inventoryState = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? categoryName = freezed,Object? quantity = null,Object? unit = null,Object? expiryDate = freezed,Object? freshnessOverride = freezed,Object? inventoryState = null,Object? photos = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_PantryIngredient(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -295,7 +303,8 @@ as double,unit: null == unit ? _self.unit : unit // ignore: cast_nullable_to_non
 as String,expiryDate: freezed == expiryDate ? _self.expiryDate : expiryDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,freshnessOverride: freezed == freshnessOverride ? _self.freshnessOverride : freshnessOverride // ignore: cast_nullable_to_non_nullable
 as bool?,inventoryState: null == inventoryState ? _self.inventoryState : inventoryState // ignore: cast_nullable_to_non_nullable
-as IngredientInventoryState,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as IngredientInventoryState,photos: null == photos ? _self._photos : photos // ignore: cast_nullable_to_non_nullable
+as List<IngredientPhoto>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));

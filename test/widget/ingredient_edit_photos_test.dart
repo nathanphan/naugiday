@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:naugiday/domain/entities/ingredient_category.dart';
+import 'package:naugiday/domain/entities/ingredient_photo.dart';
 import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_filters_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_form_controller.dart';
@@ -14,19 +15,17 @@ List<IngredientCategory> _categories() => [
         isCustom: false,
         createdAt: DateTime(2024, 1, 1),
       ),
-      IngredientCategory(
-        id: 'pantry',
-        name: 'Pantry',
-        isCustom: false,
-        createdAt: DateTime(2024, 1, 1),
-      ),
-      IngredientCategory(
-        id: 'freezer',
-        name: 'Freezer',
-        isCustom: false,
-        createdAt: DateTime(2024, 1, 1),
-      ),
     ];
+
+IngredientPhoto _photo(String id) {
+  return IngredientPhoto(
+    id: id,
+    path: '/tmp/$id.jpg',
+    source: IngredientPhotoSource.gallery,
+    displayOrder: 0,
+    createdAt: DateTime(2024, 1, 1),
+  );
+}
 
 class _TestFeatureFlagController extends FeatureFlagController {
   @override
@@ -43,12 +42,10 @@ class _TestFeatureFlagController extends FeatureFlagController {
 }
 
 void main() {
-  testWidgets('shows validation errors and duplicate warning', (tester) async {
+  testWidgets('removes a photo when delete is tapped', (tester) async {
     final container = ProviderContainer(
       overrides: [
-        ingredientCategoriesProvider.overrideWith(
-          (ref) async => _categories(),
-        ),
+        ingredientCategoriesProvider.overrideWith((ref) async => _categories()),
         featureFlagControllerProvider.overrideWith(
           () => _TestFeatureFlagController(),
         ),
@@ -72,18 +69,22 @@ void main() {
     final controller =
         container.read(ingredientFormControllerProvider.notifier);
     controller.state = controller.state.copyWith(
-      categoryId: 'fridge',
-      categoryName: 'Fridge',
-      errors: const ['Name is required'],
-      hasDuplicate: true,
+      photos: [_photo('p1')],
     );
 
     await tester.pump();
 
-    expect(find.text('Name is required'), findsOneWidget);
     expect(
-      find.textContaining('This name already exists'),
+      find.byKey(const ValueKey('ingredient-photo-thumb-ink-p1')),
       findsOneWidget,
+    );
+
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('ingredient-photo-thumb-ink-p1')),
+      findsNothing,
     );
   });
 }

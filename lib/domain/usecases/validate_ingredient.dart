@@ -1,3 +1,4 @@
+import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
 
 class IngredientValidationResult {
@@ -29,6 +30,12 @@ class ValidateIngredient {
     }
     if (ingredient.quantity <= 0) {
       errors.add('Quantity must be greater than zero');
+    }
+    if (ingredient.photos.length > maxIngredientPhotos) {
+      errors.add('You can add up to $maxIngredientPhotos photos');
+    }
+    if (ingredient.photos.any((photo) => photo.path.trim().isEmpty)) {
+      errors.add('Remove or reselect missing photos');
     }
     final expiryDate = ingredient.expiryDate;
     if (expiryDate != null && expiryDate.isBefore(DateTime.now())) {

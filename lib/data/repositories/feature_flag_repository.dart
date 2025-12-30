@@ -27,6 +27,7 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
           aiEnabled: true,
           imagesEnabled: true,
           ingredientsEnabled: true,
+          ingredientPhotosEnabled: true,
           updatedAt: DateTime.now(),
         ),
         source: 'cache',
@@ -46,6 +47,17 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
             (f) => f.name == 'ingredients_enabled',
             orElse: () => FeatureFlag(
               name: 'ingredients_enabled',
+              enabled: true,
+              source: 'cache',
+              updatedAt: DateTime.now(),
+            ),
+          )
+          .enabled,
+      ingredientPhotosEnabled: flags
+          .firstWhere(
+            (f) => f.name == 'ingredient_photos_enabled',
+            orElse: () => FeatureFlag(
+              name: 'ingredient_photos_enabled',
               enabled: true,
               source: 'cache',
               updatedAt: DateTime.now(),
@@ -75,6 +87,12 @@ class FeatureFlagRepositoryImpl implements FeatureFlagRepository {
       FeatureFlag(
         name: 'ingredients_enabled',
         enabled: record.ingredientsEnabled,
+        source: source,
+        updatedAt: record.updatedAt,
+      ),
+      FeatureFlag(
+        name: 'ingredient_photos_enabled',
+        enabled: record.ingredientPhotosEnabled,
         source: source,
         updatedAt: record.updatedAt,
       ),

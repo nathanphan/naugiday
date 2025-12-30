@@ -3,6 +3,7 @@ import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/data/dtos/ingredient_category_dto.dart';
 import 'package:naugiday/data/dtos/pantry_ingredient_dto.dart';
 import 'package:naugiday/data/local/hive_setup.dart';
+import 'package:naugiday/data/services/ingredient_photo_storage.dart';
 import 'package:naugiday/domain/entities/bulk_ingredient_update.dart';
 import 'package:naugiday/domain/entities/ingredient_category.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
@@ -14,11 +15,14 @@ class LocalIngredientRepository implements IngredientRepository {
   LocalIngredientRepository({
     IngredientsStore? ingredientsStore,
     IngredientCategoriesStore? categoriesStore,
+    IngredientPhotoStorage? photoStorage,
   })  : _ingredientsStoreOverride = ingredientsStore,
-        _categoriesStoreOverride = categoriesStore;
+        _categoriesStoreOverride = categoriesStore,
+        _photoStorage = photoStorage ?? IngredientPhotoStorage();
 
   final IngredientsStore? _ingredientsStoreOverride;
   final IngredientCategoriesStore? _categoriesStoreOverride;
+  final IngredientPhotoStorage _photoStorage;
 
   Future<IngredientsStore> _getIngredientsStore() async {
     final override = _ingredientsStoreOverride;
@@ -68,6 +72,7 @@ class LocalIngredientRepository implements IngredientRepository {
     if (value.id.isEmpty || value.name.trim().isEmpty) return false;
     if (value.categoryId.isEmpty || value.unit.trim().isEmpty) return false;
     if (value.quantity <= 0) return false;
+    if (value.photos.length > maxIngredientPhotos) return false;
     return true;
   }
 
@@ -132,7 +137,9 @@ class LocalIngredientRepository implements IngredientRepository {
   @override
   Future<void> saveIngredient(PantryIngredient ingredient) async {
     await _safeWrite((store) async {
-      final dto = PantryIngredientDto.fromDomain(ingredient);
+      final persistedPhotos = await _photoStorage.persistAll(ingredient.photos);
+      final next = ingredient.copyWith(photos: persistedPhotos);
+      final dto = PantryIngredientDto.fromDomain(next);
       await store.put(dto.id, dto);
     });
   }
@@ -140,14 +147,36 @@ class LocalIngredientRepository implements IngredientRepository {
   @override
   Future<void> updateIngredient(PantryIngredient ingredient) async {
     await _safeWrite((store) async {
-      final dto = PantryIngredientDto.fromDomain(ingredient);
+      PantryIngredient? existing;
+      final stored = store.get(ingredient.id);
+      if (_isValidIngredientDto(stored)) {
+        existing = (stored as PantryIngredientDto).toDomain();
+      }
+      final persistedPhotos = await _photoStorage.persistAll(ingredient.photos);
+      if (existing != null) {
+        await _photoStorage.deleteRemoved(
+          existing: existing.photos,
+          updated: persistedPhotos,
+        );
+      }
+      final next = ingredient.copyWith(photos: persistedPhotos);
+      final dto = PantryIngredientDto.fromDomain(next);
       await store.put(dto.id, dto);
     });
   }
 
   @override
   Future<void> deleteIngredient(String id) async {
-    await _safeWrite((store) => store.delete(id));
+    await _safeWrite((store) async {
+      final stored = store.get(id);
+      if (_isValidIngredientDto(stored)) {
+        final ingredient = (stored as PantryIngredientDto).toDomain();
+        for (final photo in ingredient.photos) {
+          await _photoStorage.deleteIfManaged(photo.path);
+        }
+      }
+      await store.delete(id);
+    });
   }
 
   @override

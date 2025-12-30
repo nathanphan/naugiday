@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/core/constants/app_assets.dart';
+import 'package:naugiday/domain/entities/ingredient_photo.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
 import 'package:naugiday/domain/errors/ingredient_storage_exception.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_controller.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:naugiday/presentation/providers/telemetry_provider.dart';
+import 'package:naugiday/presentation/widgets/ingredients/ingredient_photo_viewer.dart';
 
 class IngredientDetailScreen extends ConsumerWidget {
   final String ingredientId;
@@ -22,6 +27,8 @@ class IngredientDetailScreen extends ConsumerWidget {
     final ingredientsAsync = ref.watch(ingredientControllerProvider);
     final controller = ref.read(ingredientControllerProvider.notifier);
     final recipesAsync = ref.watch(recipeControllerProvider);
+    final flagsAsync = ref.watch(featureFlagControllerProvider);
+    final photosEnabled = flagsAsync.value?.ingredientPhotosEnabled ?? true;
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +83,10 @@ class IngredientDetailScreen extends ConsumerWidget {
           return ListView(
             padding: EdgeInsets.only(bottom: bottomPadding),
             children: [
-              _HeaderSection(ingredient: ingredient),
+              _HeaderSection(
+                ingredient: ingredient,
+                photosEnabled: photosEnabled,
+              ),
               _SuggestedRecipesSection(
                 recipesAsync: recipesAsync,
                 suggestions: recipeSuggestions,
@@ -201,8 +211,12 @@ class _ErrorState extends StatelessWidget {
 
 class _HeaderSection extends StatelessWidget {
   final PantryIngredient ingredient;
+  final bool photosEnabled;
 
-  const _HeaderSection({required this.ingredient});
+  const _HeaderSection({
+    required this.ingredient,
+    required this.photosEnabled,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +226,11 @@ class _HeaderSection extends StatelessWidget {
       ingredient,
       colorScheme: colorScheme,
     );
+    final photos = photosEnabled
+        ? ([...ingredient.photos]
+          ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder)))
+        : const <IngredientPhoto>[];
+    final primaryPhoto = photos.isEmpty ? null : photos.first;
     final categoryLabel = ingredient.categoryName ?? 'Uncategorized';
     final stateLabel = _stateLabel(ingredient.inventoryState);
     return Container(
@@ -248,9 +267,9 @@ class _HeaderSection extends StatelessWidget {
                   backgroundColor: colorScheme.surface,
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: const AssetImage(
-                      AppAssets.foodPlaceholder,
-                    ),
+                    backgroundImage: primaryPhoto == null
+                        ? const AssetImage(AppAssets.foodPlaceholder)
+                        : FileImage(File(primaryPhoto.path)) as ImageProvider,
                     backgroundColor: colorScheme.surfaceContainerHighest,
                   ),
                 ),
@@ -294,6 +313,10 @@ class _HeaderSection extends StatelessWidget {
             const SizedBox(height: 12),
             expiryChip,
           ],
+          if (photos.isNotEmpty && photosEnabled) ...[
+            const SizedBox(height: 16),
+            _PhotoStrip(photos: photos),
+          ],
         ],
       ),
     );
@@ -308,6 +331,58 @@ class _HeaderSection extends StatelessWidget {
       case IngredientInventoryState.bought:
         return 'Bought';
     }
+  }
+}
+
+class _PhotoStrip extends StatelessWidget {
+  final List<IngredientPhoto> photos;
+
+  const _PhotoStrip({required this.photos});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var index = 0; index < photos.length; index += 1) ...[
+          if (index > 0) const SizedBox(width: 12),
+          Semantics(
+            button: true,
+            label: 'Open photo ${index + 1}',
+            child: InkWell(
+              onTap: () => IngredientPhotoViewer.show(
+                context,
+                photos: photos,
+                initialPhotoId: photos[index].id,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Image.file(
+                    File(photos[index].path),
+                    fit: BoxFit.cover,
+                    cacheWidth: 112,
+                    cacheHeight: 112,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: colorScheme.surfaceContainerHighest,
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.broken_image_outlined,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
   }
 }
 

@@ -1,5 +1,6 @@
 const String pantryIngredientsBoxName = 'pantry_ingredients';
 const String ingredientCategoriesBoxName = 'ingredient_categories';
+const int maxIngredientPhotos = 3;
 
 const List<String> defaultIngredientCategories = [
   'Fridge',

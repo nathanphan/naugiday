@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/domain/entities/ingredient_category.dart';
+import 'package:naugiday/domain/entities/ingredient_photo.dart';
 import 'package:naugiday/domain/usecases/create_category.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_filters_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_form_controller.dart';
 import 'package:naugiday/presentation/providers/ingredient_repository_provider.dart';
+import 'package:naugiday/presentation/widgets/ingredients/ingredient_photo_viewer.dart';
 import 'package:uuid/uuid.dart';
 
 class IngredientForm extends ConsumerStatefulWidget {
@@ -18,6 +24,7 @@ class IngredientForm extends ConsumerStatefulWidget {
 class _IngredientFormState extends ConsumerState<IngredientForm> {
   late final TextEditingController _nameController;
   late final TextEditingController _quantityController;
+  bool _isPickingPhoto = false;
 
   @override
   void initState() {
@@ -39,8 +46,25 @@ class _IngredientFormState extends ConsumerState<IngredientForm> {
     final formState = ref.watch(ingredientFormControllerProvider);
     final formController = ref.read(ingredientFormControllerProvider.notifier);
     final categoriesAsync = ref.watch(ingredientCategoriesProvider);
+    final flagsAsync = ref.watch(featureFlagControllerProvider);
+    final photosEnabled =
+        flagsAsync.value?.ingredientPhotosEnabled ?? true;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final missingPhotos = formState.photos
+        .where(
+          (photo) =>
+              photo.path.trim().isEmpty || !File(photo.path).existsSync(),
+        )
+        .toList(growable: false);
+    final missingIds = missingPhotos.map((photo) => photo.id).toSet();
+    String? photoError;
+    for (final error in formState.errors) {
+      if (error.toLowerCase().contains('photo')) {
+        photoError = error;
+        break;
+      }
+    }
 
     if (_nameController.text != formState.name) {
       _nameController.text = formState.name;
@@ -52,12 +76,34 @@ class _IngredientFormState extends ConsumerState<IngredientForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: _PhotoTile(
-            onPressed: () {},
+        if (photosEnabled) ...[
+          _PhotoSection(
+            photos: formState.photos,
+            missingIds: missingIds,
+            isPicking: _isPickingPhoto,
+            canAdd: !_isPickingPhoto &&
+                formState.photos.length < maxIngredientPhotos,
+            errorText: photoError,
+            onRemoveMissing: missingPhotos.isEmpty
+                ? null
+                : () {
+                    for (final photo in missingPhotos) {
+                      formController.removePhoto(photo.id);
+                    }
+                  },
+            onAdd: () => _showPhotoSourceSheet(
+              context,
+              formController,
+            ),
+            onRemove: (photo) => formController.removePhoto(photo.id),
+            onView: (photo) => IngredientPhotoViewer.show(
+              context,
+              photos: formState.photos,
+              initialPhotoId: photo.id,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
+          const SizedBox(height: 16),
+        ],
         const _FieldLabel('Ingredient Name'),
         const SizedBox(height: 8),
         TextField(
@@ -232,6 +278,78 @@ class _IngredientFormState extends ConsumerState<IngredientForm> {
     );
   }
 
+  Future<void> _showPhotoSourceSheet(
+    BuildContext context,
+    IngredientFormController formController,
+  ) async {
+    if (formController.state.photos.length >= maxIngredientPhotos) {
+      _showPhotoMessage(
+        context,
+        'You can add up to $maxIngredientPhotos photos.',
+      );
+      return;
+    }
+    final source = await showModalBottomSheet<_PhotoSource>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_camera),
+              title: const Text('Take photo'),
+              onTap: () => Navigator.of(ctx).pop(_PhotoSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from library'),
+              onTap: () => Navigator.of(ctx).pop(_PhotoSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null) return;
+    await _pickPhoto(context, source, formController);
+  }
+
+  Future<void> _pickPhoto(
+    BuildContext context,
+    _PhotoSource source,
+    IngredientFormController formController,
+  ) async {
+    final picker = ref.read(ingredientPhotoPickerProvider);
+    try {
+      setState(() => _isPickingPhoto = true);
+      final photo = source == _PhotoSource.camera
+          ? await picker.pickFromCamera()
+          : await picker.pickFromGallery();
+      if (photo == null) return;
+      formController.addPhoto(photo);
+    } on PlatformException catch (_) {
+      _showPhotoMessage(
+        context,
+        'Photo access is unavailable. Check permissions in Settings.',
+      );
+    } catch (_) {
+      _showPhotoMessage(
+        context,
+        'Unable to add photo. Please try again.',
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isPickingPhoto = false);
+      }
+    }
+  }
+
+  void _showPhotoMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
   InputDecoration _inputDecoration(
     BuildContext context, {
     required String hintText,
@@ -356,55 +474,261 @@ class _IngredientFormState extends ConsumerState<IngredientForm> {
   }
 }
 
-class _PhotoTile extends StatelessWidget {
-  final VoidCallback onPressed;
+enum _PhotoSource { camera, gallery }
 
-  const _PhotoTile({required this.onPressed});
+class _PhotoSection extends StatelessWidget {
+  final List<IngredientPhoto> photos;
+  final Set<String> missingIds;
+  final bool isPicking;
+  final bool canAdd;
+  final String? errorText;
+  final VoidCallback? onRemoveMissing;
+  final VoidCallback onAdd;
+  final ValueChanged<IngredientPhoto> onRemove;
+  final ValueChanged<IngredientPhoto> onView;
+
+  const _PhotoSection({
+    required this.photos,
+    required this.missingIds,
+    required this.isPicking,
+    required this.canAdd,
+    required this.errorText,
+    required this.onRemoveMissing,
+    required this.onAdd,
+    required this.onRemove,
+    required this.onView,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final missingCount = missingIds.length;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _FieldLabel('Photos'),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            for (var index = 0; index < photos.length; index += 1)
+              _PhotoThumbnail(
+                key: ValueKey('ingredient-photo-thumb-${photos[index].id}'),
+                photo: photos[index],
+                indexLabel: index + 1,
+                isMissing: missingIds.contains(photos[index].id),
+                onRemove: () => onRemove(photos[index]),
+                onView: () => onView(photos[index]),
+              ),
+            _AddPhotoTile(
+              key: const ValueKey('ingredient-photo-add'),
+              enabled: canAdd,
+              onPressed: onAdd,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Add up to $maxIngredientPhotos photos.',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        if (isPicking) ...[
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(minHeight: 2),
+        ],
+        if (errorText != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            errorText!,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.error,
+            ),
+          ),
+        ],
+        if (missingCount > 0) ...[
+          const SizedBox(height: 8),
+          Text(
+            'Some photos are missing. Remove or reselect them.',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.error,
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: onRemoveMissing,
+              icon: const Icon(Icons.delete_outline),
+              label: Text('Remove missing photos ($missingCount)'),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _PhotoThumbnail extends StatelessWidget {
+  final IngredientPhoto photo;
+  final int indexLabel;
+  final bool isMissing;
+  final VoidCallback onRemove;
+  final VoidCallback onView;
+
+  const _PhotoThumbnail({
+    super.key,
+    required this.photo,
+    required this.indexLabel,
+    required this.isMissing,
+    required this.onRemove,
+    required this.onView,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Semantics(
+      label: isMissing ? 'Photo $indexLabel missing' : 'Photo $indexLabel',
       button: true,
-      label: 'Add photo',
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(20),
-        child: CustomPaint(
-          painter: _DashedBorderPainter(
-            color: colorScheme.outlineVariant,
-            radius: 20,
-          ),
-          child: SizedBox(
-            height: 128,
-            width: 128,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          InkWell(
+            onTap: onView,
+            borderRadius: BorderRadius.circular(16),
+            key: ValueKey('ingredient-photo-thumb-ink-${photo.id}'),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                height: 88,
+                width: 88,
+                child: Image.file(
+                  File(photo.path),
+                  fit: BoxFit.cover,
+                  cacheWidth: 176,
+                  cacheHeight: 176,
+                  errorBuilder: (_, __, ___) => Container(
                     color: colorScheme.surfaceContainerHighest,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
+                    alignment: Alignment.center,
                     child: Icon(
-                      Icons.add_a_photo,
+                      Icons.broken_image_outlined,
                       color: colorScheme.onSurfaceVariant,
-                      size: 24,
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Add Photo',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ],
+              ),
             ),
+          ),
+          if (isMissing)
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colorScheme.errorContainer.withOpacity(0.75),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Center(
+                  child: Text(
+                    'Missing',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onErrorContainer,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                ),
+              ),
+            ),
+          Positioned(
+            top: -8,
+            right: -8,
+            child: Semantics(
+              button: true,
+              label: 'Delete photo $indexLabel',
+              child: Material(
+                color: colorScheme.surface,
+                shape: const CircleBorder(),
+                elevation: 1,
+                child: IconButton(
+                  onPressed: onRemove,
+                  icon: const Icon(Icons.close),
+                  color: colorScheme.error,
+                  iconSize: 16,
+                  constraints: const BoxConstraints(
+                    minWidth: 44,
+                    minHeight: 44,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AddPhotoTile extends StatelessWidget {
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  const _AddPhotoTile({
+    super.key,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final content = SizedBox(
+      height: 88,
+      width: 88,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              shape: BoxShape.circle,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Icon(
+                Icons.add_a_photo,
+                color: colorScheme.onSurfaceVariant,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Add',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ],
+      ),
+    );
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: 'Add photo',
+      child: InkWell(
+        key: const ValueKey('ingredient-photo-add-ink'),
+        onTap: enabled ? onPressed : null,
+        borderRadius: BorderRadius.circular(16),
+        child: Opacity(
+          opacity: enabled ? 1 : 0.4,
+          child: CustomPaint(
+            painter: _DashedBorderPainter(
+              color: colorScheme.outlineVariant,
+              radius: 16,
+            ),
+            child: content,
           ),
         ),
       ),

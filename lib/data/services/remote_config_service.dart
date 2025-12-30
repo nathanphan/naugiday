@@ -21,6 +21,7 @@ class RemoteConfigService {
         aiEnabled: true,
         imagesEnabled: true,
         ingredientsEnabled: true,
+        ingredientPhotosEnabled: true,
         updatedAt: DateTime.now(),
       );
     }

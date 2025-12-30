@@ -27,6 +27,13 @@ class IngredientStorageException implements Exception {
     );
   }
 
+  factory IngredientStorageException.validation(String message) {
+    return IngredientStorageException(
+      message,
+      recoverable: true,
+    );
+  }
+
   @override
   String toString() => message;
 }

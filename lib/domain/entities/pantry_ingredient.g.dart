@@ -22,6 +22,11 @@ _PantryIngredient _$PantryIngredientFromJson(Map<String, dynamic> json) =>
         _$IngredientInventoryStateEnumMap,
         json['inventoryState'],
       ),
+      photos:
+          (json['photos'] as List<dynamic>?)
+              ?.map((e) => IngredientPhoto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <IngredientPhoto>[],
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -38,6 +43,7 @@ Map<String, dynamic> _$PantryIngredientToJson(
   'expiryDate': instance.expiryDate?.toIso8601String(),
   'freshnessOverride': instance.freshnessOverride,
   'inventoryState': _$IngredientInventoryStateEnumMap[instance.inventoryState]!,
+  'photos': instance.photos,
   'createdAt': instance.createdAt.toIso8601String(),
   'updatedAt': instance.updatedAt.toIso8601String(),
 };

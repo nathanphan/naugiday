@@ -41,7 +41,7 @@ final class IngredientFiltersProvider
   }
 }
 
-String _$ingredientFiltersHash() => r'87fa0520e193efd8a5332d232af2fb05b269c212';
+String _$ingredientFiltersHash() => r'59486f61278ea1e6184b4488bec57a1365b11822';
 
 abstract class _$IngredientFilters extends $Notifier<IngredientFiltersState> {
   IngredientFiltersState build();

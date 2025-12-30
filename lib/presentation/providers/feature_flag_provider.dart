@@ -11,6 +11,7 @@ class FeatureFlagState {
   final bool aiEnabled;
   final bool imagesEnabled;
   final bool ingredientsEnabled;
+  final bool ingredientPhotosEnabled;
   final DateTime updatedAt;
   final String source;
 
@@ -18,6 +19,7 @@ class FeatureFlagState {
     required this.aiEnabled,
     required this.imagesEnabled,
     required this.ingredientsEnabled,
+    required this.ingredientPhotosEnabled,
     required this.updatedAt,
     required this.source,
   });
@@ -34,10 +36,20 @@ class FeatureFlagState {
         updatedAt: aiFlag.updatedAt,
       ),
     );
+    final ingredientPhotosFlag = flags.firstWhere(
+      (f) => f.name == 'ingredient_photos_enabled',
+      orElse: () => FeatureFlag(
+        name: 'ingredient_photos_enabled',
+        enabled: true,
+        source: aiFlag.source,
+        updatedAt: aiFlag.updatedAt,
+      ),
+    );
     return FeatureFlagState(
       aiEnabled: aiFlag.enabled,
       imagesEnabled: imageFlag.enabled,
       ingredientsEnabled: ingredientsFlag.enabled,
+      ingredientPhotosEnabled: ingredientPhotosFlag.enabled,
       updatedAt: aiFlag.updatedAt,
       source: aiFlag.source,
     );

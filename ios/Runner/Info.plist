@@ -46,10 +46,10 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>We need camera access to scan ingredients.</string>
+	<string>We need camera access to capture ingredient photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need photo access to attach ingredient photos to recipes.</string>
+	<string>We need photo access to attach ingredient photos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We save recipe photos to your library when you choose to.</string>
+	<string>We save ingredient photos to your library when you choose to.</string>
 </dict>
 </plist>

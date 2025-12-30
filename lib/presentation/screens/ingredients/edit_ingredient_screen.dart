@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
+import 'package:naugiday/domain/errors/ingredient_storage_exception.dart';
 import 'package:naugiday/presentation/providers/ingredient_controller.dart';
 import 'package:naugiday/presentation/providers/ingredient_form_controller.dart';
+import 'package:naugiday/presentation/providers/ingredient_repository_provider.dart';
 import 'package:naugiday/presentation/providers/telemetry_provider.dart';
 import 'package:naugiday/presentation/widgets/ingredients/ingredient_form.dart';
 
@@ -108,6 +110,12 @@ class _EditIngredientScreenState extends ConsumerState<EditIngredientScreen> {
   ) async {
     final formController = ref.read(ingredientFormControllerProvider.notifier);
     final ingredients = ref.read(ingredientControllerProvider).value ?? [];
+    final formState = ref.read(ingredientFormControllerProvider);
+    final canProceed =
+        await _resolveMissingPhotos(context, ref, formController, formState);
+    if (!canProceed) {
+      return;
+    }
     final now = DateTime.now();
     final validation = formController.validate(
       ingredientId: ingredient.id,
@@ -128,15 +136,83 @@ class _EditIngredientScreenState extends ConsumerState<EditIngredientScreen> {
       updatedAt: now,
       inventoryState: ingredient.inventoryState,
     );
-    await ref.read(ingredientControllerProvider.notifier).updateIngredient(
-          updated,
+    try {
+      await ref.read(ingredientControllerProvider.notifier).updateIngredient(
+            updated,
+          );
+    } on IngredientStorageException catch (err) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.message)),
         );
+      }
+      return;
+    }
     await ref.read(telemetryControllerProvider.notifier).recordCta(
           'ingredient_edit',
         );
     if (context.mounted) {
       context.go('/ingredients/${ingredient.id}');
     }
+  }
+
+  Future<bool> _resolveMissingPhotos(
+    BuildContext context,
+    WidgetRef ref,
+    IngredientFormController formController,
+    IngredientFormState formState,
+  ) async {
+    if (formState.photos.isEmpty) return true;
+    final storage = ref.read(ingredientPhotoStorageProvider);
+    final missing = <String>[];
+    for (final photo in formState.photos) {
+      if (photo.path.trim().isEmpty) {
+        missing.add(photo.id);
+        continue;
+      }
+      final exists = await storage.exists(photo.path);
+      if (!exists) {
+        missing.add(photo.id);
+      }
+    }
+    if (missing.isEmpty) return true;
+    final remove = await _showMissingPhotosDialog(context, missing.length);
+    if (!remove) return false;
+    for (final id in missing) {
+      formController.removePhoto(id);
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Missing photos removed.')),
+      );
+    }
+    return false;
+  }
+
+  Future<bool> _showMissingPhotosDialog(
+    BuildContext context,
+    int missingCount,
+  ) async {
+    final decision = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Missing photos'),
+        content: Text(
+          '$missingCount photo(s) can\'t be found. Remove them or reselect.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Remove missing'),
+          ),
+        ],
+      ),
+    );
+    return decision ?? false;
   }
 
   Future<bool> _showDuplicateDialog(BuildContext context) async {

@@ -42,7 +42,7 @@ final class IngredientFormControllerProvider
 }
 
 String _$ingredientFormControllerHash() =>
-    r'55469c5143b34aaf14620b4bc582e18778586faa';
+    r'd4fb52864d6a82197e3d67c079a3c5a83644d71c';
 
 abstract class _$IngredientFormController
     extends $Notifier<IngredientFormState> {

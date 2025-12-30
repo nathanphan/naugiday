@@ -19,6 +19,13 @@ PantryIngredientDto _$PantryIngredientDtoFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['expiryDate'] as String),
       freshnessOverride: json['freshnessOverride'] as bool?,
       inventoryState: json['inventoryState'] as String,
+      photos:
+          (json['photos'] as List<dynamic>?)
+              ?.map(
+                (e) => IngredientPhotoDto.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
@@ -35,6 +42,7 @@ Map<String, dynamic> _$PantryIngredientDtoToJson(
   'expiryDate': instance.expiryDate?.toIso8601String(),
   'freshnessOverride': instance.freshnessOverride,
   'inventoryState': instance.inventoryState,
+  'photos': instance.photos,
   'createdAt': instance.createdAt.toIso8601String(),
   'updatedAt': instance.updatedAt.toIso8601String(),
 };

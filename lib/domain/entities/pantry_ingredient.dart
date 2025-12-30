@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:naugiday/domain/entities/ingredient_photo.dart';
 
 part 'pantry_ingredient.freezed.dart';
 part 'pantry_ingredient.g.dart';
@@ -21,6 +22,7 @@ abstract class PantryIngredient with _$PantryIngredient {
     DateTime? expiryDate,
     bool? freshnessOverride,
     required IngredientInventoryState inventoryState,
+    @Default(<IngredientPhoto>[]) List<IngredientPhoto> photos,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _PantryIngredient;

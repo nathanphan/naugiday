@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:naugiday/domain/entities/pantry_ingredient.dart';
 import 'package:naugiday/domain/entities/recipe.dart';
+import 'package:naugiday/presentation/providers/feature_flag_provider.dart';
 import 'package:naugiday/presentation/providers/ingredient_controller.dart';
 import 'package:naugiday/presentation/providers/recipe_controller.dart';
 import 'package:naugiday/presentation/screens/ingredients/ingredient_detail_screen.dart';
@@ -23,6 +24,20 @@ class _TestRecipeController extends RecipeController {
 
   @override
   Future<List<Recipe>> build() async => _recipes;
+}
+
+class _TestFeatureFlagController extends FeatureFlagController {
+  @override
+  Future<FeatureFlagState> build() async {
+    return FeatureFlagState(
+      aiEnabled: false,
+      imagesEnabled: true,
+      ingredientsEnabled: true,
+      ingredientPhotosEnabled: true,
+      updatedAt: DateTime(2024, 1, 1),
+      source: 'test',
+    );
+  }
 }
 
 PantryIngredient _ingredient() => PantryIngredient(
@@ -49,6 +64,9 @@ void main() {
           ),
           recipeControllerProvider.overrideWith(
             () => _TestRecipeController(const []),
+          ),
+          featureFlagControllerProvider.overrideWith(
+            () => _TestFeatureFlagController(),
           ),
         ],
         child: const MaterialApp(
