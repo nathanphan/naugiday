@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ingredient Detail - NauGiDay</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#381E1E",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }.no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;scrollbar-width: none;}
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#1b0d0d] dark:text-[#fcf8f8] font-display selection:bg-primary/30">
+<nav class="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<button class="flex items-center justify-center w-10 h-10 rounded-full active:bg-gray-200 dark:active:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight opacity-0 sm:opacity-100 transition-opacity">Recipe Assistant</h1>
+<button class="flex items-center justify-center w-10 h-10 rounded-full active:bg-gray-200 dark:active:bg-gray-800 transition-colors text-primary">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</nav>
+<main class="flex flex-col w-full max-w-md mx-auto pb-24 animate-fade-in">
+<div class="flex flex-col items-center pt-6 pb-8 px-6 bg-gradient-to-b from-primary/10 to-transparent dark:from-primary/20">
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/20 dark:bg-primary/10 blur-xl rounded-full scale-90 translate-y-2"></div>
+<div class="relative w-40 h-40 rounded-full overflow-hidden shadow-xl border-4 border-white dark:border-[#381E1E] bg-gray-100">
+<img alt="Roma Tomato" class="w-full h-full object-cover" data-alt="Fresh vibrant red roma tomatoes stacked together" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6hKdyr3XJlkQUQh9Sv5juPCbMDzqqufOYtaOZOigKGs6BuGVfTw78BL4Ajdd_IZUTcMI503q4_9YBwgcYl0vJRWNbSirHejuhgI67zIINjnVtUngfMVJlLD8-o8_eDSG8ocWp-gpecEvJrUjDkgbsGWaiCMSAU0Megn11155uu9YuEM6oHbg8GDdHgH8owYm5GLPnmBYw41e1U40g0pr82KGb7pGPNlUPKMFq9Xfoy1zCIo1KQsHVe_wCCuVUt-BvqNtIuqVitzU"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-surface-light dark:bg-surface-dark p-2 rounded-full shadow-md border border-gray-100 dark:border-gray-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl filled">nutrition</span>
+</div>
+</div>
+<h2 class="mt-6 text-3xl font-extrabold tracking-tight text-center text-gray-900 dark:text-white">Roma Tomato</h2>
+<p class="text-gray-500 dark:text-gray-400 font-medium mt-1">Vegetable • Pantry Item</p>
+<div class="mt-4 flex flex-wrap gap-2 justify-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-200 text-sm font-semibold border border-orange-200 dark:border-orange-800">
+<span class="material-symbols-outlined text-lg">history_toggle_off</span>
+                    Expiring in 2 days
+                </div>
+</div>
+</div>
+<section class="mt-0 pb-8 pt-4 bg-background-light dark:bg-background-dark">
+<div class="flex items-center justify-between px-5 mb-4">
+<h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">AI-Suggested Recipes</h3>
+<button class="flex items-center text-sm font-semibold text-primary/80 dark:text-primary">
+<span class="material-symbols-outlined text-base mr-1">refresh</span>
+                    Refresh
+                </button>
+</div>
+<div class="flex overflow-x-auto snap-x snap-mandatory gap-4 px-5 no-scrollbar">
+<div class="flex-none w-72 snap-center rounded-2xl shadow-lg bg-surface-light dark:bg-surface-dark overflow-hidden border border-gray-100 dark:border-gray-800/50">
+<img alt="Spicy Tomato Pasta" class="w-full h-36 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzdfSoiK1th9ji6Bui4PiMOB3xWY4SY5VDRi5_1vRRQSiuy5LIgNBX3SmkeDV7RK84sSEH-NPu6LTYZO7dg76cMtX_FomkW_A0RGz7LvCgTpZYksxtjGDVdZrO2rndBffW9v6pVuGKQOFIqQsGLT2PzkpaAb3dk7hicZgCfOXmHkxYvlvsha2JNuu44tuq6OoOMBsmDcY3Ti--0EkU-LewKC_WSFKt5dPe7Ee-XHRo5m3zh0XJ4nuDgUP9iV7KlzQ76vxLrMvtIig"/>
+<div class="p-4">
+<h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">Spicy Calabrian Chili Tomato Pasta</h4>
+<p class="text-xs text-gray-500 mb-3">Quick &amp; flavorful, perfect for dinner tonight!</p>
+<div class="flex gap-2">
+<button class="flex-1 px-4 py-2 bg-primary hover:bg-red-600 text-white text-sm font-bold rounded-xl shadow-md shadow-primary/20 transition-colors">Cook This</button>
+<button class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">View Recipe</button>
+</div>
+</div>
+</div>
+<div class="flex-none w-72 snap-center rounded-2xl shadow-lg bg-surface-light dark:bg-surface-dark overflow-hidden border border-gray-100 dark:border-gray-800/50">
+<img alt="Fresh Tomato Salsa" class="w-full h-36 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw7i2OHKJO7hCf5BjIboQqNYmEXQz4G1x54ftDy5PIe9ulVb03yXX9qdD4Y7Fbuuba2xA02K23E0VBnyDj3I6sg4TMI33otdsGD7xkUmxrl7BOABjcsZpHRrJgCoovJgyuqOFRKD6-IC7_EiXOg5JXnPDvS4teD_9SH6sBxbijHMvJFT2KX19qtjURefD2fRuxIg1B1_xlIjsFY9u2RHRewJxRB8ib3qWGjpj0-4tfRF1-1NMI6hTZyzoI3WxpJ5GR19mS2vA9h48"/>
+<div class="p-4">
+<h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">Garden Fresh Tomato Salsa</h4>
+<p class="text-xs text-gray-500 mb-3">A vibrant and zesty dip for any occasion.</p>
+<div class="flex gap-2">
+<button class="flex-1 px-4 py-2 bg-primary hover:bg-red-600 text-white text-sm font-bold rounded-xl shadow-md shadow-primary/20 transition-colors">Cook This</button>
+<button class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">View Recipe</button>
+</div>
+</div>
+</div>
+<div class="flex-none w-72 snap-center rounded-2xl shadow-lg bg-surface-light dark:bg-surface-dark overflow-hidden border border-gray-100 dark:border-gray-800/50">
+<img alt="Roasted Tomato Soup" class="w-full h-36 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKilo4isdohVuRQViatXqpze_XArE1AICWS9mXWEoPyz1aZJyeS0YeoPu5qzk736Hxeyitfd-U90cJT-auN2_z2yzSFoq-0K2efODUOQppnYYXLIkHvxAcDm8-6i50iSlvMW82IB7j_bMcf7atYeyPMgn1FShhQVdsNR-IZII22Wp2JVJIAI3OmjSWs3Wnj_JOiKr-Z4JxzH4Jczzrn75q71PuWtqwIM_x7KoQKyQnXf2NGPXLGQeDF6pxvyQ1-LzmW-h_OFj7qos"/>
+<div class="p-4">
+<h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">Creamy Roasted Tomato Soup</h4>
+<p class="text-xs text-gray-500 mb-3">Comfort in a bowl, perfect for a chilly evening.</p>
+<div class="flex gap-2">
+<button class="flex-1 px-4 py-2 bg-primary hover:bg-red-600 text-white text-sm font-bold rounded-xl shadow-md shadow-primary/20 transition-colors">Cook This</button>
+<button class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">View Recipe</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="px-5 pt-8">
+<h3 class="text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 font-bold mb-4 ml-1">Your Ingredient Details</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col p-3 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex items-center gap-2 mb-1">
+<span class="p-1 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
+<span class="material-symbols-outlined text-lg">scale</span>
+</span>
+<span class="text-xs font-semibold text-gray-400 dark:text-gray-400 uppercase">Quantity</span>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white pl-1">500g</p>
+</div>
+<div class="flex flex-col p-3 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex items-center gap-2 mb-1">
+<span class="p-1 rounded-md bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300">
+<span class="material-symbols-outlined text-lg">kitchen</span>
+</span>
+<span class="text-xs font-semibold text-gray-400 dark:text-gray-400 uppercase">Location</span>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white pl-1">Fridge</p>
+</div>
+<div class="flex flex-col p-3 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex items-center gap-2 mb-1">
+<span class="p-1 rounded-md bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-300">
+<span class="material-symbols-outlined text-lg">shopping_bag</span>
+</span>
+<span class="text-xs font-semibold text-gray-400 dark:text-gray-400 uppercase">Purchased</span>
+</div>
+<p class="text-base font-bold text-gray-900 dark:text-white pl-1">Oct 24, 2023</p>
+</div>
+<div class="flex flex-col p-3 bg-red-50/30 dark:bg-red-900/10 rounded-xl shadow-sm border border-red-100 dark:border-red-900/30">
+<div class="flex items-center gap-2 mb-1">
+<span class="p-1 rounded-md bg-primary/10 dark:bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">event_busy</span>
+</span>
+<span class="text-xs font-semibold text-primary/80 dark:text-primary/80 uppercase">Expires</span>
+</div>
+<p class="text-base font-bold text-primary pl-1">Oct 30, 2023</p>
+</div>
+</div>
+</div>
+<div class="px-5 mt-6">
+<h3 class="text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 font-bold mb-3 ml-1">Notes</h3>
+<div class="p-4 bg-surface-light dark:bg-surface-dark rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800/50 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-gray-400 shrink-0">edit_note</span>
+<p>Best used for making pasta sauce or fresh salsa. Check firmness before using.</p>
+</div>
+</div>
+</div>
+</main>
+<div class="fixed bottom-6 right-6 z-40">
+<button class="group flex items-center justify-center h-14 bg-primary hover:bg-red-600 active:bg-red-700 text-white rounded-2xl shadow-lg shadow-primary/30 transition-all duration-300 pr-6 pl-5">
+<span class="material-symbols-outlined text-2xl mr-2 group-hover:-translate-x-0.5 transition-transform">edit</span>
+<span class="text-base font-bold tracking-wide">Edit Details</span>
+</button>
+</div>
+</body></html>
