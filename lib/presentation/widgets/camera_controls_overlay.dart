@@ -2,39 +2,32 @@ import 'package:flutter/material.dart';
 
 class CameraControlsOverlay extends StatelessWidget {
   final VoidCallback onCapture;
-  final VoidCallback onToggleFlash;
   final VoidCallback onPickGallery;
-  final bool isFlashOn;
+  final VoidCallback onHelp;
 
   const CameraControlsOverlay({
     super.key,
     required this.onCapture,
-    required this.onToggleFlash,
     required this.onPickGallery,
-    required this.isFlashOn,
+    required this.onHelp,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 40, left: 24, right: 24),
+        padding: const EdgeInsets.only(bottom: 28, left: 24, right: 24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // Flash Toggle
             IconButton.filledTonal(
-              onPressed: onToggleFlash,
-              icon: Icon(isFlashOn ? Icons.flash_on : Icons.flash_off),
-              tooltip: isFlashOn ? 'Flash on' : 'Flash off',
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black54,
-                foregroundColor: Colors.white,
-              ),
+              onPressed: onPickGallery,
+              icon: const Icon(Icons.photo_library_outlined),
+              tooltip: 'Choose from photos',
             ),
 
-            // Shutter Button
             Semantics(
               label: 'Capture photo',
               button: true,
@@ -45,29 +38,24 @@ class CameraControlsOverlay extends StatelessWidget {
                   height: 80,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 4),
+                    border: Border.all(color: colorScheme.onSurface, width: 4),
                     color: Colors.transparent,
                   ),
                   child: Container(
                     margin: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                 ),
               ),
             ),
 
-            // Gallery Picker
             IconButton.filledTonal(
-              onPressed: onPickGallery,
-              icon: const Icon(Icons.photo_library),
-              tooltip: 'Choose from photos',
-              style: IconButton.styleFrom(
-                backgroundColor: Colors.black54,
-                foregroundColor: Colors.white,
-              ),
+              onPressed: onHelp,
+              icon: const Icon(Icons.help_outline),
+              tooltip: 'Help',
             ),
           ],
         ),

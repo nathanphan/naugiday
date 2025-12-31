@@ -41,6 +41,7 @@ dependencies:
   json_annotation: ^4.9.0
   camera: ^0.11.3
   image_picker: ^1.1.2
+  permission_handler: ^11.3.1
   path_provider: ^2.1.5
   path: ^1.9.0
   hive: ^2.2.3
@@ -51,6 +52,8 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

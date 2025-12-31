@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: Telemetry Events API
+  version: 1.0.0
+paths:
+  /v1/telemetry/events:
+    post:
+      summary: Record telemetry events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [events]
+              properties:
+                events:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/TelemetryEvent'
+      responses:
+        '200':
+          description: Accepted
+components:
+  schemas:
+    TelemetryEvent:
+      type: object
+      required: [name, occurredAt]
+      properties:
+        name:
+          type: string
+          description: Event name
+        occurredAt:
+          type: string
+          format: date-time
+        screenName:
+          type: string
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+          nullable: true

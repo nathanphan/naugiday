@@ -1,0 +1,40 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:naugiday/domain/entities/scan_image.dart';
+import 'package:naugiday/domain/entities/scan_queue_item.dart';
+import 'package:naugiday/domain/repositories/scan_queue_repository.dart';
+import 'package:naugiday/domain/usecases/queue_scan_image.dart';
+
+class _QueueRepoStub implements ScanQueueRepository {
+  @override
+  Future<ScanImage> enqueue(ScanImage image) async {
+    return image.copyWith(status: ScanImageStatus.processing);
+  }
+
+  @override
+  Future<List<ScanQueueItem>> fetchQueue() async => const [];
+
+  @override
+  Future<void> removeQueueItem(String id) async {}
+
+  @override
+  Future<void> updateQueueItem(ScanQueueItem item) async {}
+}
+
+void main() {
+  test('queue scan image returns updated status from repository', () async {
+    final repo = _QueueRepoStub();
+    final usecase = QueueScanImage(repo);
+    final image = ScanImage(
+      id: 'img2',
+      source: ScanImageSource.gallery,
+      path: '/tmp/gallery.jpg',
+      sizeBytes: 0,
+      createdAt: DateTime(2024, 1, 1),
+      status: ScanImageStatus.queued,
+    );
+
+    final stored = await usecase(image);
+
+    expect(stored.status, ScanImageStatus.processing);
+  });
+}

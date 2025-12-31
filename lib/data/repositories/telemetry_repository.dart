@@ -14,6 +14,13 @@ class TelemetryRepositoryImpl implements TelemetryRepository {
     'scan_ingredients',
     'save_recipe',
     'generate_recipe',
+    'scan_open',
+    'capture_photo',
+    'pick_gallery',
+    'permission_denied',
+    'open_settings',
+    'scan_retry',
+    'scan_disabled',
   };
 
   @override

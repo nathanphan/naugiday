@@ -3,6 +3,7 @@ class FeatureFlagRecord {
   final bool imagesEnabled;
   final bool ingredientsEnabled;
   final bool ingredientPhotosEnabled;
+  final bool scanEnabled;
   final DateTime updatedAt;
 
   const FeatureFlagRecord({
@@ -10,6 +11,7 @@ class FeatureFlagRecord {
     required this.imagesEnabled,
     required this.ingredientsEnabled,
     required this.ingredientPhotosEnabled,
+    required this.scanEnabled,
     required this.updatedAt,
   });
 
@@ -20,6 +22,7 @@ class FeatureFlagRecord {
       ingredientsEnabled: json['ingredients_enabled'] as bool? ?? true,
       ingredientPhotosEnabled:
           json['ingredient_photos_enabled'] as bool? ?? true,
+      scanEnabled: json['scan_enabled'] as bool? ?? true,
       updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? '') ??
           DateTime.now(),
     );
@@ -30,6 +33,7 @@ class FeatureFlagRecord {
         'images_enabled': imagesEnabled,
         'ingredients_enabled': ingredientsEnabled,
         'ingredient_photos_enabled': ingredientPhotosEnabled,
+        'scan_enabled': scanEnabled,
         'updated_at': updatedAt.toIso8601String(),
       };
 }

@@ -2,8 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:naugiday/core/constants/ingredient_constants.dart';
 import 'package:naugiday/core/constants/launch_hardening_constants.dart';
+import 'package:naugiday/core/constants/scan_constants.dart';
 import 'package:naugiday/data/adapters/pantry_ingredient_adapter.dart';
 import 'package:naugiday/data/adapters/recipe_adapter.dart';
+import 'package:naugiday/data/adapters/scan_image_adapter.dart';
+import 'package:naugiday/data/adapters/scan_queue_item_adapter.dart';
 
 const String recipesBoxName = 'recipes';
 
@@ -44,6 +47,12 @@ Future<void> initHiveForRecipes({
   if (!Hive.isAdapterRegistered(ingredientPhotoTypeId)) {
     Hive.registerAdapter(IngredientPhotoDtoAdapter());
   }
+  if (!Hive.isAdapterRegistered(scanImageTypeId)) {
+    Hive.registerAdapter(ScanImageDtoAdapter());
+  }
+  if (!Hive.isAdapterRegistered(scanQueueItemTypeId)) {
+    Hive.registerAdapter(ScanQueueItemDtoAdapter());
+  }
 
   if (!Hive.isBoxOpen(recipesBoxName)) {
     try {
@@ -73,5 +82,14 @@ Future<void> initHiveForRecipes({
   }
   if (!Hive.isBoxOpen(ingredientCategoriesBoxName)) {
     await Hive.openBox(ingredientCategoriesBoxName);
+  }
+  if (!Hive.isBoxOpen(scanImagesBoxName)) {
+    await Hive.openBox(scanImagesBoxName);
+  }
+  if (!Hive.isBoxOpen(scanQueueBoxName)) {
+    await Hive.openBox(scanQueueBoxName);
+  }
+  if (!Hive.isBoxOpen(scanSessionsBoxName)) {
+    await Hive.openBox(scanSessionsBoxName);
   }
 }

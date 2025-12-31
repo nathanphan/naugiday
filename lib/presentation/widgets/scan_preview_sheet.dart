@@ -1,72 +1,40 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
+
 import 'package:flutter/material.dart';
+import 'package:naugiday/domain/entities/scan_image.dart';
 
-class ScanPreviewSheet extends StatefulWidget {
-  final List<XFile> images;
-  final void Function(List<String> labels) onGenerate;
-  final Function(int) onDelete;
-
+class ScanPreviewSheet extends StatelessWidget {
   const ScanPreviewSheet({
     super.key,
     required this.images,
     required this.onGenerate,
     required this.onDelete,
+    required this.isOffline,
+    required this.onRetry,
   });
 
-  @override
-  State<ScanPreviewSheet> createState() => _ScanPreviewSheetState();
-}
-
-class _ScanPreviewSheetState extends State<ScanPreviewSheet> {
-  late List<TextEditingController> _controllers;
-
-  @override
-  void initState() {
-    super.initState();
-    _controllers = List.generate(
-      widget.images.length,
-      (_) => TextEditingController(),
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant ScanPreviewSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.images.length != widget.images.length) {
-      _controllers = List.generate(
-        widget.images.length,
-        (i) => TextEditingController(
-          text: i < oldWidget.images.length ? _controllers[i].text : '',
-        ),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    for (final c in _controllers) {
-      c.dispose();
-    }
-    super.dispose();
-  }
+  final List<ScanImage> images;
+  final VoidCallback onGenerate;
+  final void Function(String id) onDelete;
+  final bool isOffline;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
+    if (images.isEmpty) return const SizedBox.shrink();
     final theme = Theme.of(context);
-
-    if (widget.images.isEmpty) return const SizedBox.shrink();
+    final colorScheme = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
+            color: colorScheme.shadow.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
@@ -74,88 +42,182 @@ class _ScanPreviewSheetState extends State<ScanPreviewSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            '${widget.images.length} Ingredients Scanned',
-            style: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 100,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.images.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                return Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.file(
-                        File(widget.images[index].path),
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: InkWell(
-                        onTap: () => widget.onDelete(index),
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.black54,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Scanned items',
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+              Text(
+                '${images.length}',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: colorScheme.primary,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: 64,
+            height: 72,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: _controllers.length,
+              itemCount: images.length,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
-                return SizedBox(
-                  width: 140,
-                  child: TextField(
-                    controller: _controllers[index],
-                    decoration: const InputDecoration(
-                      labelText: 'Label',
-                      isDense: true,
-                    ),
-                  ),
+                final image = images[index];
+                return _ScanThumbnail(
+                  image: image,
+                  onDelete: () => onDelete(image.id),
                 );
               },
             ),
           ),
-          const SizedBox(height: 24),
-          FilledButton(
-            onPressed: () {
-              final labels = _controllers.map((c) => c.text).toList();
-              widget.onGenerate(labels);
-            },
+          if (isOffline) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Saved offline. We will process when you are back online.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          if (_hasRetryable(images)) ...[
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: onRetry,
+                child: const Text('Retry processing'),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            onPressed: isOffline ? null : onGenerate,
+            icon: Icon(isOffline ? Icons.cloud_upload : Icons.auto_awesome),
+            label: Text(
+              isOffline
+                  ? 'Queued for processing'
+                  : 'Generate Recipes (${images.length})',
+            ),
             style: FilledButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('Generate Recipes'),
           ),
         ],
       ),
     );
   }
+}
+
+class _ScanThumbnail extends StatelessWidget {
+  const _ScanThumbnail({
+    required this.image,
+    required this.onDelete,
+  });
+
+  final ScanImage image;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final statusIcon = _statusIcon(colorScheme);
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.file(
+            File(image.path),
+            width: 72,
+            height: 72,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 72,
+                height: 72,
+                color: colorScheme.surfaceVariant,
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.broken_image,
+                  color: colorScheme.onSurfaceVariant,
+                  size: 20,
+                ),
+              );
+            },
+          ),
+        ),
+        if (statusIcon != null)
+          Positioned(
+            bottom: -4,
+            right: -4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow.withOpacity(0.12),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                  statusIcon.icon,
+                  size: 14,
+                  color: statusIcon.color,
+                ),
+              ),
+            ),
+          ),
+        Positioned(
+          top: -6,
+          right: -6,
+          child: Semantics(
+            label: 'Remove image',
+            button: true,
+            child: IconButton.filled(
+              onPressed: onDelete,
+              icon: const Icon(Icons.close),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _StatusIcon? _statusIcon(ColorScheme colorScheme) {
+    switch (image.status) {
+      case ScanImageStatus.queued:
+        return _StatusIcon(Icons.cloud_upload, colorScheme.primary);
+      case ScanImageStatus.failed:
+        return _StatusIcon(Icons.error_outline, colorScheme.error);
+      case ScanImageStatus.processing:
+        return _StatusIcon(Icons.sync, colorScheme.secondary);
+      case ScanImageStatus.processed:
+        return null;
+    }
+  }
+}
+
+class _StatusIcon {
+  _StatusIcon(this.icon, this.color);
+
+  final IconData icon;
+  final Color color;
+}
+
+bool _hasRetryable(List<ScanImage> images) {
+  return images.any(
+    (image) =>
+        image.status == ScanImageStatus.queued ||
+        image.status == ScanImageStatus.failed,
+  );
 }
 // ignore_for_file: deprecated_member_use, unnecessary_underscores

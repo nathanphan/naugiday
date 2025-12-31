@@ -35,6 +35,7 @@ class _TestFeatureFlagController extends FeatureFlagController {
       imagesEnabled: true,
       ingredientsEnabled: true,
       ingredientPhotosEnabled: true,
+      scanEnabled: true,
       updatedAt: DateTime(2024, 1, 1),
       source: 'test',
     );
