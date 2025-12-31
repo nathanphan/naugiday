@@ -14,11 +14,11 @@ class HomeCTACard extends ConsumerWidget {
       elevation: 2,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () async {
-          await ref.read(telemetryControllerProvider.notifier).recordCta(
+        onTap: () {
+          onTap();
+          ref.read(telemetryControllerProvider.notifier).recordCta(
                 'scan_ingredients',
               );
-          onTap();
         },
         child: Container(
           height: 160,

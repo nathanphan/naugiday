@@ -1,4 +1,4 @@
-package com.antigravity.naugiday.naugiday
+package com.mindless.naugiday
 
 import io.flutter.embedding.android.FlutterActivity
 

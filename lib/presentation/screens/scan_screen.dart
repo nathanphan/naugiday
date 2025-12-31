@@ -23,13 +23,15 @@ class ScanScreen extends ConsumerStatefulWidget {
   ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
-class _ScanScreenState extends ConsumerState<ScanScreen> {
+class _ScanScreenState extends ConsumerState<ScanScreen>
+    with WidgetsBindingObserver {
   CameraController? _controller;
   List<CameraDescription>? _cameras;
   bool _isFlashOn = false;
   bool _loggedOpen = false;
   bool _loggedPermissionDenied = false;
   bool _loggedDisabled = false;
+  bool _cameraInitInProgress = false;
   late final ProviderSubscription<ScanControllerState> _scanSubscription;
   late final ProviderSubscription<AsyncValue<FeatureFlagState>>
       _featureFlagSubscription;
@@ -37,6 +39,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scanSubscription = ref.listenManual(
       scanControllerProvider,
       (previous, next) {
@@ -83,11 +86,45 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
     _controller?.dispose();
     _scanSubscription.close();
     _featureFlagSubscription.close();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      _controller?.dispose();
+      _controller = null;
+      _isFlashOn = false;
+      return;
+    }
+    if (state != AppLifecycleState.resumed) return;
+    ref.read(scanControllerProvider.notifier).refreshPermissions().whenComplete(
+      () {
+        if (!mounted || widget.forceCameraUnavailable) return;
+        final permission =
+            ref.read(scanControllerProvider).permissionState.cameraStatus;
+        if (_isCameraAllowed(permission) &&
+            (_controller == null || !_controller!.value.isInitialized)) {
+          _initCamera();
+        }
+      },
+    );
   }
 
   Future<void> _initCamera() async {
     if (!mounted) return;
+    if (_cameraInitInProgress) return;
+    _cameraInitInProgress = true;
+    final permission = ref.read(scanControllerProvider).permissionState;
+    if (!_isCameraAllowed(permission.cameraStatus)) {
+      ref
+          .read(scanControllerProvider.notifier)
+          .setCameraStatus(available: false, initializing: false);
+      _cameraInitInProgress = false;
+      return;
+    }
     ref
         .read(scanControllerProvider.notifier)
         .setCameraStatus(available: true, initializing: true);
@@ -129,6 +166,8 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
             .read(scanControllerProvider.notifier)
             .setCameraStatus(available: false, initializing: false);
       }
+    } finally {
+      _cameraInitInProgress = false;
     }
   }
 
@@ -160,6 +199,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
     final scanState = ref.read(scanControllerProvider);
     if (scanEnabled == scanState.isFeatureEnabled) return;
     ref.read(scanControllerProvider.notifier).updateFeatureEnabled(scanEnabled);
+  }
+
+  bool _isCameraAllowed(PermissionAccessStatus status) {
+    return status != PermissionAccessStatus.denied &&
+        status != PermissionAccessStatus.restricted;
   }
 
 

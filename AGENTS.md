@@ -13,6 +13,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-02
 - Hive boxes (local device storage) (005-ingredient-management)
 - Dart 3.10.1 (Flutter stable) + Flutter Material 3, flutter_riverpod/riverpod_annotation, go_router, hive/hive_flutter, freezed/json_serializable, path_provider, camera, image_picker (new) (006-add-ingredient-photos)
 - Hive boxes for ingredient metadata; local file system for photo files (006-add-ingredient-photos)
+- Dart 3.10.1, Flutter stable + Flutter Material 3, Riverpod (annotations/codegen), GoRouter, camera, image_picker, Hive, path_provider, freezed/json_serializable (007-scan-ux)
+- Hive boxes + file storage in app documents/cache (007-scan-ux)
 
 - Dart (Flutter stable) + Flutter, Riverpod (with annotations), GoRouter, Freezed/codegen tools (001-recipe-persistence)
 
@@ -32,9 +34,9 @@ tests/
 Dart (Flutter stable): Follow standard conventions
 
 ## Recent Changes
+- 007-scan-ux: Added Dart 3.10.1, Flutter stable + Flutter Material 3, Riverpod (annotations/codegen), GoRouter, camera, image_picker, Hive, path_provider, freezed/json_serializable
 - 006-add-ingredient-photos: Added Dart 3.10.1 (Flutter stable) + Flutter Material 3, flutter_riverpod/riverpod_annotation, go_router, hive/hive_flutter, freezed/json_serializable, path_provider, camera, image_picker (new)
 - 005-ingredient-management: Added Dart 3.10.1 (Flutter stable) + Flutter Material 3, flutter_riverpod/riverpod_annotation, go_router, hive/hive_flutter, freezed/json_serializable, uuid, equatable
-- 004-ios-launch-hardening: Added Dart 3.x / Flutter (stable toolchain). + Flutter Material 3, Riverpod (annotations/codegen),
 
 
 <!-- MANUAL ADDITIONS START -->
